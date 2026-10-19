@@ -6,3 +6,4 @@ node_modules/
 output/
 *.png
 .DS_Store
+private/

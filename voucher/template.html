@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Star-World Invoice {{ v.sl_no }}</title>
+<style>
+  @page { size: A5; margin: 0; }
+  :root {
+    --navy: #1d2f86; --navy-2: #2a46b8; --orange: #f7941d; --ink: #1a1a1a;
+    --line: #2a46b8; --muted: #5b6475; --paper: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Inter", "Helvetica Neue", Arial, "Noto Sans Bengali", sans-serif; }
+  .page { width: 148mm; height: 210mm; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* Header */
+  .head { position: relative; height: 27mm; background: linear-gradient(100deg, var(--navy) 0%, var(--navy-2) 100%); }
+  .head .stripe { position: absolute; left: 0; bottom: 0; width: 72%; height: 4.2mm; background: var(--orange);
+    clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%); }
+  .brand { position: absolute; left: 8mm; top: 5mm; display: flex; align-items: center; gap: 3mm; color: #fff; }
+  .brand img, .brand svg { height: 15mm; width: auto; }
+  .brand .name { font-weight: 800; letter-spacing: 1.6px; font-size: 17pt; color: var(--orange); line-height: 1; }
+  .brand .tag { font-style: italic; font-size: 8.5pt; opacity: .9; margin-top: 1.2mm; border-top: 1px solid rgba(255,255,255,.6); padding-top: .8mm; }
+
+  .title { text-align: center; font-size: 22pt; font-weight: 800; margin: 3.5mm 0 1mm; letter-spacing: .5px; }
+
+  .body { padding: 0 7mm; flex: 1; display: flex; flex-direction: column; }
+  .meta { display: grid; grid-template-columns: 1fr auto; align-items: end; margin-bottom: 2mm; }
+  .slno { font-size: 10pt; } .slno b { font-size: 15pt; margin-left: 2mm; font-variant-numeric: tabular-nums; }
+  .box { border: 1px solid var(--line); display: flex; align-items: center; font-size: 9pt; }
+  .box .lbl { padding: 1.2mm 2mm; border-right: 1px solid var(--line); white-space: nowrap; color: #333; }
+  .box .val { padding: 1.2mm 2.5mm; font-weight: 600; flex: 1; font-size: 10pt; }
+  .row { display: flex; gap: 1.5mm; margin-bottom: 1.5mm; }
+  .row .box:first-child { flex: 1.25; } .row .box:nth-child(2) { flex: 1; }
+
+  /* Items table */
+  table.items { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 9.5pt; }
+  table.items th { border: 1px solid var(--line); font-weight: 700; font-size: 7pt; padding: 1.5mm .5mm; color: #222; letter-spacing: -.1px; }
+  table.items th.desc { font-size: 11pt; letter-spacing: .3px; }
+  table.items td { border-left: 1px solid var(--line); border-right: 1px solid var(--line); vertical-align: top; padding: 1.6mm 1.5mm; }
+  table.items tr.item td { padding-bottom: 1mm; }
+  table.items td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.items td.c { text-align: center; }
+  table.items td .sub { display: block; color: var(--muted); font-size: 8pt; margin-top: .4mm; }
+  table.items tr.filler > td { height: {{ filler_mm }}mm; }
+  table.items tr.last td { border-bottom: 1px solid var(--line); }
+  .attest { height: calc({{ filler_mm }}mm + 21mm); border: 1.2px dashed #9aa6d6; border-radius: 2mm; margin: 2mm 1mm 1mm 0;
+    position: relative; color: #8b95bf; font-size: 7.5pt; padding: 2mm; }
+  .attest img { position: absolute; }
+  .totals td { height: 7mm; padding: 0 1.5mm; }
+  .totals td.k, .totals td.v { border: 1px solid var(--line); }
+  .totals .k { font-size: 7.5pt; text-align: left; font-weight: 700; }
+  .totals .v { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 10pt; }
+
+  .words { display: flex; align-items: baseline; gap: 2mm; margin-top: 2.5mm; font-size: 7.5pt; }
+  .words .w { flex: 1; border-bottom: 1px dotted #555; font-size: 10.5pt; font-weight: 600; padding: 0 1mm .6mm; }
+
+  .sign { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 3mm; height: 17mm; }
+  .sign .rcv { font-size: 8.5pt; font-weight: 700; font-style: italic; }
+  .sign .for { text-align: center; font-size: 8pt; font-weight: 700; position: relative; min-width: 42mm; }
+  .sign .for .slot { height: 12mm; display: flex; align-items: flex-end; justify-content: center; }
+  .sign .for .slot img { max-height: 13mm; max-width: 40mm; }
+  .sign .for .slot .ph { font-weight: 400; color: #9aa6d6; font-size: 7pt; border: 1px dashed #9aa6d6; padding: 1mm 2mm; border-radius: 1.5mm; }
+  .sign .for .who { border-top: 1px solid #333; padding-top: .8mm; } .sign .for .who span { color: var(--orange); }
+
+  /* Footer */
+  .foot { position: relative; height: 18mm; margin-top: 3mm; background: linear-gradient(100deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff; display: grid; grid-template-columns: .8fr 1.15fr 1.9fr; align-items: center; padding: 3.5mm 6mm 0; font-size: 7pt; gap: 3mm; }
+  .foot .stripe { position: absolute; right: 0; top: 0; width: 60%; height: 3mm; background: var(--orange);
+    clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%); }
+  .foot .ph { font-weight: 800; font-size: 9pt; line-height: 1.25; }
+  .foot .addr { font-family: Georgia, "Times New Roman", serif; font-size: 7pt; line-height: 1.3; }
+
+  .demo { position: absolute; top: 92mm; left: -10mm; right: -10mm; text-align: center; transform: rotate(-28deg);
+    font-size: 48pt; font-weight: 800; color: rgba(220, 40, 40, .10); letter-spacing: 6px; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head">
+    <div class="brand">
+      {% if assets.logo %}<img src="{{ assets.logo }}" alt="">{% else %}
+      <svg viewBox="0 0 60 60" aria-hidden="true">
+        <g fill="none" stroke-width="6" stroke-linejoin="round">
+          <path d="M30 4 L52 26 L41 37 L30 26 L19 37 L8 26 Z" stroke="#ffffff"/>
+          <path d="M30 56 L8 34 L19 23 L30 34 L41 23 L52 34 Z" stroke="#f7941d"/>
+        </g>
+      </svg>{% endif %}
+      <div><div class="name">STAR-WORLD</div><div class="tag">Smart, Fast, Affordable</div></div>
+    </div>
+    <div class="stripe"></div>
+  </div>
+
+  <div class="title">Invoice</div>
+
+  <div class="body">
+    <div class="meta">
+      <div class="slno">SL No. <b>{{ v.sl_no }}</b></div>
+      <div class="box"><span class="lbl">Date</span><span class="val">{{ v.date }}</span></div>
+    </div>
+    <div class="row">
+      <div class="box"><span class="lbl">Name</span><span class="val">{{ v.customer.name }}</span></div>
+      <div class="box"><span class="lbl">Mobile No</span><span class="val">{{ v.customer.mobile }}</span></div>
+    </div>
+    <div class="row" style="margin-bottom:2mm">
+      <div class="box" style="flex:1"><span class="lbl">Address</span><span class="val">{{ v.customer.address }}</span></div>
+    </div>
+
+    <table class="items">
+      <colgroup><col style="width:9%"><col style="width:50%"><col style="width:12.5%"><col style="width:13%"><col style="width:15.5%"></colgroup>
+      <thead><tr><th>SL.No</th><th class="desc">DESCRIPTION</th><th>QUANTITY</th><th>RATE</th><th>TAKA</th></tr></thead>
+      <tbody>
+        {% for it in v["items"] %}
+        <tr class="item">
+          <td class="c">{{ "%02d"|format(loop.index) }}</td>
+          <td>{{ it.description }}{% if it.detail %}<span class="sub">{{ it.detail }}</span>{% endif %}</td>
+          <td class="c">{{ it.qty if it.qty else "—" }}</td>
+          <td class="num">{{ money(it.rate) if it.rate else "—" }}</td>
+          <td class="num">{{ money(it.amount) }}/=</td>
+        </tr>
+        {% endfor %}
+        <tr class="filler">
+          <td></td>
+          <td rowspan="4" style="vertical-align:bottom; border-bottom:1px solid var(--line)">
+            <div class="attest">
+              {% if assets.attestation %}<img src="{{ assets.attestation }}" style="left:2mm;top:1mm;width:96%">{% else %}Handwritten attestation · signature · seal (BSTI ICT cell){% endif %}
+              {% if assets.my_sign %}<img src="{{ assets.my_sign }}" style="left:6mm;bottom:12mm;height:10mm">{% endif %}
+              {% if assets.my_seal %}<img src="{{ assets.my_seal }}" style="left:4mm;bottom:1mm;height:14mm;opacity:.9">{% endif %}
+            </div>
+          </td>
+          <td></td><td></td><td></td>
+        </tr>
+        <tr class="totals"><td></td><td></td><td class="k">TOTAL</td><td class="v">{{ money(v.total) }}/=</td></tr>
+        <tr class="totals"><td></td><td></td><td class="k">ADVANCE</td><td class="v">{{ money(v.advance) + "/=" if v.advance else "—" }}</td></tr>
+        <tr class="totals last"><td></td><td></td><td class="k">BALANCE</td><td class="v">{{ money(v.balance) }}/=</td></tr>
+      </tbody>
+    </table>
+
+    <div class="words"><span>TAKA IN WORDS :</span><span class="w">{{ v.total_words }}</span></div>
+
+    <div class="sign">
+      <div class="rcv">Received By :</div>
+      <div class="for">
+        <div class="slot">{% if assets.vendor_sign %}<img src="{{ assets.vendor_sign }}">{% else %}<span class="ph">Authorised signature</span>{% endif %}</div>
+        <div class="who">FOR-<span>STAR-WORLD</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="stripe"></div>
+    <div class="ph">01911112444<br>01771112227</div>
+    <div>www.starworld.com.bd<br>starworldbd@hotmail.com</div>
+    <div class="addr">46-48, New Elephant Road, Suvastu Arcade,<br>ICT Bhaban, Shop # 642-643 (6th Floor), Dhaka-1205.</div>
+  </div>
+
+  {% if v.demo %}<div class="demo">DEMO</div>{% endif %}
+</div>
+</body>
+</html>

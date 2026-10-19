@@ -32,6 +32,8 @@
 
 ## Text templates
 
+> **Change from 30 Aug 2026:** the templates below are copied from the samples and cite "ক্রমিক নং-৪৪ (সংশোধিত ৩৩ তম কাউন্সিল)". New cases must cite **serial 63 of "বিএসটিআই'র আর্থিক ক্ষমতার সংশোধিত তফসিল, ২০২৬"** instead. The exact wording is pending the user's confirmation; see `docs/rules.md`.
+
 Placeholders are in `<>`.
 
 **Para X.0**

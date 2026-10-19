@@ -1,0 +1,25 @@
+{
+  "demo": true,
+  "sl_no": 1294,
+  "date": "17/10/2026",
+  "customer": {
+    "name": "BSTI, Tejgaon",
+    "address": "Dhaka",
+    "mobile": "01757921354"
+  },
+  "items": [
+    {
+      "description": "Brand PC Power Supply",
+      "detail": "Model: H290AM-00, 290W",
+      "qty": 1,
+      "rate": 4000
+    },
+    {
+      "description": "Service Charge",
+      "detail": "Diagnosis, replacement & testing",
+      "qty": null,
+      "rate": null,
+      "amount": 1000
+    }
+  ]
+}
