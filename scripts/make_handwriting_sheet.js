@@ -1,5 +1,6 @@
 // Generates the handwriting-collection sheet (print → fill by hand → scan at 600 dpi).
 // Usage: node scripts/make_handwriting_sheet.js [out.docx]
+//        node scripts/make_handwriting_sheet.js out.docx --words শব্দ১ শব্দ২ …   (top-up sheet: only these words, 3 times each)
 const fs = require("fs");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType,
@@ -7,7 +8,8 @@ const {
   VerticalAlign, ShadingType,
 } = require("docx");
 
-const OUT = process.argv[2] || "output/handwriting-sheet.docx";
+const OUT = process.argv[2] && process.argv[2] !== "--words" ? process.argv[2] : "output/handwriting-sheet.docx";
+const TOPUP = process.argv.includes("--words") ? process.argv.slice(process.argv.indexOf("--words") + 1) : null;
 const FONT = { ascii: "Calibri", hAnsi: "Calibri", cs: "Nirmala UI", eastAsia: "Nirmala UI" };
 const PAGE_W = 11906, MARGIN = 850, CONTENT_W = PAGE_W - 2 * MARGIN; // A4, 1.5 cm margins
 const GRID = { style: BorderStyle.SINGLE, size: 4, color: "A6A6A6" };
@@ -74,7 +76,7 @@ const UNIT_WORDS = ["মেট্রোলজি", "পদার্থ", "পর
 const PART_WORDS = ["র‍্যাম", "মাদারবোর্ড", "পাওয়ার", "সাপ্লাই", "হার্ডডিস্ক", "এসএসডি", "প্রসেসর", "কিবোর্ড", "মাউস", "মনিটর", "ইউপিএস", "ব্যাটারি", "প্রিন্টার", "টোনার", "কার্টিজ", "ক্যাবল", "ল্যাপটপ", "ডিসপ্লে", "রাউটার", "সফটওয়্যার"];
 const BLANK_ROWS = (n) => Array(n).fill("");
 
-const children = [
+const FULL = () => [
   para(run("Handwriting Sample Sheet", { bold: true, size: 36 }), { align: AlignmentType.CENTER, after: 40 }),
   para(run("হাতের লেখার নমুনা সংগ্রহ — ভাউচার প্রত্যয়ন অটোমেশন", { size: 24 }), { align: AlignmentType.CENTER, after: 200 }),
   para(run("How to fill", { bold: true, size: 24 }), { after: 60 }),
@@ -111,6 +113,14 @@ const children = [
   ...heading("7", "সিল — ৩ বার", "Stamp your name seal (আব্দুল্লাহ আল নাহিদ / পরিদর্শক ...) with fresh ink, fully inside the box. Avoid double-stamping."),
   boxGrid(3, 1, 2300, (i) => `সিল ${i}`),
 ];
+
+const TOPUP_PAGE = () => [
+  para(run("Handwriting Top-up Sheet", { bold: true, size: 36 }), { align: AlignmentType.CENTER, after: 40 }),
+  para(run("নতুন শব্দ — প্রতিটি ৩ বার লিখুন", { size: 24 }), { align: AlignmentType.CENTER, after: 160 }),
+  para(run("Same pen and size as the voucher. One word per white box, centred, not touching the borders. Photograph the page flat in good light.", { size: 20 }), { after: 160 }),
+  writingGrid(TOPUP, 3),
+];
+const children = TOPUP ? TOPUP_PAGE() : FULL();
 
 const doc = new Document({
   creator: "ICT Purchase Automation",

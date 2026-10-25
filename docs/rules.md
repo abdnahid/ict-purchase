@@ -87,3 +87,23 @@ Mapping examples:
 - Printer, UPS or monitor repaired → office equipment repair (৩২৫৮১০৪) → serial 64, 15% / 2%.
 - New mouse or keyboard → ৪১১২২০২ → serial 90 (Director Admin up to 25,000), 10% / 5%.
 - Toner → ৩২৫৫১০১ → serial 37 (Director Admin up to 25,000), 10% / 5%.
+
+## 5. Internet/network jobs (decided 22 Oct 2026)
+
+- **৩২১১১১৭ ইন্টারনেট/ফ্যাক্স/টেলেক্স is not for repairs.** MoPA limits it to internet, fax, telex and cable-TV *service bills*.
+- **Router, modem, switch or LAN-cabling repair → ৩২৫৮১০৪ অফিস সরঞ্জামাদি মেরামত.** MoPA's example list for ৩২৫৮১০৪ names "ইন্টারনেট মডেম/রাউটার". Under the 2026 schedule this is **serial 64**: Director (Admin) has "পিপিআর অনুযায়ী পূর্ণ ক্ষমতা". VAT and tax are 15% and 2%, the same as every ৩২৫৮১xx repair.
+- ৩২৫৮১২৬ টেলিযোগাযোগ সরঞ্জামাদি (network tower, fibre, telecom links, and also router/switch/cabling maintenance) fits too, but it has **no row in the BSTI 2026 schedule and no row in the RAD VAT sheet**, so it can't be used without a ruling from accounts.
+- If the internet fault was inside the PC (LAN card, OS/network settings), it is computer repair (serial 63).
+- Internet jobs and computer repairs are different heads, so **they can never share a case**.
+
+## 6. Combining demands into one case
+
+- A case (one voucher, one note) may only combine demands of the **same head** (same খাত and power serial).
+- Its total must be within the Director (Admin) power for that serial. For **serial 63 and 64 that power is "পিপিআর অনুযায়ী পূর্ণ ক্ষমতা"** (checked on the scanned schedule, page 7), so the BSTI schedule sets no fixed taka cap. The binding cap is whatever PPR 2025 allows for this kind of direct cash purchase. PPR 2025 is not in `utils/`, so the cap is a setting (`data/settings.json` → `ppr_ceiling`, null = none) until the user confirms the figure.
+- History: under the old schedule (33rd council), computer repair was serial 50 with a Director (Admin) cap of ৳১৫,০০০. Sample-4's ৳১৭,৫০০ combined case went over it, so audit sent it back (para 86.2) and it was approved by the DG.
+
+## 7. VAT/tax method (settled: inclusive)
+
+- In sample-1, the pass letter and audit table use the VAT-inclusive method (base = total ÷ 1.15; tax = 2% of base).
+- In sample-4 (July 2026), audit para 86.1 took 15% and 2% of the **gross** total (১৭,৫০০ → VAT ২,৬২৫, tax ৩৫০).
+- **Settled (2026-10-24): use `inclusive`.** The user's `utils/vat-tax-calc.ods` sets out the method: VAT = total × 15 / (100 + 15); base = total − VAT; tax = 2% of base; net = base − tax. Example: ৩,৪৫০ → VAT ৪৫০, base ৩,০০০, tax ৬০, net ২,৯৪০. The app rounds the base to whole taka. `gross` is kept only to reproduce sample-4.

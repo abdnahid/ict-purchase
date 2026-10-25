@@ -7,6 +7,10 @@
     "address": "Dhaka",
     "mobile": "01757921354"
   },
+  "attestation": {
+    "unit": "মেট্রোলজি উইং",
+    "part": "পাওয়ার সাপ্লাই"
+  },
   "items": [
     {
       "description": "Brand PC Power Supply",

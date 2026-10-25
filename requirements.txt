@@ -1,0 +1,6 @@
+# python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+jinja2
+numpy
+pillow
+opencv-python-headless  # only for handwriting/slice_sheet.py
+flask

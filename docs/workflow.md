@@ -106,3 +106,25 @@ Implementation note: keep the rates in a config table keyed by economic code, no
 ## Bengali calendar check
 
 The samples use the Bangladesh revised calendar: 10 Aug 2026 = ২৬ শ্রাবণ ১৪৩৩, 12 Aug = ২৮ শ্রাবণ, 23 Aug = ৮ ভাদ্র ১৪৩৩.
+
+## Combined note (several demands, one voucher): sample-4, note 86
+
+One voucher covers every repair. Identical parts merge into one line (SSD × 2) and there is one service-charge line (qty = number of devices). The note subject counts the devices per wing:
+`বিএসটিআই'র সিএম উইং-এর একটি ও রসায়ন পরীক্ষণ উইং-এর একটি অকেজো কম্পিউটার মেরামত সংক্রান্ত।`
+
+**Para X.0**
+> বিএসটিআই'র <who-1> ব্যবহৃত একটি কম্পিউটার ও <who-2> ব্যবহৃত একটি কম্পিউটার অকেজো থাকায় দাপ্তরিক কার্যক্রম সম্পাদনে অসুবিধা হচ্ছে এই মর্মে ২টি চাহিদাপত্র পাওয়া গিয়েছে (সংযুক্তি: চাহিদাপত্র - <name-1>.pdf ও চাহিদাপত্র - <name-2>.pdf সদয় দ্রষ্টব্য)।
+>
+> পরবর্তীতে সমস্যা নির্ণয়ের পর নিম্নবর্ণিত ত্রুটিসমূহ পরীলক্ষিত হয়ঃ
+> • <wing-1> এর কম্পিউটারে সংযুক্ত SSD-টি ত্রুটিযুক্ত। নতুন SSD প্রতিস্থাপন করা প্রয়োজন।
+> • <wing-2> এর কম্পিউটারের মাদারবোর্ড ত্রুটিযুক্ত …
+>
+> এমতাবস্থায়, দাপ্তরিক কার্যক্রম … গুরুত্ব বিবেচনায় কম্পিউটার দুইটি দ্রুততর সময়ে মেরামত করা হয়। ইতোমধ্যে মেরামতকৃত কম্পিউটার ২টির যন্ত্রাংশ ক্রয় ও সার্ভিস চার্জ বাবদ ভ্যাট ও ট্যাক্সসহ সর্বমোট <total>/- (<words> টাকা) মাত্র (সংযুক্তি: মেরামত ভাউচার.pdf) <approver> মহোদয়ের আর্থিক ক্ষমতার ক্রমিক নং-<serial> … মোতাবেক 'কম্পিউটার মেরামত' ক্রয় খাত থেকে পোস্ট ফ্যাক্টো মঞ্জুরির প্রস্তাব অনুমোদনের পূর্বে নিরীক্ষা শাখার মতামত নেয়া যেতে পারে।
+>
+> সদয় অনুমোদনের জন্য পেশ করা হলো।
+
+Para X.2 keeps the first two paragraphs. Its third paragraph starts `এমতাবস্থায়, নোট অনুচ্ছেদ <X.1> এর নিরীক্ষা শাখার মতামতের আলোকে ইতোমধ্যে মেরামতকৃত কম্পিউটার ২টির …` and ends `… প্রস্তাবটি সদয় অনুমোদনের জন্য পেশ করা হলো।`
+
+Attachments are named `চাহিদাপত্র - <person or room>.pdf` and `মেরামত ভাউচার.pdf`.
+
+On the sample-4 voucher, the hand-written certificate also wrote the amount ("… অকেজো কম্পিউটার মেরামতের কাজে উল্লেখিত ১৭,৫০০/= (সতের হাজার পাঁচশত টাকা) যথাযথভাবে ব্যয়িত হয়েছে।"). The generator keeps the amount typed and uses the bank-composable wording: `প্রত্যয়ন করা যাইতেছে যে, সিএম উইং এর একটি ও রসায়ন পরীক্ষণ উইং এর একটি কম্পিউটার মেরামতে এসএসডি এবং মাদারবোর্ড ক্রয় ও সার্ভিস চার্জ বাবদ উক্ত অর্থ ব্যয় করা হয়েছে।`

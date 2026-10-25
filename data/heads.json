@@ -1,0 +1,40 @@
+{
+  "_comment": "Expense heads a repair can be charged to. Sources: utils/Clarification.pdf (what each economic code covers), utils/vat-tax.webp (FY rates), utils/monetary and administrative power.pdf (2026 schedule: serial + Director (Admin) power). 'limit' is the Director (Admin) cap per case in taka; null = 'পিপিআর অনুযায়ী পূর্ণ ক্ষমতা' (no fixed cap in the BSTI schedule; settings.json 'ppr_ceiling' applies instead). Cases may only combine demands of the same head. In 'subject'/'attestation', {units} is the wing list ('সিএম উইং এর একটি ও রসায়ন পরীক্ষণ উইং এর একটি' when count_devices, else 'সিএম উইং ও ... এর') and {parts} the replaced parts.",
+  "schedule": "বিএসটিআই'র আর্থিক ক্ষমতার সংশোধিত তফসিল, ২০২৬",
+  "fiscal_years": {
+    "2026-27": {
+      "computer_repair": {
+        "khat": "কম্পিউটার মেরামত",
+        "code": "৩২৫৮১০৩",
+        "code_note": "MoPA defines ৩২৫৮১০৩ as computer repair; the RAD VAT sheet prints computer repair as ৩২৫৮১০৪. Rates are the same (15%/2%).",
+        "serial": 63,
+        "approver": "পরিচালক (প্রশাসন)",
+        "limit": null,
+        "power": "পিপিআর অনুযায়ী পূর্ণ ক্ষমতা",
+        "vat": 0.15,
+        "tax": 0.02,
+        "device": "কম্পিউটার",
+        "covers": "Parts and service to make a computer usable again (RAM, SSD, HDD, PSU, motherboard, LAN card, etc.)",
+        "count_devices": true,
+        "subject": "{units} অকেজো কম্পিউটার মেরামত সংক্রান্ত।",
+        "attestation": "প্রত্যয়ন করা যাইতেছে যে, {units} কম্পিউটার মেরামতে {parts} ক্রয় ও সার্ভিস চার্জ বাবদ উক্ত অর্থ ব্যয় করা হয়েছে।"
+      },
+      "office_equipment_repair": {
+        "khat": "অফিস সরঞ্জামাদি মেরামত",
+        "code": "৩২৫৮১০৪",
+        "code_note": "MoPA lists ইন্টারনেট মডেম/রাউটার, UPS, monitor, keyboard, mouse, printer, scanner, pendrive under ৩২৫৮১০৪ repair.",
+        "serial": 64,
+        "approver": "পরিচালক (প্রশাসন)",
+        "limit": null,
+        "power": "পিপিআর অনুযায়ী পূর্ণ ক্ষমতা",
+        "vat": 0.15,
+        "tax": 0.02,
+        "device": "নেটওয়ার্ক সরঞ্জাম",
+        "covers": "Internet/network jobs (router, modem, switch, LAN cabling), UPS, printer, scanner, monitor",
+        "count_devices": false,
+        "subject": "{units} ইন্টারনেট সংযোগ/নেটওয়ার্ক সরঞ্জাম মেরামত সংক্রান্ত।",
+        "attestation": "প্রত্যয়ন করা যাইতেছে যে, {units} {parts} ক্রয় ও সার্ভিস চার্জ বাবদ উক্ত অর্থ ব্যয় করা হয়েছে।"
+      }
+    }
+  }
+}

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICT Repair Cases</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --panel: #fff; --ink: #1d2330; --muted: #6a7282; --line: #e2e5ea;
+    --accent: #1d4ed8; --accent-soft: #e8efff; --ok: #157347; --ok-soft: #e3f4ea;
+    --warn: #a15c00; --warn-soft: #fff3df; --bad: #b42318; --bad-soft: #fde8e7;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 "Noto Sans Bengali", system-ui, sans-serif; }
+  header { display: flex; align-items: center; gap: 24px; padding: 0 20px; height: 52px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  header h1 { font-size: 15px; margin: 0; font-weight: 700; }
+  nav { display: flex; gap: 4px; }
+  nav button { background: none; border: 0; padding: 8px 12px; border-radius: 6px; cursor: pointer; font: inherit; color: var(--muted); }
+  nav button.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  header .sp { flex: 1; }
+  button.btn { font: inherit; border: 1px solid var(--line); background: var(--panel); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+  button.btn:hover { border-color: #c5cad3; }
+  button.pri { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.pri:disabled { opacity: .45; cursor: default; }
+  button.danger { color: var(--bad); }
+  main { display: grid; grid-template-columns: 380px 1fr; gap: 16px; padding: 16px 20px; height: calc(100vh - 52px); }
+  main.single { grid-template-columns: 1fr; max-width: 860px; }
+  .col { overflow: auto; min-height: 0; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .bar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .bar .sp { flex: 1; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; align-items: start; }
+  .card.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  .card .t { font-weight: 600; }
+  .card .s { color: var(--muted); font-size: 12.5px; grid-column: 2 / 4; }
+  .card .amt { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .chip { display: inline-block; font-size: 11.5px; padding: 1px 8px; border-radius: 99px; background: #eef0f3; color: var(--muted); margin-right: 4px; white-space: nowrap; }
+  .chip.ok { background: var(--ok-soft); color: var(--ok); } .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); color: var(--bad); } .chip.acc { background: var(--accent-soft); color: var(--accent); }
+  .muted { color: var(--muted); } .small { font-size: 12.5px; }
+  .editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; height: 100%; }
+  .editor iframe, .editor img { width: 100%; height: 100%; min-height: 600px; border: 1px solid var(--line); border-radius: 8px; background: #fff; object-fit: contain; }
+  label { display: block; font-size: 12.5px; color: var(--muted); margin: 10px 0 3px; }
+  input, select, textarea { font: inherit; width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  textarea { resize: vertical; min-height: 56px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row2 > div > label { margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; }
+  table.items td, table.items th { padding: 4px; text-align: left; font-weight: 500; font-size: 12.5px; color: var(--muted); }
+  table.items td { color: var(--ink); }
+  table.items input, table.items select { padding: 4px 6px; }
+  table.sum td { padding: 5px 8px; border-bottom: 1px solid var(--line); }
+  table.sum td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .x { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+  .total { text-align: right; font-weight: 700; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .err { background: var(--bad-soft); color: var(--bad); border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 13px; }
+  .note { background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 13px; }
+  .text { white-space: pre-wrap; background: #fafbfc; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14.5px; line-height: 1.75; }
+  h2 { font-size: 16px; margin: 0 0 4px; } h3 { font-size: 13.5px; margin: 18px 0 6px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+  .steps { display: flex; gap: 4px; flex-wrap: wrap; margin: 8px 0; }
+  .steps button { font: inherit; font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 3px 10px; cursor: pointer; color: var(--muted); }
+  .steps button.done { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+  .steps button.cur { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .empty { color: var(--muted); padding: 40px; text-align: center; }
+  .prop { border: 1px dashed var(--accent); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .files a { display: inline-block; margin: 0 10px 6px 0; color: var(--accent); }
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 16px; border-radius: 8px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ICT Repair Cases</h1>
+  <nav id="tabs"></nav>
+  <span class="sp"></span>
+  <button class="btn" onclick="scan()">Scan demands folder</button>
+</header>
+<main id="main"></main>
+<div id="toast"></div>
+
+<script>
+const S = { tab: "inbox", demands: [], cases: [], heads: {}, parts: {}, settings: {}, statuses: [],
+            sel: null, selCase: null, checked: new Set(), showAll: false, proposals: null, note: null };
+const STATUS_BN = { draft: "Draft", voucher: "Voucher made", x0_sent: "X.0 sent", x1_received: "X.1 received",
+                    approved: "Approved", pass_letter: "Pass letter issued", reimbursed: "Reimbursed" };
+const bnd = s => String(s).replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+const money = n => { const s = String(Math.round(n)); if (s.length <= 3) return s;
+  let h = s.slice(0, -3), out = []; while (h.length > 2) { out.unshift(h.slice(-2)); h = h.slice(0, -2); }
+  if (h) out.unshift(h); return out.join(",") + "," + s.slice(-3); };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const $ = id => document.getElementById(id);
+
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 2600); }
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+async function refresh() { Object.assign(S, await api("GET", "/api/state")); render(); }
+async function scan() { const r = await api("POST", "/api/scan"); toast(r.added.length ? `${r.added.length} new demand(s) found` : "No new demands"); refresh(); }
+
+function render() {
+  $("tabs").innerHTML = [["inbox", "Inbox"], ["cases", "Cases"], ["settings", "Settings"]]
+    .map(([k, l]) => `<button class="${S.tab === k ? "on" : ""}" onclick="S.tab='${k}';render()">${l}${k === "inbox" ? ` (${S.demands.filter(d => !d.case).length})` : k === "cases" ? ` (${S.cases.length})` : ""}</button>`).join("");
+  ({ inbox: renderInbox, cases: renderCases, settings: renderSettings })[S.tab]();
+}
+
+/* ---------- inbox ---------- */
+function demandStatus(d) {
+  if (d.case) return `<span class="chip acc">in ${esc(d.case)}</span>`;
+  if (d.problems.length) return `<span class="chip warn">needs ${esc(d.problems.join(", "))}</span>`;
+  return `<span class="chip ok">ready</span>`;
+}
+function headChip(key) { return key && S.heads[key] ? `<span class="chip">${esc(S.heads[key].khat)}</span>` : ""; }
+
+function renderInbox() {
+  const m = $("main"); m.className = "";
+  const list = S.demands.filter(d => S.showAll || !d.case);
+  const n = S.checked.size;
+  m.innerHTML = `
+    <div class="col">
+      <div class="bar">
+        <button class="btn" onclick="suggest()">Suggest cases</button>
+        <button class="btn pri" ${n ? "" : "disabled"} onclick="combine([...S.checked])">${n > 1 ? `Combine ${n} into one case` : "Make case"}</button>
+        <span class="sp"></span>
+        <label style="margin:0;display:flex;gap:6px;align-items:center"><input type="checkbox" style="width:auto" ${S.showAll ? "checked" : ""} onchange="S.showAll=this.checked;render()"> all</label>
+      </div>
+      ${S.proposals ? renderProposals() : ""}
+      ${list.length ? list.map(d => `
+        <div class="card ${S.sel === d.id ? "sel" : ""}" onclick="S.sel='${d.id}';render()">
+          <input type="checkbox" style="width:auto;margin-top:3px" ${S.checked.has(d.id) ? "checked" : ""} ${d.case ? "disabled" : ""}
+                 onclick="event.stopPropagation();toggle('${d.id}',this.checked)">
+          <div><div class="t">${esc(d.label || d.file.split("/").pop())}</div></div>
+          <div class="amt">${d.total ? "৳" + bnd(money(d.total)) : ""}</div>
+          <div class="s">${esc(d.wing || "—")}${d.date ? " · " + esc(d.date) : ""}<br>${headChip(d.head_key)}${demandStatus(d)}</div>
+        </div>`).join("") : `<div class="empty">No demands. Put scans in <b>demands/</b> and press “Scan demands folder”.</div>`}
+    </div>
+    <div class="col">${S.sel ? renderEditor(S.demands.find(d => d.id === S.sel)) : `<div class="empty">Select a demand to fill in what was repaired.</div>`}</div>`;
+}
+function toggle(id, on) { on ? S.checked.add(id) : S.checked.delete(id); render(); }
+
+function renderProposals() {
+  if (!S.proposals.length) return `<div class="note">No ready demands to group. Fill in the repair details first.</div>`;
+  const cap = k => S.heads[k].limit ?? S.settings.ppr_ceiling;
+  return S.proposals.map(p => `
+    <div class="prop">
+      <div style="display:flex;justify-content:space-between"><b>${esc(S.heads[p.head].khat)}</b><b>৳${bnd(money(p.total))}</b></div>
+      <div class="small">${p.ids.map(i => esc(S.demands.find(d => d.id === i).label)).join(" · ")}</div>
+      <div class="small muted">limit: ${cap(p.head) == null ? esc(S.heads[p.head].power) + " (no ceiling set)" : "৳" + bnd(money(cap(p.head)))}</div>
+      <button class="btn pri" style="margin-top:6px" onclick='combine(${JSON.stringify(p.ids)})'>Create this case</button>
+    </div>`).join("") + `<div style="margin-bottom:12px"><button class="btn" onclick="S.proposals=null;render()">Hide suggestions</button></div>`;
+}
+async function suggest() { S.proposals = await api("GET", "/api/proposals"); render(); }
+async function combine(ids) {
+  try { const c = await api("POST", "/api/cases", { ids }); S.checked.clear(); S.proposals = null; S.selCase = c.id; S.tab = "cases"; toast(`Case ${c.id} created`); refresh(); }
+  catch (e) { toast(e.message); }
+}
+
+function partOptions(sel) {
+  // grouped by head; ✍✗ = the hand-written attestation can't name this part yet
+  return `<option value="">— part —</option>` + Object.entries(S.heads).map(([hk, h]) => `<optgroup label="${esc(h.khat)}">` +
+    Object.entries(S.parts).filter(([, p]) => p.head === hk).map(([k, p]) =>
+      `<option value="${k}" ${k === sel ? "selected" : ""}>${esc(p.bn)} · ${esc(p.en)}${p.hand_missing.length ? " ✍✗" : ""}</option>`).join("") +
+    `</optgroup>`).join("");
+}
+function renderEditor(d) {
+  const wings = [...new Set(S.demands.map(x => x.wing).filter(Boolean))];
+  const isImg = /\.(jpe?g|png)$/i.test(d.file);
+  return `<div class="editor">
+    <div>${isImg ? `<img src="/file/${encodeURI(d.file)}">` : `<iframe src="/file/${encodeURI(d.file)}#view=FitH"></iframe>`}</div>
+    <div class="panel" style="overflow:auto">
+      <h2>${esc(d.label || "New demand")}</h2>
+      <div class="small muted">${esc(d.file)}</div>
+      ${d.case ? `<div class="note">Part of case ${esc(d.case)}. Changes here go into that case's documents when you regenerate.</div>` : ""}
+      <div class="row2">
+        <div><label>Name on attachment (চাহিদাপত্র - … .pdf)</label><input id="f_label" value="${esc(d.label)}" placeholder="আব্দুল কাদের"></div>
+        <div><label>Demand date</label><input id="f_date" type="date" value="${esc(d.date)}"></div>
+      </div>
+      <label>Wing (short; used in subject and handwritten attestation)</label>
+      <input id="f_wing" list="wings" value="${esc(d.wing)}" placeholder="সিএম উইং">
+      <datalist id="wings">${wings.map(w => `<option value="${esc(w)}">`).join("")}</datalist>
+      <label>Who / where (ends with “এর” or “এ”)</label>
+      <textarea id="f_who" placeholder="সিএম উইং এর ফিল্ড অফিসার জনাব আব্দুল কাদের এর">${esc(d.who)}</textarea>
+      <div class="row2">
+        <div><label>What</label><input id="f_thing" value="${esc(d.thing)}"></div>
+        <div><label>Condition</label><input id="f_state" value="${esc(d.state)}"></div>
+      </div>
+      <h3>Repair</h3>
+      <table class="items"><tr><th>Part · model (printed on the voucher)</th><th style="width:60px">Qty</th><th style="width:90px">Rate ৳</th><th></th></tr>
+        ${d.items.map((it, i) => `<tr>
+          <td><select id="i_part_${i}" onchange="pickPart(${i})">${partOptions(it.part)}</select></td>
+          <td><input id="i_qty_${i}" type="number" min="1" value="${esc(it.qty ?? 1)}"></td>
+          <td><input id="i_rate_${i}" type="number" min="0" value="${esc(it.rate)}"></td>
+          <td><button class="x" onclick="rmItem(${i})" title="remove">×</button></td></tr>
+          <tr><td colspan="3" style="padding-top:0"><input id="i_detail_${i}" list="dl_${i}" value="${esc(it.detail)}" oninput="pickModel(${i})"
+                placeholder="${S.parts[it.part]?.options?.length ? "model: pick from the list or type one" : "model: brand, size, spec"}">
+              <datalist id="dl_${i}">${(S.parts[it.part]?.options || []).map(o => `<option value="${esc(o.detail)}">${esc((o.fits ? o.fits + " · " : "") + "৳" + money(o.rate) + (o.src === "estimate" ? " (estimate)" : o.src ? " (" + o.src + ")" : ""))}</option>`).join("")}</datalist>
+              <div class="small muted" id="i_fit_${i}">${esc(fitsOf(it.part, it.detail))}</div></td><td></td></tr>`).join("")}
+      </table>
+      <button class="btn" style="margin-top:6px" onclick="addItem()">+ Part</button>
+      <div class="row2">
+        <div><label>Service charge ৳</label><input id="f_sc" type="number" min="0" value="${esc(d.service_charge)}"></div>
+        <div><label>Expense head</label><select id="f_head"><option value="">Auto (from parts)</option>
+          ${Object.entries(S.heads).map(([k, h]) => `<option value="${k}" ${d.head === k ? "selected" : ""}>${esc(h.khat)} (${esc(h.code)}, serial ${h.serial})</option>`).join("")}</select></div>
+      </div>
+      <label>Diagnosis bullet (combined notes only; blank = generated)</label>
+      <textarea id="f_diag" placeholder="সিএম উইং এর কম্পিউটারে সংযুক্ত SSD-টি ত্রুটিযুক্ত। নতুন SSD প্রতিস্থাপন করা প্রয়োজন।">${esc(d.diagnosis)}</textarea>
+      <label>Private notes</label><textarea id="f_notes">${esc(d.notes)}</textarea>
+      ${handHint(d.items)}
+      <div class="total">Total ৳${bnd(money(d.total))} ${headChip(d.head_key)}</div>
+      <div class="bar" style="margin-top:10px"><span class="sp"></span><button class="btn pri" onclick="saveDemand()">Save</button></div>
+    </div></div>`;
+}
+function handHint(items) {
+  const miss = [...new Set(items.flatMap(i => S.parts[i.part]?.hand_missing || []))];
+  return miss.length ? `<div class="note">✍✗ No handwriting sample for <b>${esc(miss.join(", "))}</b>: the voucher will come out without the attestation until you add these words (Settings → Handwriting).</div>` : "";
+}
+function readItems() {
+  const d = S.demands.find(x => x.id === S.sel);
+  return d.items.map((_, i) => ({ part: $(`i_part_${i}`).value, detail: $(`i_detail_${i}`).value,
+    qty: +$(`i_qty_${i}`).value || 1, rate: +$(`i_rate_${i}`).value || 0 }));
+}
+function pickPart(i) {
+  const d = S.demands.find(x => x.id === S.sel); d.items = readItems();
+  const it = d.items[i], p = S.parts[it.part];
+  if (p) {  // a new part starts from the last model bought (edit if different) and its price
+    it.detail = p.detail || "";
+    it.rate = optionOf(it.part, it.detail)?.rate ?? p.rate;
+  }
+  keepForm(() => render());
+}
+function optionOf(part, detail) { return (S.parts[part]?.options || []).find(o => o.detail === detail); }
+function fitsOf(part, detail) {
+  const o = optionOf(part, detail); if (!o) return "";
+  return [o.fits && "fits: " + o.fits, o.src && "price: " + (o.src === "estimate" ? "estimate" : o.src)].filter(Boolean).join(" · ");
+}
+function pickModel(i) {  // choosing a listed model fills its usual price; type over it with what you paid
+  const part = $(`i_part_${i}`).value, o = optionOf(part, $(`i_detail_${i}`).value);
+  $(`i_fit_${i}`).textContent = fitsOf(part, $(`i_detail_${i}`).value);
+  if (o) $(`i_rate_${i}`).value = o.rate;
+}
+function addItem() { const d = S.demands.find(x => x.id === S.sel); d.items = [...readItems(), { part: "", detail: "", qty: 1, rate: "" }]; keepForm(() => render()); }
+function rmItem(i) { const d = S.demands.find(x => x.id === S.sel); d.items = readItems(); d.items.splice(i, 1); keepForm(() => render()); }
+function formFields() {
+  return { label: $("f_label").value.trim(), date: $("f_date").value, wing: $("f_wing").value.trim(), who: $("f_who").value.trim(),
+           thing: $("f_thing").value.trim(), state: $("f_state").value.trim(), service_charge: +$("f_sc").value || 0,
+           head: $("f_head").value, diagnosis: $("f_diag").value.trim(), notes: $("f_notes").value };
+}
+function keepForm(fn) { const d = S.demands.find(x => x.id === S.sel); Object.assign(d, formFields()); fn(); }
+async function saveDemand() {
+  const body = { ...formFields(), items: readItems().filter(i => i.part) };
+  try { await api("PUT", `/api/demands/${S.sel}`, body); toast("Saved"); refresh(); } catch (e) { toast(e.message); }
+}
+
+/* ---------- cases ---------- */
+function renderCases() {
+  const m = $("main"); m.className = "";
+  const c = S.cases.find(x => x.id === S.selCase);
+  m.innerHTML = `
+    <div class="col">${S.cases.length ? S.cases.slice().reverse().map(x => `
+      <div class="card ${x.id === S.selCase ? "sel" : ""}" onclick="openCase('${x.id}')" style="grid-template-columns:1fr auto">
+        <div class="t">${esc(x.id)} <span class="muted small">SL ${esc(x.voucher.sl_no)}${x.note.no ? " · note " + bnd(x.note.no) : ""}</span></div>
+        <div class="amt">৳${bnd(money(x.totals.total))}</div>
+        <div class="s" style="grid-column:1/3">${x.labels.map(esc).join(" · ")}<br>${headChip(x.head)}<span class="chip ${x.status === "reimbursed" ? "ok" : "acc"}">${STATUS_BN[x.status]}</span>${x.errors.length ? `<span class="chip bad">check</span>` : ""}</div>
+      </div>`).join("") : `<div class="empty">No cases yet. Fill in demands in the Inbox, then combine them.</div>`}</div>
+    <div class="col">${c ? renderCase(c) : `<div class="empty">Select a case.</div>`}</div>`;
+}
+async function openCase(id) { S.selCase = id; S.note = null; render(); S.note = await api("GET", `/api/cases/${id}/note`); render(); }
+
+function renderCase(c) {
+  const h = S.heads[c.head], t = c.totals, si = S.statuses.indexOf(c.status);
+  const rate = p => Math.round(p * 100) + "%";
+  return `<div class="panel">
+    <div class="bar"><h2 style="margin:0">${esc(c.id)}</h2><span class="chip">${esc(h.khat)} · ${esc(h.code)} · serial ${bnd(h.serial)}</span><span class="sp"></span>
+      <button class="btn danger" onclick="dissolve('${c.id}')">Dissolve</button>
+      <button class="btn pri" onclick="gen('${c.id}')">Generate voucher &amp; note</button></div>
+    <div class="steps">${S.statuses.map((s, i) => `<button class="${i < si ? "done" : i === si ? "cur" : ""}" onclick="setStatus('${c.id}','${s}')">${STATUS_BN[s]}</button>`).join("")}</div>
+    ${c.errors.map(e => `<div class="err">${esc(e)}</div>`).join("")}
+    <div class="row2">
+      <div><label>Voucher SL</label><input id="c_sl" type="number" value="${esc(c.voucher.sl_no)}"></div>
+      <div><label>Voucher date (also under the signature)</label><input id="c_date" type="date" value="${esc(c.voucher.date)}"></div>
+      <div><label>D-Nothi note no.</label><input id="c_note" type="number" value="${esc(c.note.no ?? "")}" placeholder="e.g. 91"></div>
+      <div><label>Audit opinion paragraph (X.1)</label><input id="c_audit" value="${esc(c.note.audit_para ?? "")}" placeholder="${c.note.no ? c.note.no + ".1" : "e.g. 91.1"}"></div>
+    </div>
+    <div class="bar" style="margin-top:10px"><span class="sp"></span><button class="btn" onclick="saveCase('${c.id}')">Save</button></div>
+
+    <h3>Amounts (${esc(S.settings.vat_method)} VAT, ${rate(h.vat)} / ${rate(h.tax)})</h3>
+    <table class="sum">
+      <tr><td>(১) ভ্যাট ও ট্যাক্সসহ দাবীকৃত বিল</td><td>${bnd(money(t.total))}</td></tr>
+      <tr><td>(২) ভ্যাট পূর্ব টাকার পরিমাণ</td><td>${bnd(money(t.base))}</td></tr>
+      <tr><td>(৩) কর্তনকৃত ভ্যাট</td><td>${bnd(money(t.vat))}</td></tr>
+      <tr><td>(৪) কর্তনকৃত ট্যাক্স</td><td>${bnd(money(t.tax))}</td></tr>
+      <tr><td>(৫) পরিশোধযোগ্য বিল</td><td>${bnd(money(t.payable))}</td></tr>
+    </table>
+    <div class="small muted" style="margin-top:4px">Limit: ${h.limit != null ? "৳" + bnd(money(h.limit)) : esc(h.power) + (S.settings.ppr_ceiling ? ` · ceiling ৳${bnd(money(S.settings.ppr_ceiling))}` : " · no ceiling set")}</div>
+
+    ${c.files.length ? `<h3>Files</h3><div class="files">${c.files.map(f => `<a href="/file/cases/${esc(c.id)}/out/${encodeURIComponent(f)}" target="_blank">${esc(f)}</a>`).join("")}</div>` : ""}
+    <div id="genmsg">${(c.warnings || []).map(w => `<div class="err">${esc(w)}</div>`).join("")}</div>
+
+    ${S.note ? `
+      <h3>Note subject</h3>${copyBlock(S.note.subject)}
+      <h3>Paragraph X.0 (to audit)</h3>${copyBlock(S.note.x0)}
+      <h3>Paragraph X.2 (final proposal)</h3>${copyBlock(S.note.x2)}
+      <h3>Attachments</h3><div class="text">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>` : `<div class="muted">Loading note…</div>`}
+  </div>`;
+}
+function copyBlock(text) {
+  const id = "cp" + Math.random().toString(36).slice(2);
+  window[id] = text;
+  return `<div style="position:relative"><div class="text" style="padding-right:72px">${esc(text)}</div>
+    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="navigator.clipboard.writeText(window['${id}']);toast('Copied')">Copy</button></div>`;
+}
+async function saveCase(id) {
+  await api("PUT", `/api/cases/${id}`, { voucher: { sl_no: +$("c_sl").value, date: $("c_date").value },
+    note: { no: $("c_note").value ? +$("c_note").value : null, audit_para: $("c_audit").value.trim() || null } });
+  toast("Saved"); await refresh(); openCase(id);
+}
+async function setStatus(id, status) { await api("PUT", `/api/cases/${id}`, { status }); refresh(); }
+async function dissolve(id) {
+  if (!confirm(`Dissolve ${id}? Its demands go back to the inbox and generated files are deleted.`)) return;
+  await api("DELETE", `/api/cases/${id}`); S.selCase = null; refresh();
+}
+async function gen(id) {
+  $("genmsg").innerHTML = `<div class="note">Generating…</div>`;
+  try {
+    const r = await api("POST", `/api/cases/${id}/generate`);
+    await refresh(); await openCase(id);
+    $("genmsg").innerHTML = r.warnings.map(w => `<div class="err">${esc(w)}</div>`).join("");
+    toast("Generated");
+  } catch (e) { $("genmsg").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+
+/* ---------- settings ---------- */
+function renderSettings() {
+  const m = $("main"); m.className = "single"; const s = S.settings;
+  m.innerHTML = `<div class="col"><div class="panel">
+    <h2>Settings</h2>
+    <div class="row2">
+      <div><label>Ceiling for one case when the power is “PPR full” (৳, blank = none)</label><input id="s_ceil" type="number" value="${esc(s.ppr_ceiling ?? "")}"></div>
+      <div><label>VAT method</label><select id="s_vat">
+        <option value="inclusive" ${s.vat_method === "inclusive" ? "selected" : ""}>VAT-inclusive: base = total ÷ 1.15 (sample-1)</option>
+        <option value="gross" ${s.vat_method === "gross" ? "selected" : ""}>On gross: 15% and 2% of total (sample-4)</option></select></div>
+      <div><label>Next voucher SL</label><input id="s_sl" type="number" value="${esc(s.next_voucher_sl)}"></div>
+      <div><label>Default service charge ৳</label><input id="s_sc" type="number" value="${esc(s.service_charge)}"></div>
+    </div>
+    <div class="bar" style="margin-top:12px"><span class="sp"></span><button class="btn pri" onclick="saveSettings()">Save</button></div>
+    <h3>Handwriting</h3>
+    ${S.hand_missing.length ? `<div class="small">${bnd(S.hand_missing.length)} words used by parts, wings or attestations have no hand-written sample yet, so a voucher that needs one comes out without the attestation:</div>
+      <div class="text" style="margin:6px 0">${esc(S.hand_missing.join("  "))}</div>
+      <label>Words for the top-up sheet (edit to pick only some)</label><textarea id="s_words">${esc(S.hand_missing.join(" "))}</textarea>
+      <div class="bar" style="margin-top:6px"><span class="sp"></span><button class="btn" onclick="topUp()">Download top-up sheet (.docx)</button></div>
+      <div class="small muted">Print it, write each word 3 times, photograph it, drop the photo in <code>handwriting-sample/</code> and ask Claude to add it to the bank.</div>`
+      : `<div class="small muted">Every part, wing and attestation word has a hand-written sample.</div>`}
+    <h3>Expense heads (${esc(s.fiscal_year)})</h3>
+    <table class="sum">${Object.values(S.heads).map(h => `<tr><td><b>${esc(h.khat)}</b> · ${esc(h.code)} · serial ${bnd(h.serial)}<br><span class="small muted">${esc(h.covers)}</span></td>
+      <td>${Math.round(h.vat * 100)}% / ${Math.round(h.tax * 100)}%<br><span class="small muted">${h.limit != null ? "≤ ৳" + money(h.limit) : esc(h.power)}</span></td></tr>`).join("")}</table>
+  </div></div>`;
+}
+function topUp() { location.href = "/api/handwriting-sheet?words=" + encodeURIComponent($("s_words").value.trim()); }
+async function saveSettings() {
+  await api("PUT", "/api/settings", { ppr_ceiling: $("s_ceil").value ? +$("s_ceil").value : null, vat_method: $("s_vat").value,
+    next_voucher_sl: +$("s_sl").value, service_charge: +$("s_sc").value });
+  toast("Saved"); refresh();
+}
+
+// deep links: #demand=<id> or #case=<id>
+(async () => {
+  await refresh();
+  const [k, v] = decodeURIComponent(location.hash.slice(1)).split("=");
+  if (k === "demand") { S.sel = v; render(); }
+  if (k === "case") { S.tab = "cases"; openCase(v); }
+})();
+</script>
+</body>
+</html>

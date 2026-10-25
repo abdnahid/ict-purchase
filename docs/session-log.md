@@ -71,3 +71,113 @@
 - Build the scan slicer (cut each grid cell into a word image, clean it, make the background transparent).
 - Build the attestation composer.
 - Add a voucher SL-number counter and a case log.
+
+## 2026-10-22: Session 4 (handwriting bank and attestation composer)
+
+**Done**
+- The user's printer was down, so they wrote the handwriting sheet on plain paper and photographed it (7 phone photos, about 140 dpi) into `handwriting-sample/`. That folder is now git-ignored.
+- `handwriting/slice_sheet.py` + `layout.json` produce the word bank in `private/handwriting/` (351 images, 91 labels): all fixed, unit and part words, Latin and Bangla digits, `/`, `/=`, `()`, comma and danda (both cut from the sentences), 6 signatures and 3 seals.
+  - Method: ink map with shading removed → word blobs → columns split at the widest x-gaps → touching rows split at the thinnest ink row → each word gets the whole strokes whose centre falls in its box. Variants that are much taller than their siblings are flagged `outlier` and not used.
+  - Sentence words give extra in-context variants. Lines 2 and 4 of section 1 don't split cleanly and are skipped; sentence 2 line 2 and sentence 3 line 3 (struck-out word) are excluded in the layout.
+- `handwriting/compose.py`: text → wrapped lines aligned on the headline (মাত্রা), with random variant choice (no repeats within a block), ±5% size, ±1.2° tilt and varied spacing. Below the text: signature, then the date in hand-written digits under the signature line, then the seal. The output is upscaled ×2 and is sharp at 300 dpi.
+- `make_voucher.py` composes the attestation when the case has `attestation: {unit, part}`; the seed is `sl_no`, so re-running reproduces the same voucher. The placeholder's dashed border is hidden when filled. `output/voucher-demo.pdf` regenerated.
+- Added `.venv` + `requirements.txt`.
+
+**Waiting on the user**
+- Feedback on how realistic the demo attestation looks (spacing, size, where the date and seal sit).
+- Confirm the attestation wording (the sample-1 voucher omits "ও সার্ভিস চার্জ").
+- Optional: original full-resolution photos (these look WhatsApp-compressed), and one more page of extra words (e.g. ল্যাবের, শাখার-type forms, other parts) whenever a case needs a word that isn't in the bank. `compose.py` lists any missing words.
+- Star-World logo and authorised signature (still missing).
+
+**Next**
+- Voucher SL-number counter and case log.
+- Core engine: calculation, Bangla/English amount in words, Bengali calendar, D-Nothi paragraphs, মঞ্জুরিপত্র.
+
+### Session 4, continued: originals, logo, signature
+
+- The user added full-resolution camera originals (`handwriting-sample/originals/`, Galaxy S24 Ultra, about 2× the pixels, uncropped with perspective) plus the Star-World logo and authorised signature.
+- **Privacy fix:** the signature had been dropped into `utils/` as an SVG, which `.gitignore` did not cover. It was moved to `private/starworld_sign.svg` before any commit, and the logo to `private/starworld_logo.png`. Each asset slot in `make_voucher.py` now accepts .svg or .png.
+- The slicer still segments on the cropped page photos (already verified), then aligns each original to its photo (SIFT + RANSAC homography, 684–3757 inliers per page) and cuts at 2×, re-selecting whole strokes on the high-res image so a few pixels of page curl don't clip letters. All 351 crops re-checked on the contact sheet. Pages map to originals in `layout.json` under `"originals"`.
+- The composer is now resolution-independent (`word_px` target in place of a fixed upscale; jitter scales with word height).
+- The seal ink colour is normalised (measured hue lifted to stamp-pad brightness), because the dim raw photos made it nearly black.
+- The voucher header shows the real logo lockup directly on the navy band (the white badge was removed at the user's request). Its tagline "You trust, our Promise" replaces the template's "Smart, Fast, Affordable". The vendor signature was reduced by 25% (max 9.75 × 30 mm).
+
+**Open**
+- The logo is only 323×87 px (about 170 dpi at print size). A larger PNG or an SVG would print crisper.
+- The footer still reads "FOR-STAR-WORLD" while the new logo says "STAR WORLD". Ask which the shop wants.
+
+## 2026-10-22: Session 5 (case app: demands → combined cases)
+
+**Done**
+- Read the 5 real demands in `demands/10.10.2026/`:
+  - two internet jobs: the JDCF room ৪০২, and the sanitary-ware lab (handwritten);
+  - a slow PC (DD Faisal);
+  - an HP PC in the building-materials lab;
+  - the audit section PC with a dead motherboard.
+
+  A demand gives the who, where, fault and date. It never gives the part or price.
+- Read `sample-4-combined/`: 2 demands → 1 voucher (SSD × 2, motherboard, service charge × 2 = ৳১৭,৫০০) → note 86. Its combined-note wording is now in `docs/workflow.md`.
+- **Internet head decided from the reference docs:** router/modem/switch/cabling repair goes under ৩২৫৮১০৪ অফিস সরঞ্জামাদি মেরামত, serial 64, not ৩২১১১১৭ (bills only). Details are in `docs/rules.md` §5.
+- **Grouping rule:** same head, and total within the Director (Admin) power. For serials 63 and 64 that power is "পিপিআর অনুযায়ী পূর্ণ ক্ষমতা" (confirmed on the scan), so there is no fixed cap. `ppr_ceiling` stays configurable (`docs/rules.md` §6).
+- Built the local web app (`app/`, Flask on 127.0.0.1:5050):
+  - **Inbox:** PDF preview beside a form; the part catalogue remembers the last price.
+  - **Grouping:** "Suggest cases" (first-fit by head and ceiling) and manual combine, with validation.
+  - **Cases:** a status pipeline (draft → reimbursed), the VAT/tax table and **Generate**:
+    - the voucher with merged lines and a composed handwritten attestation for one or several wings;
+    - demand copies renamed for D-Nothi;
+    - X.0/X.2 text, single or combined, in Bangla digits and words, citing serial 63 or 64 of the 2026 schedule.
+- `data/heads.json`, `parts.json` and `settings.json` hold rates, serials, limits and wording.
+- `make_voucher.py` now exposes `render()`.
+- `demands/` and `cases/` are git-ignored.
+- Pre-filled all 5 demand records; only the parts and prices remain.
+- Tested end to end with made-up prices (then removed):
+  - the PC + internet mix was refused;
+  - the 2 PCs were combined;
+  - the voucher and note were checked visually.
+
+**Fixes found while testing**
+- The handwriting bank has no standalone comma, so the attestation joins parts with "এবং".
+
+**Waiting on the user**
+- Parts replaced and prices for the 5 demands.
+- **VAT method:** VAT-inclusive (sample-1) or 15%/2% on the gross (sample-4 audit para 86.1)?
+- The PPR 2025 cash/direct-purchase limit, if one should cap combined cases.
+- Which code BSTI's budget prints for computer repair: ৩২৫৮১০৩ (MoPA) or ৩২৫৮১০৪ (RAD sheet)?
+- Whether "সার্ভিস" is fine. The samples' X.0 typed "সার্ভিজ", which is a typo; the generator writes সার্ভিস.
+
+**Next**
+- মঞ্জুরিপত্র generator (Bengali calendar date, the table, memo no.).
+- Audit-table preview for X.1 cross-checking.
+- Convert image demands to PDF on upload.
+
+### Session 5b (2026-10-23): attestation gaps, bigger parts catalogue
+- **Missing attestation on case 2026-27-001:** "মিডিয়া কনভার্টার" isn't in the handwriting bank, so the voucher was rendered without the attestation. The warning only flashed once.
+  - Warnings are now saved in `case.json` and shown in red on the case page.
+  - `core.hand_missing()` checks the text before rendering.
+  - Parts the bank can't write are marked ✍✗ in the part picker and in a hint in the demand editor.
+- **`data/parts.json`:** expanded to 73 parts, grouped by head (desktop internals, laptop parts, peripherals and printer consumables, network and fiber).
+  - Rates are rough market estimates until a real price overwrites them.
+  - `ups` is now "ইউপিএস ব্যাটারি" (UPS Battery); `ups_unit` is the whole UPS.
+- **Handwriting top-up:** Settings → Handwriting lists the 62 bank-missing words and downloads a one-page sheet (`make_handwriting_sheet.js out.docx --words …`, route `/api/handwriting-sheet`).
+  - **To do:** after the user photographs the filled sheet, add its page to `handwriting/layout.json` and re-run `slice_sheet.py`.
+
+### Session 5c (2026-10-24): VAT method settled, item details on the voucher
+- **VAT method:** `utils/vat-tax-calc.ods` (from the user) settles it as `inclusive`, the same as sample-1. `settings.json` is switched back from `gross`, and docs/rules.md §7 is resolved.
+- **Item details:** voucher lines now read "RAM (ADATA 4GB DDR3 2400MHz)", inline, instead of a grey second line.
+  - Each part has a `hint` (example spec, shown as the placeholder) and a `detail` (the last model actually bought, pre-filled next time).
+  - Generate warns about items that have no detail.
+- **Model options per part** (2026-10-24): `parts.json` options now list typical models, 192 in all, each with `detail` (printed on the voucher), `fits` (form hint) and `rate`.
+  - Planned around HP: DDR3 1600 for ProDesk 400/600 G1–G2, DDR4 for G3+, DDR3L/DDR4 SO-DIMM for HP 250/ProBook laptops, HP-specific PSUs, toners, batteries and adapters.
+  - Network options are 2021+ only (Wi-Fi 6/7, 2.5G/10G).
+  - The form's detail box is a dropdown with free text; picking a model fills its price, and the price paid is remembered per model.
+  - Model names and prices are from memory, so verify them against the shop.
+- **Prices refreshed from Star Tech** (startech.com.bd, 2026-10-24): 119 of 212 options are now real listed prices, and each option has `src` ("Star Tech 2026-10-24" or "estimate").
+  - The estimates are used or HP-specific parts, laptop spares, services and out-of-stock items.
+  - Models that weren't in stock were replaced with similar in-stock ones.
+  - RAM and SSD prices are about 3× last year's (8GB DDR4 ≈ ৳৭,৫০০–৮,৩০০). 1TB internal HDDs aren't stocked.
+  - To refresh again, the scraper approach is: curl the category page with `?limit=90`, then parse `p-item-name` / `price-new`.
+- **Fix `KeyError: ','`** (2026-10-24): a 3-wing case joins the wings with a comma, but the bank had no standalone ",". `hand_missing` stripped the comma and so didn't flag it.
+  - `compose.Bank.derive_comma()` now cuts the user's real comma off the "যে," samples (separate ink blob, `ink_blobs`).
+  - `bank_words()` counts "," when "যে," exists, and `hand_missing` reports a missing punctuation mark.
+  - The parts list in the attestation now uses normal commas ("মাদারবোর্ড, এসএসডি, র‍্যাম ও পাওয়ার সাপ্লাই"); `join_hand` was removed.
+  - `generate()` falls back to a voucher without the attestation on any bank KeyError instead of failing.

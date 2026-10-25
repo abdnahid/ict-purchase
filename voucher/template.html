@@ -20,6 +20,7 @@
     clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%); }
   .brand { position: absolute; left: 8mm; top: 5mm; display: flex; align-items: center; gap: 3mm; color: #fff; }
   .brand img, .brand svg { height: 15mm; width: auto; }
+  .brand .logo { height: 12.5mm; display: block; }
   .brand .name { font-weight: 800; letter-spacing: 1.6px; font-size: 17pt; color: var(--orange); line-height: 1; }
   .brand .tag { font-style: italic; font-size: 8.5pt; opacity: .9; margin-top: 1.2mm; border-top: 1px solid rgba(255,255,255,.6); padding-top: .8mm; }
 
@@ -42,12 +43,12 @@
   table.items tr.item td { padding-bottom: 1mm; }
   table.items td.num { text-align: right; font-variant-numeric: tabular-nums; }
   table.items td.c { text-align: center; }
-  table.items td .sub { display: block; color: var(--muted); font-size: 8pt; margin-top: .4mm; }
   table.items tr.filler > td { height: {{ filler_mm }}mm; }
   table.items tr.last td { border-bottom: 1px solid var(--line); }
   .attest { height: calc({{ filler_mm }}mm + 21mm); border: 1.2px dashed #9aa6d6; border-radius: 2mm; margin: 2mm 1mm 1mm 0;
     position: relative; color: #8b95bf; font-size: 7.5pt; padding: 2mm; }
   .attest img { position: absolute; }
+  .attest.filled { border-color: transparent; }
   .totals td { height: 7mm; padding: 0 1.5mm; }
   .totals td.k, .totals td.v { border: 1px solid var(--line); }
   .totals .k { font-size: 7.5pt; text-align: left; font-weight: 700; }
@@ -60,7 +61,7 @@
   .sign .rcv { font-size: 8.5pt; font-weight: 700; font-style: italic; }
   .sign .for { text-align: center; font-size: 8pt; font-weight: 700; position: relative; min-width: 42mm; }
   .sign .for .slot { height: 12mm; display: flex; align-items: flex-end; justify-content: center; }
-  .sign .for .slot img { max-height: 13mm; max-width: 40mm; }
+  .sign .for .slot img { max-height: 9.75mm; max-width: 30mm; }
   .sign .for .slot .ph { font-weight: 400; color: #9aa6d6; font-size: 7pt; border: 1px dashed #9aa6d6; padding: 1mm 2mm; border-radius: 1.5mm; }
   .sign .for .who { border-top: 1px solid #333; padding-top: .8mm; } .sign .for .who span { color: var(--orange); }
 
@@ -80,14 +81,14 @@
 <div class="page">
   <div class="head">
     <div class="brand">
-      {% if assets.logo %}<img src="{{ assets.logo }}" alt="">{% else %}
+      {% if assets.logo %}<img class="logo" src="{{ assets.logo }}" alt="Star World">{% else %}
       <svg viewBox="0 0 60 60" aria-hidden="true">
         <g fill="none" stroke-width="6" stroke-linejoin="round">
           <path d="M30 4 L52 26 L41 37 L30 26 L19 37 L8 26 Z" stroke="#ffffff"/>
           <path d="M30 56 L8 34 L19 23 L30 34 L41 23 L52 34 Z" stroke="#f7941d"/>
         </g>
-      </svg>{% endif %}
-      <div><div class="name">STAR-WORLD</div><div class="tag">Smart, Fast, Affordable</div></div>
+      </svg>
+      <div><div class="name">STAR-WORLD</div><div class="tag">Smart, Fast, Affordable</div></div>{% endif %}
     </div>
     <div class="stripe"></div>
   </div>
@@ -114,7 +115,7 @@
         {% for it in v["items"] %}
         <tr class="item">
           <td class="c">{{ "%02d"|format(loop.index) }}</td>
-          <td>{{ it.description }}{% if it.detail %}<span class="sub">{{ it.detail }}</span>{% endif %}</td>
+          <td>{{ it.description }}{% if it.detail %} ({{ it.detail }}){% endif %}</td>
           <td class="c">{{ it.qty if it.qty else "—" }}</td>
           <td class="num">{{ money(it.rate) if it.rate else "—" }}</td>
           <td class="num">{{ money(it.amount) }}/=</td>
@@ -123,8 +124,8 @@
         <tr class="filler">
           <td></td>
           <td rowspan="4" style="vertical-align:bottom; border-bottom:1px solid var(--line)">
-            <div class="attest">
-              {% if assets.attestation %}<img src="{{ assets.attestation }}" style="left:2mm;top:1mm;width:96%">{% else %}Handwritten attestation · signature · seal (BSTI ICT cell){% endif %}
+            <div class="attest{% if assets.attestation %} filled{% endif %}">
+              {% if assets.attestation %}<img src="{{ assets.attestation }}" style="left:3mm;top:2mm;max-width:92%;max-height:calc(100% - 4mm)">{% else %}Handwritten attestation · signature · seal (BSTI ICT cell){% endif %}
               {% if assets.my_sign %}<img src="{{ assets.my_sign }}" style="left:6mm;bottom:12mm;height:10mm">{% endif %}
               {% if assets.my_seal %}<img src="{{ assets.my_seal }}" style="left:4mm;bottom:1mm;height:14mm;opacity:.9">{% endif %}
             </div>

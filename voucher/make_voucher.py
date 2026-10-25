@@ -3,13 +3,17 @@
 Usage: python3 voucher/make_voucher.py voucher/demo.json [-o output/voucher-demo.pdf]
 
 Optional images are picked up from private/ (git-ignored) when present:
-  starworld_logo.png, starworld_sign.png, attestation.png, my_sign.png, my_seal.png
+  starworld_logo, starworld_sign, attestation, my_sign, my_seal (.svg or .png)
+If the case has an "attestation" ({"unit": ..., "part": ...} or {"text": ...}) and the handwriting bank
+exists (handwriting/slice_sheet.py), the hand-written certificate is composed from it instead.
 """
 import argparse
 import base64
+import io
 import json
 import mimetypes
 import subprocess
+import sys
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -17,12 +21,15 @@ from jinja2 import Environment, FileSystemLoader
 ROOT = Path(__file__).resolve().parent.parent
 PRIVATE = ROOT / "private"
 ASSETS = {
-    "logo": "starworld_logo.png",
-    "vendor_sign": "starworld_sign.png",
-    "attestation": "attestation.png",
-    "my_sign": "my_sign.png",
-    "my_seal": "my_seal.png",
+    "logo": "starworld_logo",
+    "vendor_sign": "starworld_sign",
+    "attestation": "attestation",
+    "my_sign": "my_sign",
+    "my_seal": "my_seal",
 }
+ASSET_EXTS = (".svg", ".png")
+
+ATTESTATION = "প্রত্যয়ন করা যাইতেছে যে, {unit} এর কম্পিউটার মেরামতে {part} ক্রয় ও সার্ভিস চার্জ বাবদ উক্ত অর্থ ব্যয় করা হয়েছে।"
 
 ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
         "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
@@ -74,6 +81,19 @@ def data_uri(path):
     return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
 
 
+def composed_attestation(case):
+    """Hand-written certificate + signature + date + seal from the word bank, as a data URI (None if unavailable)."""
+    att = case.get("attestation")
+    if not att or not (PRIVATE / "handwriting" / "bank.json").exists():
+        return None
+    sys.path.insert(0, str(ROOT / "handwriting"))
+    from compose import compose
+    img = compose(att.get("text") or ATTESTATION.format(**att), date=case["date"], seed=case["sl_no"])
+    buf = io.BytesIO()
+    img.save(buf, "PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 def build(case):
     items = case["items"]
     for it in items:
@@ -85,26 +105,36 @@ def build(case):
     return case
 
 
+def render(case, out_pdf):
+    """Build totals, compose the attestation and print the A5 PDF. Returns the built case."""
+    case = build(case)
+    out_pdf = Path(out_pdf).resolve()
+    out_pdf.parent.mkdir(parents=True, exist_ok=True)
+    assets = {k: data_uri(path) for k, stem in ASSETS.items()
+              for path in [next((PRIVATE / (stem + e) for e in ASSET_EXTS if (PRIVATE / (stem + e)).exists()), None)] if path}
+    if (att := composed_attestation(case)):
+        assets["attestation"] = att
+    env = Environment(loader=FileSystemLoader(Path(__file__).parent), autoescape=True)
+    html = env.get_template("template.html").render(v=case, assets=assets, money=money,
+                                              filler_mm=max(30, 64 - 11 * len(case["items"])))
+    out_html = out_pdf.with_suffix(".html")
+    out_html.write_text(html, encoding="utf-8")
+    subprocess.run(["google-chrome", "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+                    f"--print-to-pdf={out_pdf}", out_html.as_uri()],
+                   check=True, capture_output=True)
+    out_html.unlink()
+    return case
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("case")
     ap.add_argument("-o", "--out")
     args = ap.parse_args()
 
-    case = build(json.loads(Path(args.case).read_text(encoding="utf-8")))
-    out_pdf = Path(args.out or ROOT / "output" / f"voucher-{case['sl_no']}.pdf").resolve()
-    out_pdf.parent.mkdir(parents=True, exist_ok=True)
-
-    assets = {k: data_uri(PRIVATE / f) for k, f in ASSETS.items() if (PRIVATE / f).exists()}
-    env = Environment(loader=FileSystemLoader(Path(__file__).parent), autoescape=True)
-    html = env.get_template("template.html").render(v=case, assets=assets, money=money,
-                                              filler_mm=max(30, 64 - 11 * len(case["items"])))
-    out_html = out_pdf.with_suffix(".html")
-    out_html.write_text(html, encoding="utf-8")
-
-    subprocess.run(["google-chrome", "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
-                    f"--print-to-pdf={out_pdf}", out_html.as_uri()],
-                   check=True, capture_output=True)
+    case = json.loads(Path(args.case).read_text(encoding="utf-8"))
+    out_pdf = Path(args.out or ROOT / "output" / f"voucher-{case['sl_no']}.pdf")
+    case = render(case, out_pdf)
     print(f"total {money(case['total'])}/= ({case['total_words']})")
     print("wrote", out_pdf)
 

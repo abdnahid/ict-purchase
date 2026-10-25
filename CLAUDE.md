@@ -9,11 +9,22 @@ Read `docs/workflow.md` for the full process, text templates and calculation rul
 ## Repo layout
 
 - `sample-1/`, `sample-2/`, `sample-3/`: real past cases. Each has `demand.pdf`, `voucher.pdf`, `note.pdf` and `pass-letter.pdf`.
+- `sample-4-combined/`: a **combined** case (2 demands → 1 voucher → note 86, July 2026, old schedule). It contains `demand-1.pdf`, `demand-2.pdf`, `voucher.pdf` and `note.pdf`, but no pass letter.
 - `utils/vat-tax.webp`: official FY 2026-27 VAT and income-tax deduction rates by economic code. কম্পিউটার মেরামত (৩২৫৮১০৪) is 15% VAT and 2% tax.
+- `utils/vat-tax-calc.ods`: the user's own VAT/tax calculator, and the method the audit branch uses. VAT = total × 15/115, base = total − VAT, tax = 2% of base, net = base − tax (`vat_method: inclusive`).
 - `utils/monetary and administrative power.pdf`: BSTI's revised schedule of administrative and financial powers, 2026, effective 30 Aug 2026. The pages are scanned sideways, so rotate them when rendering. **Computer repair is serial 63, not 44.**
 - `utils/Clarification.pdf`: MoPA's definitions of the economic codes (which code covers which item).
 - `docs/rules.md`: the extracted ICT-relevant rules from these three files. **Use it as the source of truth** for codes, rates and approval limits.
-- `voucher/`: Star-World invoice generator (Jinja2 HTML → headless Chrome → A5 PDF). Run `python3 voucher/make_voucher.py voucher/demo.json -o output/voucher-demo.pdf`. Star-World is run by the user's brother, who authorised digital invoices; their authorised signature goes in `private/starworld_sign.png`.
+- `voucher/`: Star-World invoice generator (Jinja2 HTML → headless Chrome → A5 PDF). Run `python3 voucher/make_voucher.py voucher/demo.json -o output/voucher-demo.pdf`. Star-World is run by the user's brother, who authorised digital invoices; their authorised signature is `private/starworld_sign.svg` and the logo is `private/starworld_logo.png` (each asset slot accepts .svg or .png).
+- `handwriting/`: hand-written attestation. `slice_sheet.py` builds the word bank in `private/handwriting/` from the photos in `handwriting-sample/` (git-ignored), using `layout.json` (where each section sits and which words were written). It finds words on the cropped page photos, then cuts the pixels at 2× from the full-resolution camera originals in `handwriting-sample/originals/`, aligned with SIFT and a homography. Run it with `.venv/bin/python`, since it needs OpenCV (`requirements.txt`). `compose.py` builds the certificate, signature, date and seal block from the bank with only numpy and Pillow. `make_voucher.py` calls it when the case JSON has `"attestation": {"unit", "part"}`.
+- `app/`: the local web app, the main way to work. Run `.venv/bin/python app/server.py` and open http://127.0.0.1:5050 (it binds to localhost only).
+  - **Inbox:** demand scans from `demands/`, each with its PDF beside a form for unit, who/where, fault, parts, prices and service charge.
+  - **Suggest cases:** groups demands by head within the limit.
+  - **Cases:** status steps, the totals table, and **Generate**, which writes the voucher PDF, D-Nothi-named demand copies and the X.0/X.2 text.
+  - `app/core.py` holds all the logic, including Bangla digits and number words, grouping rules and note templates. `server.py` is a thin Flask layer.
+  - When the user drops new demands in, Claude can read the scans and pre-fill the records in `cases/demands.json` (`core.update_demand`); the user then adds only what was replaced and the price.
+- `data/` (committed): `heads.json` (economic code, VAT/tax, 2026 power serial, Director (Admin) limit and wording per head, by fiscal year), `parts.json` (part catalogue: Bangla/English name, default head, last price) and `settings.json` (voucher SL counter, `ppr_ceiling`, `vat_method`, note file no.).
+- `demands/` and `cases/` (git-ignored, real names): incoming demand scans; `cases/demands.json`, the demand records; and `cases/<fy-nnn>/`, one folder per case holding `case.json` and `out/`.
 - `scripts/make_handwriting_sheet.js`: builds `output/handwriting-sheet.docx`, the sheet the user fills in by hand. Run `npm install` first.
 - `private/` (git-ignored): signature, seal, handwriting scans and logo. **Never commit these.** Copy them between computers by hand.
 - `docs/workflow.md`: domain knowledge, including the step-by-step process, the paragraph templates and the VAT/tax formula.

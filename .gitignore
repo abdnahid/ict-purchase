@@ -7,3 +7,6 @@ output/
 *.png
 .DS_Store
 private/
+handwriting-sample/
+demands/
+cases/
