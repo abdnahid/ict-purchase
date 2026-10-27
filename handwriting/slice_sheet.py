@@ -262,6 +262,10 @@ def main():
                 (args.out / rel).parent.mkdir(exist_ok=True)
                 cv2.imwrite(str(args.out / rel), cv2.cvtColor(rgba, cv2.COLOR_RGBA2BGRA))
                 bank.setdefault(label, []).append({"file": rel, "h": rgba.shape[0], "w": rgba.shape[1], "matra": matra_row(rgba), "scale": k})
+                fixed = blk.get("matra", {}).get(label, [])
+                col = n // len(blk["labels"]) if "labels" in blk else 0
+                if col < len(fixed) and fixed[col] is not None:  # set by eye where the headline slopes into a long tail
+                    bank[label][-1]["matra"] = fixed[col]
                 cv2.rectangle(overlay, (x0, y0), (x1, y1), (0, 0, 255), 2)
                 cv2.putText(overlay, str(n), (x0, y0 - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 140, 0), 1)
         if args.debug:

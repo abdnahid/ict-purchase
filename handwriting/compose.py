@@ -10,6 +10,7 @@ jitter in size, tilt and spacing so no two vouchers look the same. Needs only nu
 import argparse
 import json
 import random
+import unicodedata
 from pathlib import Path
 
 import numpy as np
@@ -59,7 +60,7 @@ class Bank:
     def tokens(self, text):
         """Split text into bank labels, peeling trailing punctuation off words that were only written bare."""
         out, missing = [], []
-        for word in text.split():
+        for word in unicodedata.normalize("NFC", text).split():
             tail = []
             while word not in self.items and word and word[-1] in PUNCT:
                 tail.insert(0, word[-1])

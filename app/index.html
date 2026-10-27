@@ -40,15 +40,24 @@
   .muted { color: var(--muted); } .small { font-size: 12.5px; }
   .editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; height: 100%; }
   .editor iframe, .editor img { width: 100%; height: 100%; min-height: 600px; border: 1px solid var(--line); border-radius: 8px; background: #fff; object-fit: contain; }
-  label { display: block; font-size: 12.5px; color: var(--muted); margin: 10px 0 3px; }
-  input, select, textarea { font: inherit; width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
-  textarea { resize: vertical; min-height: 56px; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 2px; }
+  input, select, textarea { font: inherit; font-size: 13px; width: 100%; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  input, select { height: 30px; }
+  select { appearance: none; padding-right: 24px; cursor: pointer; text-overflow: ellipsis;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236a7282' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 8px center; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  textarea { resize: vertical; min-height: 52px; line-height: 1.45; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .row2 > div > label { margin-top: 10px; }
   table { border-collapse: collapse; width: 100%; }
-  table.items td, table.items th { padding: 4px; text-align: left; font-weight: 500; font-size: 12.5px; color: var(--muted); }
-  table.items td { color: var(--ink); }
-  table.items input, table.items select { padding: 4px 6px; }
+  /* repair items: one small card per part — part · qty · rate on top, the model (voucher spec line) below */
+  .item { display: grid; grid-template-columns: minmax(0, 1fr) 56px 88px 22px; gap: 4px 6px; align-items: center;
+    background: #fafbfc; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; }
+  .item .wide { grid-column: 1 / 4; }
+  .item .hint { grid-column: 1 / 4; font-size: 11.5px; color: var(--muted); line-height: 1.3; min-height: 0; }
+  .item .hint:empty { display: none; }
+  .item-head { display: grid; grid-template-columns: minmax(0, 1fr) 56px 88px 22px; gap: 6px; padding: 0 9px; font-size: 11.5px; color: var(--muted); }
+  .item input[type=number] { text-align: right; padding-right: 6px; }
   table.sum td { padding: 5px 8px; border-bottom: 1px solid var(--line); }
   table.sum td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
   .x { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
@@ -158,10 +167,10 @@ async function combine(ids) {
 }
 
 function partOptions(sel) {
-  // grouped by head; ✍✗ = the hand-written attestation can't name this part yet
+  // grouped by head
   return `<option value="">— part —</option>` + Object.entries(S.heads).map(([hk, h]) => `<optgroup label="${esc(h.khat)}">` +
     Object.entries(S.parts).filter(([, p]) => p.head === hk).map(([k, p]) =>
-      `<option value="${k}" ${k === sel ? "selected" : ""}>${esc(p.bn)} · ${esc(p.en)}${p.hand_missing.length ? " ✍✗" : ""}</option>`).join("") +
+      `<option value="${k}" ${k === sel ? "selected" : ""}>${esc(p.bn)} · ${esc(p.en)}</option>`).join("") +
     `</optgroup>`).join("");
 }
 function renderEditor(d) {
@@ -177,7 +186,7 @@ function renderEditor(d) {
         <div><label>Name on attachment (চাহিদাপত্র - … .pdf)</label><input id="f_label" value="${esc(d.label)}" placeholder="আব্দুল কাদের"></div>
         <div><label>Demand date</label><input id="f_date" type="date" value="${esc(d.date)}"></div>
       </div>
-      <label>Wing (short; used in subject and handwritten attestation)</label>
+      <label>Wing (short; used in the note subject)</label>
       <input id="f_wing" list="wings" value="${esc(d.wing)}" placeholder="সিএম উইং">
       <datalist id="wings">${wings.map(w => `<option value="${esc(w)}">`).join("")}</datalist>
       <label>Who / where (ends with “এর” or “এ”)</label>
@@ -187,17 +196,8 @@ function renderEditor(d) {
         <div><label>Condition</label><input id="f_state" value="${esc(d.state)}"></div>
       </div>
       <h3>Repair</h3>
-      <table class="items"><tr><th>Part · model (printed on the voucher)</th><th style="width:60px">Qty</th><th style="width:90px">Rate ৳</th><th></th></tr>
-        ${d.items.map((it, i) => `<tr>
-          <td><select id="i_part_${i}" onchange="pickPart(${i})">${partOptions(it.part)}</select></td>
-          <td><input id="i_qty_${i}" type="number" min="1" value="${esc(it.qty ?? 1)}"></td>
-          <td><input id="i_rate_${i}" type="number" min="0" value="${esc(it.rate)}"></td>
-          <td><button class="x" onclick="rmItem(${i})" title="remove">×</button></td></tr>
-          <tr><td colspan="3" style="padding-top:0"><input id="i_detail_${i}" list="dl_${i}" value="${esc(it.detail)}" oninput="pickModel(${i})"
-                placeholder="${S.parts[it.part]?.options?.length ? "model: pick from the list or type one" : "model: brand, size, spec"}">
-              <datalist id="dl_${i}">${(S.parts[it.part]?.options || []).map(o => `<option value="${esc(o.detail)}">${esc((o.fits ? o.fits + " · " : "") + "৳" + money(o.rate) + (o.src === "estimate" ? " (estimate)" : o.src ? " (" + o.src + ")" : ""))}</option>`).join("")}</datalist>
-              <div class="small muted" id="i_fit_${i}">${esc(fitsOf(it.part, it.detail))}</div></td><td></td></tr>`).join("")}
-      </table>
+      <div class="item-head"><span>Part · model (printed on the voucher)</span><span style="text-align:right">Qty</span><span style="text-align:right">Rate ৳</span><span></span></div>
+      ${d.items.map((it, i) => itemRow(it, i)).join("")}
       <button class="btn" style="margin-top:6px" onclick="addItem()">+ Part</button>
       <div class="row2">
         <div><label>Service charge ৳</label><input id="f_sc" type="number" min="0" value="${esc(d.service_charge)}"></div>
@@ -207,18 +207,36 @@ function renderEditor(d) {
       <label>Diagnosis bullet (combined notes only; blank = generated)</label>
       <textarea id="f_diag" placeholder="সিএম উইং এর কম্পিউটারে সংযুক্ত SSD-টি ত্রুটিযুক্ত। নতুন SSD প্রতিস্থাপন করা প্রয়োজন।">${esc(d.diagnosis)}</textarea>
       <label>Private notes</label><textarea id="f_notes">${esc(d.notes)}</textarea>
-      ${handHint(d.items)}
       <div class="total">Total ৳${bnd(money(d.total))} ${headChip(d.head_key)}</div>
       <div class="bar" style="margin-top:10px"><span class="sp"></span><button class="btn pri" onclick="saveDemand()">Save</button></div>
     </div></div>`;
 }
-function handHint(items) {
-  const miss = [...new Set(items.flatMap(i => S.parts[i.part]?.hand_missing || []))];
-  return miss.length ? `<div class="note">✍✗ No handwriting sample for <b>${esc(miss.join(", "))}</b>: the voucher will come out without the attestation until you add these words (Settings → Handwriting).</div>` : "";
+function itemRow(it, i) {
+  // the model is a real <select> (a datalist filters itself down to the chosen value); "Other…" opens a text box
+  const opts = S.parts[it.part]?.options || [], k = opts.findIndex(o => o.detail === it.detail);
+  const other = !opts.length || (k < 0 && it.detail);
+  const model = opts.length ? `<select class="wide" id="i_model_${i}" onchange="pickModel(${i})">
+      <option value="" ${k < 0 && !it.detail ? "selected" : ""}>— model —</option>
+      ${opts.map((o, j) => `<option value="${j}" ${j === k ? "selected" : ""}>${esc(o.detail)} — ৳${money(o.rate)}${o.src === "estimate" ? " (est.)" : ""}</option>`).join("")}
+      <option value="other" ${other ? "selected" : ""}>Other… (type the model)</option></select>` : "";
+  return `<div class="item">
+    <select id="i_part_${i}" onchange="pickPart(${i})">${partOptions(it.part)}</select>
+    <input id="i_qty_${i}" type="number" min="1" value="${esc(it.qty ?? 1)}">
+    <input id="i_rate_${i}" type="number" min="0" value="${esc(it.rate)}">
+    <button class="x" onclick="rmItem(${i})" title="remove">×</button>
+    ${model}
+    <input class="wide" id="i_detail_${i}" value="${esc(it.detail)}" placeholder="model: brand, size, spec" ${other ? "" : "hidden"}>
+    <div class="hint" id="i_fit_${i}">${esc(fitsOf(it.part, it.detail))}</div>
+  </div>`;
+}
+function detailOf(i) {
+  const sel = $(`i_model_${i}`), opts = S.parts[$(`i_part_${i}`).value]?.options || [];
+  if (!sel || sel.value === "other") return $(`i_detail_${i}`).value.trim();
+  return sel.value === "" ? "" : opts[+sel.value].detail;
 }
 function readItems() {
   const d = S.demands.find(x => x.id === S.sel);
-  return d.items.map((_, i) => ({ part: $(`i_part_${i}`).value, detail: $(`i_detail_${i}`).value,
+  return d.items.map((_, i) => ({ part: $(`i_part_${i}`).value, detail: detailOf(i),
     qty: +$(`i_qty_${i}`).value || 1, rate: +$(`i_rate_${i}`).value || 0 }));
 }
 function pickPart(i) {
@@ -236,8 +254,11 @@ function fitsOf(part, detail) {
   return [o.fits && "fits: " + o.fits, o.src && "price: " + (o.src === "estimate" ? "estimate" : o.src)].filter(Boolean).join(" · ");
 }
 function pickModel(i) {  // choosing a listed model fills its usual price; type over it with what you paid
-  const part = $(`i_part_${i}`).value, o = optionOf(part, $(`i_detail_${i}`).value);
-  $(`i_fit_${i}`).textContent = fitsOf(part, $(`i_detail_${i}`).value);
+  const part = $(`i_part_${i}`).value, other = $(`i_model_${i}`).value === "other", box = $(`i_detail_${i}`);
+  box.hidden = !other;
+  if (other) { box.value = ""; box.focus(); }
+  const detail = detailOf(i), o = optionOf(part, detail);
+  $(`i_fit_${i}`).textContent = fitsOf(part, detail);
   if (o) $(`i_rate_${i}`).value = o.rate;
 }
 function addItem() { const d = S.demands.find(x => x.id === S.sel); d.items = [...readItems(), { part: "", detail: "", qty: 1, rate: "" }]; keepForm(() => render()); }
@@ -302,8 +323,29 @@ function renderCase(c) {
       <h3>Note subject</h3>${copyBlock(S.note.subject)}
       <h3>Paragraph X.0 (to audit)</h3>${copyBlock(S.note.x0)}
       <h3>Paragraph X.2 (final proposal)</h3>${copyBlock(S.note.x2)}
-      <h3>Attachments</h3><div class="text">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>` : `<div class="muted">Loading note…</div>`}
+      <h3>Attachments</h3><div class="text">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>
+      <h3>মঞ্জুরিপত্র: subject</h3>${copyBlock(S.note.pass_subject)}
+      <h3>মঞ্জুরিপত্র: body</h3>${passBlock(S.note)}` : `<div class="muted">Loading note…</div>`}
   </div>`;
+}
+function passBlock(n) {
+  // paragraph + bordered table + closing line; Copy puts HTML on the clipboard so D-Nothi's editor keeps the table
+  const cell = "border:1px solid #000;padding:4px 6px;text-align:center;vertical-align:middle";
+  const html = `<p>${esc(n.pass_para)}</p>
+    <table style="border-collapse:collapse;width:100%">${n.pass_table.map((r, i) => `<tr>${r.map(c =>
+      `<td style="${cell}${i === 0 ? ";font-size:90%" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</table>
+    <p>${esc(n.pass_close)}</p>`;
+  window._passHtml = html; window._passText = n.pass_body;
+  return `<div style="position:relative"><div class="text" style="white-space:normal;padding-right:72px">${html}</div>
+    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyPass()">Copy</button></div>`;
+}
+async function copyPass() {
+  try {
+    await navigator.clipboard.write([new ClipboardItem({
+      "text/html": new Blob([window._passHtml], { type: "text/html" }),
+      "text/plain": new Blob([window._passText], { type: "text/plain" }) })]);
+  } catch (e) { await navigator.clipboard.writeText(window._passText); }
+  toast("Copied (with table)");
 }
 function copyBlock(text) {
   const id = "cp" + Math.random().toString(36).slice(2);
@@ -346,12 +388,12 @@ function renderSettings() {
     </div>
     <div class="bar" style="margin-top:12px"><span class="sp"></span><button class="btn pri" onclick="saveSettings()">Save</button></div>
     <h3>Handwriting</h3>
-    ${S.hand_missing.length ? `<div class="small">${bnd(S.hand_missing.length)} words used by parts, wings or attestations have no hand-written sample yet, so a voucher that needs one comes out without the attestation:</div>
+    ${S.hand_missing.length ? `<div class="small">${bnd(S.hand_missing.length)} words of the attestation have no hand-written sample yet, so vouchers come out without it:</div>
       <div class="text" style="margin:6px 0">${esc(S.hand_missing.join("  "))}</div>
       <label>Words for the top-up sheet (edit to pick only some)</label><textarea id="s_words">${esc(S.hand_missing.join(" "))}</textarea>
       <div class="bar" style="margin-top:6px"><span class="sp"></span><button class="btn" onclick="topUp()">Download top-up sheet (.docx)</button></div>
       <div class="small muted">Print it, write each word 3 times, photograph it, drop the photo in <code>handwriting-sample/</code> and ask Claude to add it to the bank.</div>`
-      : `<div class="small muted">Every part, wing and attestation word has a hand-written sample.</div>`}
+      : `<div class="small muted">Every attestation word has a hand-written sample.</div>`}
     <h3>Expense heads (${esc(s.fiscal_year)})</h3>
     <table class="sum">${Object.values(S.heads).map(h => `<tr><td><b>${esc(h.khat)}</b> · ${esc(h.code)} · serial ${bnd(h.serial)}<br><span class="small muted">${esc(h.covers)}</span></td>
       <td>${Math.round(h.vat * 100)}% / ${Math.round(h.tax * 100)}%<br><span class="small muted">${h.limit != null ? "≤ ৳" + money(h.limit) : esc(h.power)}</span></td></tr>`).join("")}</table>

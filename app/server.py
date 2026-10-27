@@ -32,7 +32,7 @@ def index():
 def state():
     reg = core.registry()["demands"]
     return jsonify(demands=[demand_view(d) for d in reg.values()], cases=[case_view(c) for c in core.list_cases()],
-                   heads=core.heads(), parts=core.parts_view(), hand_missing=core.missing_hand_words(), settings=core.settings(), statuses=core.STATUSES)
+                   heads=core.heads(), parts=core.parts(), hand_missing=core.missing_hand_words(), settings=core.settings(), statuses=core.STATUSES)
 
 
 @app.post("/api/scan")

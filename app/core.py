@@ -11,6 +11,7 @@ import json
 import re
 import shutil
 import sys
+import unicodedata
 from datetime import date
 from pathlib import Path
 
@@ -70,7 +71,7 @@ def hand_missing(text, bank=None):
     """Words of `text` the attestation can't write, in order; mirrors compose.Bank.tokens (trailing , । peeled off)."""
     bank = bank_words() if bank is None else bank
     missing = []
-    for w in text.split():
+    for w in unicodedata.normalize("NFC", text).split():
         while w not in bank and w and w[-1] in ",।":
             if w[-1] not in bank and w[-1] not in missing:
                 missing.append(w[-1])
@@ -80,19 +81,9 @@ def hand_missing(text, bank=None):
     return missing
 
 
-def parts_view():
-    """Catalogue plus which parts the hand-written attestation can name."""
-    bank = bank_words()
-    return {k: {**p, "hand_missing": hand_missing(p["bn"], bank)} for k, p in parts().items()}
-
-
 def missing_hand_words():
-    """Every word the catalogue, heads and known wings need that isn't in the bank yet: the top-up list."""
-    bank = bank_words()
-    texts = [p["bn"] for p in parts().values()]
-    texts += [h["attestation"].replace("{units}", "").replace("{parts}", "") for h in heads().values()]
-    texts += [d["wing"] for d in registry()["demands"].values() if d.get("wing")]
-    return list(dict.fromkeys(w for t in texts for w in hand_missing(t, bank)))
+    """Words of every head's attestation that aren't in the bank yet: the top-up list."""
+    return list(dict.fromkeys(w for k in heads() for w in hand_missing(attestation_text(k))))
 
 
 # ---------- Bangla numbers ----------
@@ -180,7 +171,7 @@ def scan_inbox():
     for path in sorted(DEMANDS.rglob("*")):
         if path.suffix.lower() not in (".pdf", ".jpg", ".jpeg", ".png") or not path.is_file():
             continue
-        rel = str(path.relative_to(ROOT))
+        rel = path.relative_to(ROOT).as_posix()  # forward slashes on Windows too, so records match across computers
         if rel in known:
             continue
         did = demand_id(path)
@@ -426,10 +417,10 @@ def parts_phrase(demands, joiner=join_bn):
     return joiner(names)
 
 
-def attestation_text(case, demands):
-    h = heads(case["fy"])[case["head"]]
-    units = wings_phrase(demands, {**h, "count_devices": h["count_devices"] and len(demands) > 1}, " এর")
-    return h["attestation"].format(units=units, parts=parts_phrase(demands))
+def attestation_text(head_key, fy=None):
+    """The hand-written certificate: one common sentence naming only the kind of job (no wings or parts)."""
+    work = heads(fy)[head_key]["attestation_work"]
+    return unicodedata.normalize("NFC", settings()["attestation"].format(work=work))
 
 
 def voucher_case(case):
@@ -437,7 +428,7 @@ def voucher_case(case):
     demands = case_demands(case)
     y, m, d = case["voucher"]["date"].split("-")
     return {"sl_no": case["voucher"]["sl_no"], "date": f"{d}/{m}/{y}", "customer": s["customer"],
-            "attestation": {"text": attestation_text(case, demands)}, "items": voucher_items(demands)}
+            "attestation": {"text": attestation_text(case["head"], case["fy"])}, "items": voucher_items(demands)}
 
 
 # ---------- D-Nothi note ----------
@@ -493,7 +484,31 @@ def note_texts(case):
     p3_x2 = f"এমতাবস্থায়, নোট অনুচ্ছেদ {bn(audit)} এর নিরীক্ষা শাখার মতামতের আলোকে {body}টি সদয় অনুমোদনের জন্য পেশ করা হলো।"
     x0 = "\n\n".join([p1, p2, p3_x0, "সদয় অনুমোদনের জন্য পেশ করা হলো।"])
     x2 = "\n\n".join([p1, p2, p3_x2])
-    return {"subject": subject, "x0": x0, "x2": x2, "attachments": files + [voucher]}
+
+    # মঞ্জুরিপত্র (sample-1 wording): one device names its parts, several say যন্ত্রাংশ like the combined note
+    what = join_bn([f"{d['who']} {d['thing']}" for d in demands])
+    bought = parts_phrase(demands) if n == 1 else "যন্ত্রাংশ"
+    pass_para = (f"বিএসটিআই'র {what} মেরামতের জন্য {bought} ক্রয় ও সার্ভিস চার্জ বাবদ ভ্যাট ও ট্যাক্সসহ সর্বমোট {amount} "
+                 f"(বিবেচ্য সংযুক্তি: {voucher}, সদয় দ্রষ্টব্য।) '{h['khat']}' ক্রয় খাত থেকে পোস্ট ফ্যাক্টো মঞ্জুরির প্রস্তাবটি "
+                 f"কর্তৃপক্ষ কর্তৃক মঞ্জুর করা হয়েছে।")
+    pass_close = f"উক্ত ব্যয় '{h['khat']}' খাত হতে সমন্বয় করা হবে।"
+    table = pass_table(case)
+    pass_body = "\n\n".join([pass_para, "\n".join("\t".join(r) for r in table), pass_close])
+    return {"subject": subject, "x0": x0, "x2": x2, "attachments": files + [voucher],
+            "pass_subject": "মঞ্জুরিপত্র", "pass_para": pass_para, "pass_table": table, "pass_close": pass_close,
+            "pass_body": pass_body}
+
+
+def pass_table(case):
+    """The deduction table of the মঞ্জুরিপত্র (sample-1 layout): header row, formula row, figures with the payable in words."""
+    h = heads(case["fy"])[case["head"]]
+    t = totals(case)
+    vat, tax = bn(f"{h['vat'] * 100:g}%"), bn(f"{h['tax'] * 100:g}%")
+    amt = lambda n: taka_bn(n) + ".০০"
+    return [["ভ্যাট ও ট্যাক্সসহ দাবীকৃত বিল (টাকা)", "ভ্যাট পূর্ব টাকার পরিমাণ", f"কর্তনকৃত ভ্যাটের পরিমাণ ({vat}) (টাকা)",
+             f"কর্তনকৃত ট্যাক্সের পরিমাণ ({tax}) (টাকা)", "পরিশোধযোগ্য বিলের পরিমাণ (টাকা)"],
+            ["(১)", "(২)", f"৩=(২×{vat})", f"৪=(২×{tax})", "৫=(১-৩-৪)"],
+            [amt(t["total"]), amt(t["base"]), amt(t["vat"]), amt(t["tax"]), f"{amt(t['payable'])} ({words_bn(t['payable'])})"]]
 
 
 def default_diagnosis(d, device):
@@ -541,7 +556,8 @@ def generate(cid):
     texts = note_texts(case)
     (out / "note.txt").write_text(
         f"নোটের বিষয়: {texts['subject']}\n\n--- অনুচ্ছেদ X.0 ---\n{texts['x0']}\n\n--- অনুচ্ছেদ X.2 ---\n{texts['x2']}\n\n"
-        "সংযুক্তি:\n" + "\n".join(f"{bn(i)}। {a}" for i, a in enumerate(texts["attachments"], 1)) + "\n", encoding="utf-8")
+        "সংযুক্তি:\n" + "\n".join(f"{bn(i)}। {a}" for i, a in enumerate(texts["attachments"], 1)) + "\n\n"
+        f"--- মঞ্জুরিপত্র ---\nবিষয়: {texts['pass_subject']}\n\n{texts['pass_body']}\n", encoding="utf-8")
     case = get_case(cid)
     case["warnings"] = warnings  # kept so the case page still shows them after a reload
     if case["status"] == "draft":

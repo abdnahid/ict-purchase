@@ -43,6 +43,14 @@
   table.items tr.item td { padding-bottom: 1mm; }
   table.items td.num { text-align: right; font-variant-numeric: tabular-nums; }
   table.items td.c { text-align: center; }
+  /* item name on its own line in bold; the model/spec under it, smaller and grey, with a dash */
+  table.items .iname { font-weight: 700; }
+  table.items .ispec { font-size: 8pt; color: #555; margin-top: .6mm; padding-left: 3mm; text-indent: -3mm; }
+  table.items .ispec::before { content: "–\00a0\00a0"; }
+  /* many items: tighter rows so the attestation keeps its minimum space */
+  table.items.tight tr.item td { padding-top: .9mm; padding-bottom: .5mm; }
+  table.items.tight .ispec { font-size: 7.5pt; margin-top: .2mm; }
+  .head, .foot { flex-shrink: 0; }
   table.items tr.filler > td { height: {{ filler_mm }}mm; }
   table.items tr.last td { border-bottom: 1px solid var(--line); }
   .attest { height: calc({{ filler_mm }}mm + 21mm); border: 1.2px dashed #9aa6d6; border-radius: 2mm; margin: 2mm 1mm 1mm 0;
@@ -115,7 +123,7 @@
         {% for it in v["items"] %}
         <tr class="item">
           <td class="c">{{ "%02d"|format(loop.index) }}</td>
-          <td>{{ it.description }}{% if it.detail %} ({{ it.detail }}){% endif %}</td>
+          <td><div class="iname">{{ it.description }}</div>{% if it.detail %}<div class="ispec">{{ it.detail }}</div>{% endif %}</td>
           <td class="c">{{ it.qty if it.qty else "—" }}</td>
           <td class="num">{{ money(it.rate) if it.rate else "—" }}</td>
           <td class="num">{{ money(it.amount) }}/=</td>
@@ -158,5 +166,27 @@
 
   {% if v.demo %}<div class="demo">DEMO</div>{% endif %}
 </div>
+<script>
+  // Item rows are one to three lines tall (name + wrapped spec), so the blank row under them is sized here, after
+  // layout: it grows into whatever .body (flex: 1) leaves below the signature and gives back any overflow past the
+  // page edge. The attestation box's padding and margins change the table height too, so measure, set, re-measure.
+  (function () {
+    const page = document.querySelector(".page"), body = page.querySelector(".body"), sign = body.querySelector(".sign");
+    const foot = page.querySelector(".foot"), table = page.querySelector("table.items");
+    const cells = page.querySelectorAll("tr.filler > td"), attest = page.querySelector(".attest");
+    const mm = 96 / 25.4, min = {{ filler_mm }} * mm, r = el => el.getBoundingClientRect();
+    const slack = () => (r(body).bottom - r(sign).bottom) - Math.max(0, r(foot).bottom - r(page).bottom);
+    const set = h => { cells.forEach(td => td.style.height = h + "px"); attest.style.height = h + 21 * mm + "px"; };
+    let h = min;
+    set(h);
+    if (slack() < 0) table.classList.add("tight");
+    for (let i = 0; i < 4; i++) {
+      const s = slack();
+      if (Math.abs(s) < 0.5 || (h === min && s < 0)) break;
+      h = Math.max(min, h + s);
+      set(h);
+    }
+  })();
+</script>
 </body>
 </html>

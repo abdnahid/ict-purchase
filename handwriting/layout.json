@@ -1,5 +1,5 @@
 {
-  "_comment": "Where each section of the hand-written sample pages sits (pixel coords on the original photos in handwriting-sample/). Labels are listed top-to-bottom; every column repeats the same labels. 'kind' decides how the crop is cleaned: word (ink → transparent), seal (keeps stamp colour).",
+  "_comment": "Where each section of the hand-written sample pages sits (pixel coords on the original photos in handwriting-sample/). Labels are listed top-to-bottom; every column repeats the same labels. 'kind' decides how the crop is cleaned: word (ink → transparent), seal (keeps stamp colour). 'matra' (optional): headline height per label and column, for variants whose sloping headline or long tail fools the automatic estimate (null = keep it).",
   "originals": {
     "1.jpeg": "originals/20261022_095412.jpg", "2.jpeg": "originals/20261022_095458.jpg",
     "3.jpeg": "originals/20261022_095508.jpg", "4.jpeg": "originals/20261022_095519.jpg",
@@ -49,6 +49,11 @@
     "7.jpeg": [
       {"name": "sign", "kind": "word", "box": [100, 130, 950, 560], "cols": 2, "labels": ["sign", "sign", "sign"]},
       {"name": "seal", "kind": "seal", "box": [60, 700, 1100, 900], "cols": 3, "labels": ["seal"]}
+    ],
+    "originals/topup.jpeg": [
+      {"name": "topup", "kind": "word", "box": [30, 60, 1860, 1340], "cols": 3,
+       "matra": {"উল্লেখিত": [null, 0.44, 0.44]},
+       "labels": ["মেরামত", "কাজে", "উল্লেখিত", "যথাযথভাবে", "ব্যয়িত", "ইন্টারনেট", "সংযোগ", "নেটওয়ার্ক"]}
     ]
   }
 }

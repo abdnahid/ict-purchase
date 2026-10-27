@@ -1,10 +1,10 @@
 {
-  "_comment": "ppr_ceiling: the most one combined case may total when the head's Director (Admin) power is 'PPR full' (null = no cap). vat_method: 'inclusive' (VAT = total×15/115, base = total − VAT, tax = 2% of base; the user's utils/vat-tax-calc.ods and the sample-1 pass letter) or 'gross' (15% and 2% of the total, sample-4 audit note).",
+  "_comment": "ppr_ceiling: the most one combined case may total when the head's Director (Admin) power is 'PPR full' (null = no cap). vat_method: 'inclusive' (VAT = total×15/115, base = total − VAT, tax = 2% of base; the user's utils/vat-tax-calc.ods and the sample-1 pass letter) or 'gross' (15% and 2% of the total, sample-4 audit note). attestation: the hand-written certificate on every voucher, the same for every case (no wings or parts); {work} is the head's 'attestation_work' in heads.json.",
   "fiscal_year": "2026-27",
   "ppr_ceiling": null,
   "vat_method": "inclusive",
   "service_charge": 1000,
-  "next_voucher_sl": 1304,
+  "next_voucher_sl": 1308,
   "customer": {
     "name": "BSTI, Tejgaon",
     "address": "Dhaka",
@@ -14,5 +14,6 @@
     "file_no": "৩৬.০৫.০০০০.০০০.১০৮.০৭.০০০১.১৭",
     "file_subject": "বিএসটিআই'র আইসিটি দ্রব্যাদি/এক্সেসরিজ ক্রয় সংক্রান্ত।",
     "voucher_attachment": "মেরামত ভাউচার.pdf"
-  }
+  },
+  "attestation": "প্রত্যয়ন করা যাইতেছে যে, {work} মেরামত কাজে উল্লেখিত অর্থ যথাযথভাবে ব্যয়িত হয়েছে।"
 }

@@ -181,3 +181,39 @@
   - `bank_words()` counts "," when "যে," exists, and `hand_missing` reports a missing punctuation mark.
   - The parts list in the attestation now uses normal commas ("মাদারবোর্ড, এসএসডি, র‍্যাম ও পাওয়ার সাপ্লাই"); `join_hand` was removed.
   - `generate()` falls back to a voucher without the attestation on any bank KeyError instead of failing.
+
+## 2026-10-26: Session 6 (common attestation, top-up words)
+
+- **The attestation is now one common text for every case**, at the user's request, and names no wings, sections or parts: "প্রত্যয়ন করা যাইতেছে যে, কম্পিউটার মেরামত কাজে উল্লেখিত অর্থ যথাযথভাবে ব্যয়িত হয়েছে।" (from `handwriting-sample/attestation.txt`).
+  - The text now lives in `data/settings.json` → `attestation`, which is committed; the `.txt` file is git-ignored. The per-head `attestation` templates were removed from `heads.json`.
+  - `core.attestation_text(head_key)` fills in the head's job word. `missing_hand_words()` checks only the attestation texts.
+  - The ✍✗ marks on parts and the handwriting hint in the demand form were removed, since parts and wings are no longer handwritten.
+- **Unicode fix:** the `.txt` used the precomposed য় (U+09DF), but the bank labels store it as য + ় (U+09AF U+09BC). `hand_missing` and `compose.Bank.tokens` now NFC-normalise the text, which splits U+09DF into those two characters.
+- **Job word for each head:** the sentence is shared, but `{work}` comes from each head's `attestation_work` in `heads.json`:
+  - computer repair (serial 63): "…যে, কম্পিউটার মেরামত কাজে…"
+  - network/office equipment (serial 64): "…যে, ইন্টারনেট সংযোগ মেরামত কাজে…"
+- **Top-up added to the bank:** the user wrote the 7 missing words plus a spare নেটওয়ার্ক, 3 times each, in one flat photo, `handwriting-sample/originals/topup.jpeg` (1880×1568).
+  - It goes into `layout.json` as its own page (`originals/topup.jpeg`, an 8 × 3 grid). It needs no separate cropped photo or alignment, and is cut at 1×; the word pixel heights match the old bank (মেরামত 61–72 px vs মেরামতে 63–82 px).
+  - The bank now has 375 images and 99 labels, and both attestation texts can be fully hand-written. All 24 cuts were checked on the debug overlay.
+- **Headline fix:** in 2 of the 3 উল্লেখিত samples the headline slopes down into a long tail, so the automatic মাত্রা estimate (0.59) landed on the tail, and compose then printed the word too high on its line.
+  - `layout.json` blocks can now carry `"matra": {label: [per-column value or null]}`, and `slice_sheet.py` applies it. উল্লেখিত is set to `[null, 0.44, 0.44]`.
+  - Both demo vouchers were re-rendered and checked: every word now sits on the line.
+
+### Session 6b (2026-10-26): more spec options, two-line voucher items
+- **Parts catalogue:** every part now offers at least 4 models (353 options in all, up from 212). New prices were scraped from Star Tech on 2026-10-26 (`src: "Star Tech 2026-10-26"`); HP-specific parts, used parts and services are `estimate`.
+  - SSD now starts at 128GB: Netac N600S ৳৩,২০০, Netac SA500 ৳৩,৪০০, TwinMOS H2 Ultra ৳৩,৭০০. NVMe gained a 128GB M.2 2242 option and a 256GB one.
+  - Star Tech category URLs changed (e.g. `/component/ram`, `/accessories/mouse`, `/networking/router`), and the product name is now in `itemprop="name"`. In-stock = the listing has `btn-add-cart`. Pages cap at 90 items (`?limit=90&page=N`).
+  - Existing options were not re-priced (e.g. Netac DDR3 8GB is now ৳২,৮০০ on Star Tech, the catalogue still says ৳৩,২০০).
+- **Voucher items:** the part name is on its own line in bold, and the spec is on a smaller grey line under it, starting with a dash. No brackets.
+  - All 61 catalogue specs with brackets were rewritten with commas ("HP ProDesk 400 G1 MT board, DDR3, LGA1150"), and so were 4 item details in `cases/demands.json`. Model names that include a bracket (RG-RAP2260(G)) are unchanged.
+  - The blank row under the items is now sized by a script in `template.html` after layout, because two-line rows made the old `64 − 11 × items` estimate overflow; this squeezed the header and pushed the footer off the page. If even the minimum (12mm) doesn't fit, the table switches to `.tight` rows. `.head`/`.foot` no longer shrink. Checked with 1, 5 and 7 items.
+- **Demand form:** the model picker is now a real `<select>` listing every model with its price, plus "Other… (type the model)", which shows a text box. The old `<datalist>` only showed options that matched the text already in the box, so once a model was picked the others disappeared. Each part is now a compact card (part · qty · rate on one row, model below, fit/price hint under it). Inputs and selects are 30px tall and 13px text, with a custom arrow and focus ring.
+- **মঞ্জুরিপত্র text (subject + body only, by request):** `note_texts()` now also returns `pass_subject` ("মঞ্জুরিপত্র") and `pass_body`, written in sample-1's wording. A single-demand case names its parts; a combined case says "যন্ত্রাংশ", like the combined X.0. The body ends with "উক্ত ব্যয় '<খাত>' খাত হতে সমন্বয় করা হবে।" Both are shown with copy buttons at the bottom of the case page and appended to `out/note.txt`. The deduction table figures are the case page's audit table. Not built, because the user doesn't need them: letterhead, memo no., the two-calendar date, the PDF.
+- **মঞ্জুরিপত্র table:** the body now includes the deduction table in sample-1's layout (header row, formula row `৩=(২×১৫%)` etc., figures as `১৪,৭৫০.০০`, with the payable amount also in Bangla words), built by `core.pass_table()` from `totals()` and the head's rates. On the case page it is a real bordered table between the paragraph and "উক্ত ব্যয় …"; Copy puts HTML (and a tab-separated plain-text fallback) on the clipboard, so pasting into D-Nothi's editor should keep the table (not yet tried in D-Nothi). `note.txt` gets the tab-separated version.
+
+### Session 6c (2026-10-27): Windows support
+- **GitHub repo is PUBLIC** (github.com/abdnahid/ict-purchase returns 200 without login). It holds the samples with real names, signatures and phone numbers. The user was told to make it private; push nothing until it is.
+- The user's second computer runs Windows:
+  - `make_voucher.find_browser()` replaces the hard-coded `google-chrome`. It checks `$CHROME`, then PATH, then the usual Chrome/Edge install folders on Windows and macOS. Edge prints the same way, so a Windows PC without Chrome still works.
+  - `scan_inbox()` stores demand paths with `.as_posix()`. With `str()`, Windows would write backslashes and re-add every existing demand as new.
+  - All file I/O already passes `encoding="utf-8"`.

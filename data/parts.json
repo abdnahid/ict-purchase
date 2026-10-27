@@ -1,78 +1,2563 @@
 {
-  "_comment": "What can be replaced in a repair. 'bn' is used in the note and the hand-written attestation (each word must exist in the handwriting bank for the attestation; see Settings → Handwriting), 'en' is the voucher line. 'head' is the default expense head (data/heads.json); it can be overridden per demand. 'rate' starts as a rough Dhaka market estimate and is overwritten by the last price actually paid. Head follows utils/Clarification.pdf: computer internals and laptop parts → কম্পিউটার মেরামত; peripherals (monitor, keyboard, mouse, printer, scanner, UPS, pendrive) and internet/network gear → অফিস সরঞ্জামাদি মেরামত. 'options' are the usual models for this office (mostly HP ProDesk/ProBook; DDR3 for 4th-gen-era HP, DDR4 for G3 and newer; network gear released 2021 or later): 'detail' goes on the voucher in brackets, 'fits' is a hint shown in the form, 'rate' the default price and 'src' where it came from: 'Star Tech <date>' = retail price listed on startech.com.bd that day, 'estimate' = not listed (used/HP-specific parts, out of stock). 'detail' on the part itself is the last model actually bought.",
+  "_comment": "What can be replaced in a repair. 'bn' is used in the note and the hand-written attestation (each word must exist in the handwriting bank for the attestation; see Settings → Handwriting), 'en' is the voucher line. 'head' is the default expense head (data/heads.json); it can be overridden per demand. 'rate' starts as a rough Dhaka market estimate and is overwritten by the last price actually paid. Head follows utils/Clarification.pdf: computer internals and laptop parts → কম্পিউটার মেরামত; peripherals (monitor, keyboard, mouse, printer, scanner, UPS, pendrive) and internet/network gear → অফিস সরঞ্জামাদি মেরামত. 'options' are the usual models for this office (mostly HP ProDesk/ProBook; DDR3 for 4th-gen-era HP, DDR4 for G3 and newer; network gear released 2021 or later): 'detail' goes on the voucher on its own line under the part name (no brackets: separate the spec's parts with commas), 'fits' is a hint shown in the form, 'rate' the default price and 'src' where it came from: 'Star Tech <date>' = retail price listed on startech.com.bd that day, 'estimate' = not listed (used/HP-specific parts, out of stock). 'detail' on the part itself is the last model actually bought.",
   "parts": {
-    "ram": {"bn": "র‍্যাম", "en": "RAM", "head": "computer_repair", "rate": 2800, "options": [{"detail": "Netac Basic 8GB DDR3 1600MHz", "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)", "rate": 2800, "src": "Star Tech 2026-10-24"}, {"detail": "OCPC VS 8GB DDR3 1600MHz", "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)", "rate": 3150, "src": "Star Tech 2026-10-24"}, {"detail": "4GB DDR3 1600MHz (used/pull)", "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)", "rate": 1500, "src": "estimate"}, {"detail": "Netac Shadow III 8GB DDR4 3200MHz", "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)", "rate": 7500, "src": "Star Tech 2026-10-24"}, {"detail": "Kingston FURY Beast 8GB DDR4 3200MHz", "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)", "rate": 7999, "src": "Star Tech 2026-10-24"}, {"detail": "Corsair Vengeance LPX 8GB DDR4 3200MHz", "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)", "rate": 8300, "src": "Star Tech 2026-10-24"}, {"detail": "Netac Basic 16GB DDR4 3200MHz", "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)", "rate": 11900, "src": "Star Tech 2026-10-24"}, {"detail": "Netac Basic 4GB DDR3L 1600MHz SO-DIMM", "fits": "Laptop: HP 250 G4/G5, ProBook G2–G3 (DDR3L)", "rate": 2500, "src": "Star Tech 2026-10-24"}, {"detail": "Netac Basic 8GB DDR3L 1600MHz SO-DIMM", "fits": "Laptop: DDR3L", "rate": 2800, "src": "Star Tech 2026-10-24"}, {"detail": "Netac Basic 8GB DDR4 3200MHz SO-DIMM", "fits": "Laptop: HP 250 G6+, ProBook 440/450 G5+", "rate": 6950, "src": "Star Tech 2026-10-24"}, {"detail": "Samsung 8GB DDR4 3200MHz SO-DIMM", "fits": "Laptop: HP 250 G6+, ProBook G5+", "rate": 7200, "src": "Star Tech 2026-10-24"}, {"detail": "16GB DDR4 3200MHz SO-DIMM", "fits": "Laptop: HP 250 G8+, ProBook G7+", "rate": 13000, "src": "estimate"}], "detail": "Netac Basic 8GB DDR3 1600MHz"},
-    "ssd": {"bn": "এসএসডি", "en": "SSD", "head": "computer_repair", "rate": 5450, "options": [{"detail": "Netac SA500 256GB 2.5\" SATA", "fits": "Any SATA bay", "rate": 5450, "src": "Star Tech 2026-10-24"}, {"detail": "Biostar S160 256GB 2.5\" SATA", "fits": "Any SATA bay", "rate": 5199, "src": "Star Tech 2026-10-24"}, {"detail": "Netac SA500 512GB 2.5\" SATA", "fits": "Any SATA bay", "rate": 8450, "src": "Star Tech 2026-10-24"}, {"detail": "MiPhi MP100 512GB 2.5\" SATA", "fits": "Any SATA bay", "rate": 8500, "src": "Star Tech 2026-10-24"}], "detail": "Netac SA500 256GB 2.5\" SATA"},
-    "nvme": {"bn": "এনভিএমই এসএসডি", "en": "NVMe SSD", "head": "computer_repair", "rate": 11500, "options": [{"detail": "OSCOO ON901 512GB M.2 NVMe Gen3", "fits": "HP ProDesk 400 G4+ / 280 G4+ / ProBook G5+", "rate": 11500, "src": "Star Tech 2026-10-24"}, {"detail": "MiPhi MP500G4 512GB M.2 NVMe Gen4", "fits": "M.2 2280 NVMe (runs at Gen3 in older HP)", "rate": 13500, "src": "Star Tech 2026-10-24"}, {"detail": "Kingston KC3000 512GB M.2 NVMe Gen4", "fits": "M.2 2280 NVMe", "rate": 18500, "src": "Star Tech 2026-10-24"}, {"detail": "Netac NV3000 1TB M.2 NVMe Gen3", "fits": "M.2 2280 NVMe", "rate": 21000, "src": "Star Tech 2026-10-24"}]},
-    "hdd": {"bn": "হার্ডডিস্ক", "en": "Hard Disk", "head": "computer_repair", "rate": 19000, "options": [{"detail": "Seagate BarraCuda 2TB 3.5\" 7200RPM", "fits": "Desktop (1TB is out of stock in Dhaka)", "rate": 19000, "src": "Star Tech 2026-10-24"}, {"detail": "Toshiba S300 2TB 3.5\" 5400RPM", "fits": "Desktop, cheaper (surveillance grade)", "rate": 15399, "src": "Star Tech 2026-10-24"}, {"detail": "1TB 3.5\" 7200RPM", "fits": "Desktop, if the shop has one", "rate": 12000, "src": "estimate"}, {"detail": "1TB 2.5\" 5400RPM", "fits": "Laptop", "rate": 11000, "src": "estimate"}]},
-    "psu": {"bn": "পাওয়ার সাপ্লাই", "en": "Power Supply", "head": "computer_repair", "rate": 3500, "options": [{"detail": "HP 240W PSU (ProDesk 400 G1/G2 MT)", "fits": "HP ProDesk 400 G1/G2 MT, HP 280 G1", "rate": 3500, "src": "estimate"}, {"detail": "HP 180W PSU (ProDesk 400/600 G3–G5 SFF)", "fits": "HP ProDesk G3–G5 SFF", "rate": 4000, "src": "estimate"}, {"detail": "HP 260W PSU (ProDesk 400 G4–G6 MT)", "fits": "HP ProDesk 400 G4–G6 MT, HP 280 G4/G5", "rate": 4500, "src": "estimate"}, {"detail": "Solitine STN-RP450BZ 450W 80+ Bronze ATX", "fits": "Generic ATX casing", "rate": 4140, "src": "Star Tech 2026-10-24"}], "detail": "HP 240W PSU (ProDesk 400 G1/G2 MT)"},
-    "motherboard": {"bn": "মাদারবোর্ড", "en": "Motherboard", "head": "computer_repair", "rate": 5500, "options": [{"detail": "HP ProDesk 400 G1 MT board (DDR3, LGA1150)", "fits": "HP ProDesk 400 G1 MT", "rate": 5500, "src": "estimate"}, {"detail": "HP ProDesk 400 G3 MT board (DDR4, LGA1151)", "fits": "HP ProDesk 400 G3 MT", "rate": 6500, "src": "estimate"}, {"detail": "HP 280 G4 MT board (DDR4, LGA1151)", "fits": "HP 280 G4 MT", "rate": 7000, "src": "estimate"}, {"detail": "ASUS PRIME H510M-F R3.0 (DDR4, LGA1200)", "fits": "Generic casing, 10th/11th Gen Intel", "rate": 10300, "src": "Star Tech 2026-10-24"}, {"detail": "ASUS PRIME H510M-K R2.0 (DDR4, LGA1200)", "fits": "Generic casing, 10th/11th Gen Intel", "rate": 10800, "src": "Star Tech 2026-10-24"}], "detail": "HP ProDesk 400 G1 MT board (DDR3, LGA1150)"},
-    "processor": {"bn": "প্রসেসর", "en": "Processor", "head": "computer_repair", "rate": 2500, "options": [{"detail": "Intel Core i3-4160 (4th Gen, used)", "fits": "DDR3 HP: ProDesk 400/600 G1–G2", "rate": 2500, "src": "estimate"}, {"detail": "Intel Core i5-4590 (4th Gen, used)", "fits": "DDR3 HP: ProDesk 400/600 G1–G2", "rate": 3500, "src": "estimate"}, {"detail": "Intel Core i5-6500 (6th Gen, used)", "fits": "HP ProDesk 400/600 G3", "rate": 4500, "src": "estimate"}, {"detail": "Intel Core i5-8500 (8th Gen, used)", "fits": "HP ProDesk 400/600 G4–G5, 280 G4", "rate": 7500, "src": "estimate"}, {"detail": "Intel Core i3-10100 (10th Gen)", "fits": "HP ProDesk 400 G7, 280 G6, H510 boards", "rate": 9400, "src": "Star Tech 2026-10-24"}, {"detail": "Intel Core i5-10500 (10th Gen)", "fits": "HP ProDesk 400 G7, H510 boards", "rate": 13900, "src": "Star Tech 2026-10-24"}]},
-    "cpu_cooler": {"bn": "প্রসেসর ফ্যান", "en": "CPU Cooler / Fan", "head": "computer_repair", "rate": 300, "options": [{"detail": "Deepcool CK-11509", "fits": "LGA115x/1200", "rate": 300, "src": "Star Tech 2026-10-24"}, {"detail": "Arctic Alpine 17 CO Low Profile", "fits": "LGA1700; HP SFF", "rate": 999, "src": "Star Tech 2026-10-24"}, {"detail": "DeepCool ICE EDGE MINI FS V2.0", "fits": "Generic casing", "rate": 1150, "src": "Star Tech 2026-10-24"}, {"detail": "HP stock CPU cooler (pull)", "fits": "HP ProDesk MT/SFF", "rate": 1000, "src": "estimate"}]},
-    "thermal_paste": {"bn": "থার্মাল পেস্ট", "en": "Thermal Paste", "head": "computer_repair", "rate": 500, "options": [{"detail": "DeepCool Z3", "rate": 500, "src": "Star Tech 2026-10-24"}, {"detail": "Thermal Grizzly PolarTherm X-8 2g", "rate": 450, "src": "Star Tech 2026-10-24"}]},
-    "cmos_battery": {"bn": "সিমস ব্যাটারি", "en": "CMOS Battery", "head": "computer_repair", "rate": 100, "options": [{"detail": "Maxell CR2032", "fits": "All", "rate": 100, "src": "estimate"}, {"detail": "Panasonic CR2032", "fits": "All", "rate": 120, "src": "estimate"}]},
-    "gpu": {"bn": "গ্রাফিক্স কার্ড", "en": "Graphics Card", "head": "computer_repair", "rate": 11500, "options": [{"detail": "AFOX GeForce GT 1030 2GB GDDR5", "fits": "HP MT (check low-profile bracket for SFF)", "rate": 11500, "src": "Star Tech 2026-10-24"}, {"detail": "OCPC GeForce GT 730 4GB DDR3", "fits": "HP MT", "rate": 8100, "src": "Star Tech 2026-10-24"}]},
-    "lan_card": {"bn": "ল্যান কার্ড", "en": "LAN Card", "head": "computer_repair", "rate": 1149, "options": [{"detail": "TP-Link TG-3468 Gigabit PCIe", "fits": "PCIe x1", "rate": 1149, "src": "Star Tech 2026-10-24"}, {"detail": "Cudy PE10 Gigabit PCIe", "fits": "PCIe x1", "rate": 750, "src": "Star Tech 2026-10-24"}, {"detail": "Onten OTN-5225D USB 3.0 Gigabit", "fits": "Laptop or no free slot", "rate": 999, "src": "Star Tech 2026-10-24"}]},
-    "wifi_card": {"bn": "ওয়াইফাই অ্যাডাপ্টার", "en": "Wi-Fi Adapter", "head": "computer_repair", "rate": 2050, "options": [{"detail": "TP-Link Archer TX20U Nano AX1800 Wi-Fi 6 USB", "fits": "Any PC, USB 3.0", "rate": 2050, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Archer TX20U AX1800 Wi-Fi 6 USB (antenna)", "fits": "Desktop", "rate": 2490, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Archer TX1U Nano AX300 Wi-Fi 6 USB", "fits": "Any PC, basic", "rate": 790, "src": "Star Tech 2026-10-24"}]},
-    "dvd": {"bn": "ডিভিডি রাইটার", "en": "DVD Writer", "head": "computer_repair", "rate": 3500, "options": [{"detail": "Onten OTN-UCD22 external DVD writer", "fits": "Any PC (USB)", "rate": 3500, "src": "Star Tech 2026-10-24"}, {"detail": "ASUS ZenDrive SDRW-08U8M-U external", "fits": "Any PC (USB-C/A)", "rate": 4900, "src": "Star Tech 2026-10-24"}, {"detail": "HP slim DVD-RW (SFF, pull)", "fits": "HP SFF internal", "rate": 1700, "src": "estimate"}]},
-    "casing": {"bn": "কেসিং", "en": "Desktop Casing", "head": "computer_repair", "rate": 3500, "options": [{"detail": "ATX casing with PSU", "rate": 3500, "src": "estimate"}, {"detail": "ATX casing without PSU", "rate": 2500, "src": "estimate"}]},
-    "casing_fan": {"bn": "কেসিং ফ্যান", "en": "Casing Fan", "head": "computer_repair", "rate": 400, "options": [{"detail": "120mm 3-pin", "rate": 400, "src": "estimate"}, {"detail": "HP 92mm system fan (pull)", "fits": "HP ProDesk MT/SFF", "rate": 900, "src": "estimate"}]},
-    "power_button": {"bn": "পাওয়ার বাটন", "en": "Power Button", "head": "computer_repair", "rate": 600, "options": [{"detail": "HP ProDesk power button board", "fits": "HP ProDesk 400/600", "rate": 600, "src": "estimate"}, {"detail": "Power/reset switch cable", "fits": "Generic", "rate": 250, "src": "estimate"}]},
-    "sata_cable": {"bn": "সাটা ক্যাবল", "en": "SATA Cable", "head": "computer_repair", "rate": 150, "options": [{"detail": "SATA III 6Gbps 50cm", "rate": 150, "src": "estimate"}, {"detail": "SATA power splitter", "rate": 150, "src": "estimate"}]},
-    "power_cable": {"bn": "পাওয়ার ক্যাবল", "en": "Power Cable", "head": "computer_repair", "rate": 250, "options": [{"detail": "3-pin PC power cable 1.5m", "rate": 250, "src": "estimate"}, {"detail": "3-pin laptop (clover) cable", "rate": 200, "src": "estimate"}]},
-    "hdmi_cable": {"bn": "এইচডিএমআই ক্যাবল", "en": "HDMI Cable", "head": "computer_repair", "rate": 450, "options": [{"detail": "Vention AACBG HDMI 1.5m", "rate": 450, "src": "Star Tech 2026-10-24"}, {"detail": "Dtech DT-H005 HDMI 3m", "rate": 450, "src": "Star Tech 2026-10-24"}, {"detail": "DisplayPort to HDMI 1.8m", "fits": "HP ProDesk G2+ (DP only)", "rate": 900, "src": "estimate"}]},
-    "vga_cable": {"bn": "ভিজিএ ক্যাবল", "en": "VGA Cable", "head": "computer_repair", "rate": 358, "options": [{"detail": "Onten OTN-6301V VGA 1.5m", "rate": 358, "src": "Star Tech 2026-10-24"}, {"detail": "DisplayPort to VGA adapter", "fits": "HP ProDesk G3+ (no VGA port)", "rate": 800, "src": "estimate"}]},
-    "display": {"bn": "ডিসপ্লে", "en": "Laptop Display", "head": "computer_repair", "rate": 6500, "options": [{"detail": "15.6\" HD LED 30-pin", "fits": "HP 250 G6/G7, 15-da", "rate": 6500, "src": "estimate"}, {"detail": "15.6\" FHD IPS 30-pin", "fits": "HP 250 G8/G9, ProBook 450 G6+", "rate": 9000, "src": "estimate"}, {"detail": "14\" HD LED 30-pin", "fits": "HP ProBook 440, 240 G-series", "rate": 6000, "src": "estimate"}]},
-    "battery": {"bn": "ব্যাটারি", "en": "Laptop Battery", "head": "computer_repair", "rate": 2200, "options": [{"detail": "HP JC04 (A grade)", "fits": "HP 250/255 G6, 15-bs/bw", "rate": 2200, "src": "Star Tech 2026-10-24"}, {"detail": "HP HT03XL (A grade)", "fits": "HP 250/255 G7–G8, 15-da/db", "rate": 2500, "src": "estimate"}, {"detail": "HP RR03XL (A grade)", "fits": "HP ProBook 430/440/450 G4–G5", "rate": 2800, "src": "estimate"}, {"detail": "HP HS04 (A grade)", "fits": "HP 250 G4/G5", "rate": 2200, "src": "estimate"}]},
-    "laptop_keyboard": {"bn": "ল্যাপটপ কিবোর্ড", "en": "Laptop Keyboard", "head": "computer_repair", "rate": 2000, "options": [{"detail": "HP 250 G6 keyboard", "fits": "HP 250 G6, 15-bs", "rate": 2000, "src": "Star Tech 2026-10-24"}, {"detail": "HP ProBook 440 G7 keyboard", "fits": "HP ProBook 440 G6/G7", "rate": 2500, "src": "Star Tech 2026-10-24"}, {"detail": "HP 250 G7 / 15-da keyboard", "rate": 2200, "src": "estimate"}, {"detail": "HP 250 G8 / G9 keyboard", "rate": 2500, "src": "estimate"}]},
-    "laptop_adapter": {"bn": "ল্যাপটপ অ্যাডাপ্টার", "en": "Laptop Charger / Adapter", "head": "computer_repair", "rate": 1300, "options": [{"detail": "HP 65W 19.5V 3.33A (A grade, 4.5mm)", "fits": "HP 250 G4+, ProBook G3+", "rate": 1300, "src": "Star Tech 2026-10-24"}, {"detail": "HP 65W 19.5V 3.33A original (4.5mm)", "fits": "HP 250 G4+, ProBook G3+", "rate": 2500, "src": "estimate"}, {"detail": "HP 90W 19.5V 4.62A", "fits": "HP 4.5mm, higher power", "rate": 1500, "src": "Star Tech 2026-10-24"}, {"detail": "HP 65W USB-C", "fits": "HP ProBook G6+ / 250 G9 with USB-C charging", "rate": 2800, "src": "estimate"}]},
-    "laptop_fan": {"bn": "ল্যাপটপ ফ্যান", "en": "Laptop Cooling Fan", "head": "computer_repair", "rate": 1200, "options": [{"detail": "HP 250 G7 / 15-da fan", "rate": 1200, "src": "estimate"}, {"detail": "HP ProBook 450 G5 fan", "rate": 1500, "src": "estimate"}]},
-    "hinge": {"bn": "ল্যাপটপ হিঞ্জ", "en": "Laptop Hinge", "head": "computer_repair", "rate": 1500, "options": [{"detail": "HP 250 G7 hinge pair", "rate": 1500, "src": "estimate"}, {"detail": "HP 250 G8 hinge pair", "rate": 1600, "src": "estimate"}]},
-    "touchpad": {"bn": "টাচপ্যাড", "en": "Laptop Touchpad", "head": "computer_repair", "rate": 2000, "options": [{"detail": "HP 250 G7 touchpad", "rate": 2000, "src": "estimate"}]},
-    "dc_jack": {"bn": "ডিসি জ্যাক", "en": "Laptop DC Jack", "head": "computer_repair", "rate": 600, "options": [{"detail": "HP 4.5mm DC jack with cable", "fits": "HP 250 G4–G8", "rate": 600, "src": "estimate"}]},
-    "bios_chip": {"bn": "বায়োস চিপ", "en": "BIOS Chip Programming", "head": "computer_repair", "rate": 1500, "options": [{"detail": "BIOS re-flash (HP)", "rate": 1500, "src": "estimate"}]},
-    "software": {"bn": "সফটওয়্যার", "en": "OS & Software Setup", "head": "computer_repair", "rate": 1500, "options": [{"detail": "Windows 11 Pro + MS Office 2021 setup", "fits": "8th Gen Intel or newer, TPM 2.0", "rate": 1500, "src": "estimate"}, {"detail": "Windows 10 Pro + MS Office setup", "fits": "Older HP (4th–7th Gen)", "rate": 1200, "src": "estimate"}, {"detail": "Drivers & software setup", "rate": 800, "src": "estimate"}]},
-    "antivirus": {"bn": "অ্যান্টিভাইরাস", "en": "Antivirus", "head": "computer_repair", "rate": 900, "options": [{"detail": "Kaspersky Standard, 1 PC 1 year", "rate": 900, "src": "estimate"}, {"detail": "ESET NOD32, 1 PC 1 year", "rate": 1000, "src": "estimate"}]},
-    "data_recovery": {"bn": "ডাটা রিকভারি", "en": "Data Recovery", "head": "computer_repair", "rate": 3000, "options": [{"detail": "HDD/SSD data recovery up to 500GB", "rate": 3000, "src": "estimate"}]},
-    "monitor": {"bn": "মনিটর", "en": "Monitor", "head": "office_equipment_repair", "rate": 11800, "options": [{"detail": "HP P204v 19.5\" HD", "rate": 11800, "src": "Star Tech 2026-10-24"}, {"detail": "HP Series 3 Pro 322pe 21.45\" FHD IPS", "fits": "2024", "rate": 11800, "src": "Star Tech 2026-10-24"}, {"detail": "HP M22f 22\" FHD IPS", "fits": "2021", "rate": 14500, "src": "Star Tech 2026-10-24"}, {"detail": "HP Series 3 Pro 324pf 23.8\" FHD IPS", "fits": "2024", "rate": 15500, "src": "Star Tech 2026-10-24"}, {"detail": "HP E22 G5 21.5\" FHD IPS", "fits": "Height-adjustable", "rate": 21999, "src": "Star Tech 2026-10-24"}]},
-    "keyboard": {"bn": "কিবোর্ড", "en": "Keyboard", "head": "office_equipment_repair", "rate": 850, "options": [{"detail": "A4Tech KRS-82 USB (Bangla)", "rate": 850, "src": "Star Tech 2026-10-24"}, {"detail": "HP wired USB keyboard", "rate": 800, "src": "estimate"}]},
-    "mouse": {"bn": "মাউস", "en": "Mouse", "head": "office_equipment_repair", "rate": 525, "options": [{"detail": "A4Tech OP-620D USB", "rate": 525, "src": "Star Tech 2026-10-24"}, {"detail": "HP wired USB mouse", "rate": 450, "src": "estimate"}]},
-    "webcam": {"bn": "ওয়েবক্যাম", "en": "Webcam", "head": "office_equipment_repair", "rate": 3299, "options": [{"detail": "A4Tech PK-935HL 1080p", "rate": 3299, "src": "Star Tech 2026-10-24"}, {"detail": "Logitech BRIO 300 1080p", "rate": 7700, "src": "Star Tech 2026-10-24"}]},
-    "speaker": {"bn": "স্পিকার", "en": "Speaker", "head": "office_equipment_repair", "rate": 649, "options": [{"detail": "Havit SK715 USB 2.0", "rate": 649, "src": "Star Tech 2026-10-24"}, {"detail": "Havit SK764 USB", "rate": 690, "src": "Star Tech 2026-10-24"}]},
-    "headset": {"bn": "হেডফোন", "en": "Headset", "head": "office_equipment_repair", "rate": 1200, "options": [{"detail": "A4Tech HU-35 USB", "rate": 1200, "src": "Star Tech 2026-10-24"}, {"detail": "A4Tech HS30 3.5mm", "rate": 1200, "src": "Star Tech 2026-10-24"}]},
-    "pendrive": {"bn": "পেনড্রাইভ", "en": "Pendrive", "head": "office_equipment_repair", "rate": 900, "options": [{"detail": "Hiksemi M210S 32GB USB 3.2", "rate": 900, "src": "Star Tech 2026-10-24"}, {"detail": "Apacer AH355 32GB USB 3.1", "rate": 950, "src": "Star Tech 2026-10-24"}, {"detail": "Kingston DataTraveler Exodia S 64GB USB 3.2", "rate": 950, "src": "Star Tech 2026-10-24"}]},
-    "ups": {"bn": "ইউপিএস ব্যাটারি", "en": "UPS Battery", "head": "office_equipment_repair", "rate": 1450, "options": [{"detail": "KENSON 12V 7.5Ah UPS battery", "fits": "650–850VA UPS", "rate": 1450, "src": "Star Tech 2026-10-24"}, {"detail": "KSTAR 12V 8.5Ah UPS battery", "fits": "650–1000VA UPS", "rate": 1400, "src": "Star Tech 2026-10-24"}]},
-    "ups_unit": {"bn": "ইউপিএস", "en": "UPS", "head": "office_equipment_repair", "rate": 3700, "options": [{"detail": "MaxGreen MG-LI-EAP 650VA offline UPS", "fits": "1 PC", "rate": 3700, "src": "Star Tech 2026-10-24"}, {"detail": "Power Guard PG 650VA offline UPS", "fits": "1 PC", "rate": 3650, "src": "Star Tech 2026-10-24"}, {"detail": "1200VA offline UPS", "fits": "PC + router/switch", "rate": 7000, "src": "estimate"}, {"detail": "MaxGreen MGOE-W1KS 1KVA online UPS", "fits": "Server/network rack", "rate": 22800, "src": "Star Tech 2026-10-24"}]},
-    "multiplug": {"bn": "মাল্টিপ্লাগ", "en": "Power Strip / Multiplug", "head": "office_equipment_repair", "rate": 750, "options": [{"detail": "Aptech A1005 5-port 3m", "rate": 750, "src": "Star Tech 2026-10-24"}, {"detail": "Aptech A1004MS 4-port 3m", "rate": 675, "src": "Star Tech 2026-10-24"}]},
-    "printer": {"bn": "প্রিন্টার", "en": "Printer Repair Kit", "head": "office_equipment_repair", "rate": 3000, "options": [{"detail": "HP LaserJet P1102 repair kit", "rate": 3000, "src": "estimate"}, {"detail": "HP LaserJet M12/M15 repair kit", "rate": 3200, "src": "estimate"}]},
-    "toner": {"bn": "টোনার", "en": "Toner Cartridge", "head": "office_equipment_repair", "rate": 10700, "options": [{"detail": "HP 85A original (CE285A)", "fits": "HP LaserJet P1102, M1132, M1212", "rate": 10700, "src": "Star Tech 2026-10-24"}, {"detail": "HP 85A compatible", "fits": "HP LaserJet P1102, M1132, M1212", "rate": 1800, "src": "estimate"}, {"detail": "HP 79A original (CF279A)", "fits": "HP LaserJet M12, M26", "rate": 9000, "src": "Star Tech 2026-10-24"}, {"detail": "HP 26A original (CF226A)", "fits": "HP LaserJet Pro M402, M426", "rate": 15900, "src": "Star Tech 2026-10-24"}, {"detail": "HP 107A original (W1107A)", "fits": "HP Laser 107, MFP 135/137", "rate": 6350, "src": "Star Tech 2026-10-24"}, {"detail": "HP 12A compatible (Q2612A)", "fits": "HP LaserJet 1020, M1005", "rate": 1600, "src": "estimate"}]},
-    "cartridge": {"bn": "কার্টিজ", "en": "Ink Cartridge", "head": "office_equipment_repair", "rate": 1200, "options": [{"detail": "HP GT53 Black ink bottle", "fits": "HP Ink Tank 115/315/415, Smart Tank", "rate": 1200, "src": "estimate"}, {"detail": "HP 680 Black", "fits": "HP DeskJet 2135/3635", "rate": 1500, "src": "estimate"}, {"detail": "Canon PG-47", "fits": "Canon E400/E410", "rate": 1300, "src": "estimate"}]},
-    "drum": {"bn": "ড্রাম ইউনিট", "en": "Drum Unit", "head": "office_equipment_repair", "rate": 2800, "options": [{"detail": "Brother DR-B028 drum unit", "fits": "Brother HL-B2080/DCP-B7500", "rate": 2800, "src": "Star Tech 2026-10-24"}, {"detail": "DigitalX DL-410 drum unit", "fits": "Pantum/compatible", "rate": 1800, "src": "Star Tech 2026-10-24"}]},
-    "fuser": {"bn": "ফিউজার ইউনিট", "en": "Fuser Unit", "head": "office_equipment_repair", "rate": 4500, "options": [{"detail": "HP LaserJet P1102 / M12 fuser", "rate": 4500, "src": "estimate"}, {"detail": "HP LaserJet M402 / M426 fuser", "rate": 9000, "src": "estimate"}]},
-    "roller": {"bn": "পিকআপ রোলার", "en": "Pickup Roller", "head": "office_equipment_repair", "rate": 800, "options": [{"detail": "HP LaserJet P1102 pickup roller", "rate": 800, "src": "estimate"}, {"detail": "HP LaserJet M402 pickup roller", "rate": 1200, "src": "estimate"}]},
-    "printer_head": {"bn": "প্রিন্টার হেড", "en": "Printer Head", "head": "office_equipment_repair", "rate": 3500, "options": [{"detail": "HP Ink Tank 315/415 printhead", "rate": 3500, "src": "estimate"}, {"detail": "Epson L3110/L3210 printhead", "rate": 4500, "src": "estimate"}]},
-    "printer_cable": {"bn": "প্রিন্টার ক্যাবল", "en": "Printer USB Cable", "head": "office_equipment_repair", "rate": 250, "options": [{"detail": "Yuanxin YUX-002 USB A-B 1.5m", "rate": 250, "src": "Star Tech 2026-10-24"}, {"detail": "Yuanxin YUX-002 USB A-B 3m", "rate": 250, "src": "Star Tech 2026-10-24"}]},
-    "scanner": {"bn": "স্ক্যানার", "en": "Scanner Repair", "head": "office_equipment_repair", "rate": 3000, "options": [{"detail": "Canon LiDE 300 repair", "rate": 3000, "src": "estimate"}, {"detail": "HP ScanJet Pro 2000 s2 roller kit", "rate": 4500, "src": "estimate"}]},
-    "projector_lamp": {"bn": "প্রজেক্টর ল্যাম্প", "en": "Projector Lamp", "head": "office_equipment_repair", "rate": 8000, "options": [{"detail": "Epson ELPLP96", "fits": "Epson EB-X41/W42", "rate": 8000, "src": "estimate"}]},
-    "router": {"bn": "রাউটার", "en": "Router", "head": "office_equipment_repair", "rate": 6590, "options": [{"detail": "TP-Link Archer AX53 AX3000 Wi-Fi 6", "fits": "Room/floor", "rate": 6590, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Deco X50 AX3000 Wi-Fi 6 mesh (1-pack)", "fits": "Floor, add units for coverage", "rate": 9020, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Archer GE230 BE3600 Wi-Fi 7", "fits": "Office, 2.5G ports, 2024", "rate": 14940, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Archer AX73 AX5400 Wi-Fi 6", "fits": "Large floor", "rate": 15500, "src": "Star Tech 2026-10-24"}, {"detail": "MikroTik L009UiGS-RM 8-port gigabit router", "fits": "Wired core router, VLAN/firewall, 2022", "rate": 14500, "src": "Star Tech 2026-10-24"}, {"detail": "MikroTik hAP ax² Wi-Fi 6", "fits": "Managed, 2022", "rate": 11000, "src": "estimate"}]},
-    "router_adapter": {"bn": "রাউটার অ্যাডাপ্টার", "en": "Router Power Adapter", "head": "office_equipment_repair", "rate": 400, "options": [{"detail": "12V 1A DC adapter", "fits": "TP-Link Archer AX53", "rate": 400, "src": "estimate"}, {"detail": "12V 1.5A DC adapter", "fits": "Archer GE230 / AX73", "rate": 500, "src": "estimate"}, {"detail": "24V 1.2A DC adapter", "fits": "MikroTik", "rate": 700, "src": "estimate"}]},
-    "modem": {"bn": "মডেম", "en": "Modem", "head": "office_equipment_repair", "rate": 9000, "options": [{"detail": "TP-Link Archer MR600 4G+ LTE", "fits": "Backup internet via SIM", "rate": 9000, "src": "estimate"}, {"detail": "TP-Link Archer MR550 4G+ LTE", "fits": "Backup internet via SIM", "rate": 7500, "src": "estimate"}]},
-    "onu": {"bn": "ওএনইউ", "en": "ONU", "head": "office_equipment_repair", "rate": 1290, "options": [{"detail": "TP-Link XZ000-G7 1-port gigabit XPON ONU", "fits": "ISP fiber, single LAN", "rate": 1290, "src": "Star Tech 2026-10-24"}, {"detail": "BDCOM GP1704-2F-E dual-port Wi-Fi XPON ONU", "fits": "ISP fiber with Wi-Fi", "rate": 2100, "src": "Star Tech 2026-10-24"}, {"detail": "BDCOM GP1705-2G dual-port gigabit Wi-Fi XPON ONU", "fits": "ISP fiber with Wi-Fi, gigabit", "rate": 3050, "src": "Star Tech 2026-10-24"}]},
-    "access_point": {"bn": "অ্যাক্সেস পয়েন্ট", "en": "Wi-Fi Access Point", "head": "office_equipment_repair", "rate": 16149, "options": [{"detail": "TP-Link Omada EAP653 AX3000 Wi-Fi 6", "fits": "Ceiling, PoE", "rate": 16149, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Omada EAP613 AX1800 Wi-Fi 6", "fits": "Ceiling, PoE", "rate": 16490, "src": "Star Tech 2026-10-24"}, {"detail": "Ruijie Reyee RG-RAP2260(G) AX1800 Wi-Fi 6", "fits": "Ceiling, PoE, cloud managed", "rate": 16150, "src": "Star Tech 2026-10-24"}, {"detail": "Ubiquiti U6+ Wi-Fi 6 (no PoE adapter)", "fits": "UniFi", "rate": 16920, "src": "Star Tech 2026-10-24"}, {"detail": "Ubiquiti U7 Lite Wi-Fi 7 (no PoE adapter)", "fits": "UniFi, 2024", "rate": 21160, "src": "Star Tech 2026-10-24"}]},
-    "switch": {"bn": "সুইচ", "en": "Network Switch", "head": "office_equipment_repair", "rate": 1900, "options": [{"detail": "TP-Link TL-SG1008D 8-port gigabit", "fits": "Unmanaged", "rate": 1900, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link TL-SG1016D 16-port gigabit", "fits": "Unmanaged, rackmount", "rate": 6090, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link TL-SG1024D 24-port gigabit", "fits": "Unmanaged, rackmount", "rate": 8290, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link Omada ES210GMP 8-port PoE+ easy managed", "fits": "Powers APs, 2022", "rate": 12990, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link TL-SG2210P 8-port PoE smart", "fits": "Smart managed, powers APs", "rate": 14990, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link TL-SG108-M2 8-port 2.5G", "fits": "Unmanaged, 2.5G", "rate": 9500, "src": "estimate"}]},
-    "mc": {"bn": "মিডিয়া কনভার্টার", "en": "Media Converter", "head": "office_equipment_repair", "rate": 2500, "options": [{"detail": "TP-Link MC220L gigabit SFP media converter", "fits": "Takes any 1.25G SFP", "rate": 2500, "src": "estimate"}, {"detail": "D-Link HTB-3100 (A+B) media converter pair", "fits": "100 Mbps only, cheapest", "rate": 1850, "src": "Star Tech 2026-10-24"}, {"detail": "10G SFP+ to RJ45 media converter", "fits": "10G backbone", "rate": 9000, "src": "estimate"}], "detail": "TP-Link MC220L gigabit SFP media converter"},
-    "sfp": {"bn": "এসএফপি মডিউল", "en": "SFP Module", "head": "office_equipment_repair", "rate": 2150, "options": [{"detail": "TP-Link Omada SM321B 1.25G BiDi SFP", "fits": "Pair with SM321A, 1 fiber core", "rate": 2150, "src": "Star Tech 2026-10-24"}, {"detail": "Grandstream F-SM1310-20KM 1.25G SM SFP", "fits": "Single mode, 20 km", "rate": 3500, "src": "Star Tech 2026-10-24"}, {"detail": "TP-Link TL-SM331T 1000BASE-T SFP", "fits": "SFP port to copper RJ45", "rate": 2200, "src": "Star Tech 2026-10-24"}, {"detail": "10G SFP+ LR SM LC 10km", "fits": "10G uplink", "rate": 4000, "src": "estimate"}]},
-    "cable": {"bn": "ক্যাবল", "en": "LAN Cable", "head": "office_equipment_repair", "rate": 35, "options": [{"detail": "Cat-6 UTP pure copper (per metre)", "fits": "Up to 1G (2.5G to 55 m)", "rate": 35, "src": "estimate"}, {"detail": "Aptech Cat-6 UTP 305m box", "fits": "Whole box", "rate": 4500, "src": "Star Tech 2026-10-24"}, {"detail": "Pro Tech Cat-6 UTP 305m box", "fits": "Whole box", "rate": 4900, "src": "Star Tech 2026-10-24"}], "detail": "Cat-6 UTP pure copper (per metre)"},
-    "fiber_cable": {"bn": "ফাইবার ক্যাবল", "en": "Fiber Optic Cable", "head": "office_equipment_repair", "rate": 18, "options": [{"detail": "2-core SM FTTH drop cable (G.657A, per metre)", "fits": "Indoor/outdoor drop", "rate": 18, "src": "estimate"}, {"detail": "4-core SM armoured outdoor (per metre)", "fits": "Between buildings", "rate": 40, "src": "estimate"}]},
-    "fiber_patch": {"bn": "ফাইবার প্যাচ কর্ড", "en": "Fiber Patch Cord", "head": "office_equipment_repair", "rate": 300, "options": [{"detail": "Safenet LC/APC SM simplex 3m", "rate": 300, "src": "Star Tech 2026-10-24"}, {"detail": "Safenet LC/APC SM duplex 3m", "rate": 550, "src": "Star Tech 2026-10-24"}, {"detail": "COTE LC-LC SM duplex 5m", "fits": "SFP to SFP", "rate": 700, "src": "Star Tech 2026-10-24"}]},
-    "splicing": {"bn": "ফাইবার স্প্লাইসিং", "en": "Fiber Splicing", "head": "office_equipment_repair", "rate": 500, "options": [{"detail": "Fiber splicing per core", "rate": 500, "src": "estimate"}, {"detail": "Fiber termination with pigtail per core", "rate": 700, "src": "estimate"}]},
-    "patch_cord": {"bn": "প্যাচ কর্ড", "en": "Patch Cord", "head": "office_equipment_repair", "rate": 150, "options": [{"detail": "UGREEN NW102 Cat-6 1m", "rate": 150, "src": "Star Tech 2026-10-24"}, {"detail": "Vention IBEBH Cat-6 2m", "rate": 175, "src": "Star Tech 2026-10-24"}, {"detail": "Vention IBOBI Cat-6A 3m slim", "rate": 420, "src": "Star Tech 2026-10-24"}]},
-    "rj45": {"bn": "কানেক্টর", "en": "RJ-45 Connector", "head": "office_equipment_repair", "rate": 15, "options": [{"detail": "Cat-6 RJ45 connector", "rate": 15, "src": "estimate"}, {"detail": "Vention IDIH0 Cat-6A FTP toolless RJ45", "rate": 375, "src": "Star Tech 2026-10-24"}]},
-    "keystone": {"bn": "কিস্টোন জ্যাক", "en": "Keystone Jack", "head": "office_equipment_repair", "rate": 320, "options": [{"detail": "D-Link NKJ-C6WHI1B21 Cat-6 keystone jack", "rate": 320, "src": "Star Tech 2026-10-24"}, {"detail": "Dintek 1305-04017 Cat-6 keystone jack", "rate": 420, "src": "Star Tech 2026-10-24"}]},
-    "faceplate": {"bn": "ফেস প্লেট", "en": "Face Plate", "head": "office_equipment_repair", "rate": 170, "options": [{"detail": "Rosenberger CP21-112-10 dual-port faceplate", "rate": 170, "src": "Star Tech 2026-10-24"}, {"detail": "CommScope FPS-BS-2P-W 2-port faceplate kit", "rate": 210, "src": "Star Tech 2026-10-24"}, {"detail": "Single-port faceplate", "rate": 150, "src": "estimate"}]},
-    "patch_panel": {"bn": "প্যাচ প্যানেল", "en": "Patch Panel", "head": "office_equipment_repair", "rate": 2500, "options": [{"detail": "TRENDnet TC-KP24 24-port keystone patch panel", "fits": "Add keystone jacks", "rate": 2500, "src": "Star Tech 2026-10-24"}, {"detail": "Belden AX101456 24-port patch panel", "rate": 4500, "src": "Star Tech 2026-10-24"}]},
-    "cable_channel": {"bn": "ক্যাবল চ্যানেল", "en": "Cable Channel / PVC Conduit", "head": "office_equipment_repair", "rate": 120, "options": [{"detail": "PVC cable channel 1\" x 2m", "rate": 120, "src": "estimate"}, {"detail": "PVC conduit 20mm x 3m", "rate": 100, "src": "estimate"}]},
-    "network_rack": {"bn": "নেটওয়ার্ক র‍্যাক", "en": "Network Rack", "head": "office_equipment_repair", "rate": 10500, "options": [{"detail": "Solitine SOL-265-6U wall-mount rack", "rate": 10500, "src": "Star Tech 2026-10-24"}, {"detail": "Solitine SOL-265-9U wall-mount rack", "rate": 11500, "src": "Star Tech 2026-10-24"}, {"detail": "Nexakey NX-9U wall-mount rack", "rate": 10500, "src": "Star Tech 2026-10-24"}]},
-    "network_setup": {"bn": "নেটওয়ার্ক কনফিগারেশন", "en": "Network Configuration", "head": "office_equipment_repair", "rate": 1500, "options": [{"detail": "Router, switch & Wi-Fi configuration", "rate": 1500, "src": "estimate"}, {"detail": "VLAN / MikroTik configuration", "rate": 2500, "src": "estimate"}]}
+    "ram": {
+      "bn": "র‍্যাম",
+      "en": "RAM",
+      "head": "computer_repair",
+      "rate": 7200,
+      "options": [
+        {
+          "detail": "Netac Basic 8GB DDR3 1600MHz",
+          "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)",
+          "rate": 3200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "OCPC VS 8GB DDR3 1600MHz",
+          "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)",
+          "rate": 3150,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "4GB DDR3 1600MHz, used/pull",
+          "fits": "HP ProDesk 400/600 G1–G2, EliteDesk 800 G1, HP 280 G1 (DDR3 1600)",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Netac Shadow III 8GB DDR4 3200MHz",
+          "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)",
+          "rate": 7500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Kingston FURY Beast 8GB DDR4 3200MHz",
+          "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)",
+          "rate": 7999,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Corsair Vengeance LPX 8GB DDR4 3200MHz",
+          "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)",
+          "rate": 8300,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac Basic 16GB DDR4 3200MHz",
+          "fits": "HP ProDesk 400/600 G3–G9, HP 280/290 G3+ (any DDR4 speed works)",
+          "rate": 11900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac Basic 4GB DDR3L 1600MHz SO-DIMM",
+          "fits": "Laptop: HP 250 G4/G5, ProBook G2–G3 (DDR3L)",
+          "rate": 2500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac Basic 8GB DDR3L 1600MHz SO-DIMM",
+          "fits": "Laptop: DDR3L",
+          "rate": 2800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac Basic 8GB DDR4 3200MHz SO-DIMM",
+          "fits": "Laptop: HP 250 G6+, ProBook 440/450 G5+",
+          "rate": 6950,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Samsung 8GB DDR4 3200MHz SO-DIMM",
+          "fits": "Laptop: HP 250 G6+, ProBook G5+",
+          "rate": 7200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "16GB DDR4 3200MHz SO-DIMM",
+          "fits": "Laptop: HP 250 G8+, ProBook G7+",
+          "rate": 13000,
+          "src": "estimate"
+        }
+      ],
+      "detail": "Samsung 8GB DDR4 3200MHz SO-DIMM"
+    },
+    "ssd": {
+      "bn": "এসএসডি",
+      "en": "SSD",
+      "head": "computer_repair",
+      "rate": 5450,
+      "options": [
+        {
+          "detail": "Netac N600S 128GB 2.5\" SATA",
+          "fits": "Any SATA bay; enough for Windows + Office only",
+          "rate": 3200,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Netac SA500 128GB 2.5\" SATA",
+          "fits": "Any SATA bay; enough for Windows + Office only",
+          "rate": 3400,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "TwinMOS Hyper H2 Ultra 128GB 2.5\" SATA",
+          "fits": "Any SATA bay; enough for Windows + Office only",
+          "rate": 3700,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Biostar S160 256GB 2.5\" SATA",
+          "fits": "Any SATA bay",
+          "rate": 5199,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac SA500 256GB 2.5\" SATA",
+          "fits": "Any SATA bay",
+          "rate": 5450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "OSCOO OS001 256GB 2.5\" SATA",
+          "fits": "Any SATA bay",
+          "rate": 5600,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Netac SA500 512GB 2.5\" SATA",
+          "fits": "Any SATA bay",
+          "rate": 8450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "MiPhi MP100 512GB 2.5\" SATA",
+          "fits": "Any SATA bay",
+          "rate": 8500,
+          "src": "Star Tech 2026-10-24"
+        }
+      ],
+      "detail": "Netac SA500 256GB 2.5\" SATA"
+    },
+    "nvme": {
+      "bn": "এনভিএমই এসএসডি",
+      "en": "NVMe SSD",
+      "head": "computer_repair",
+      "rate": 11500,
+      "options": [
+        {
+          "detail": "OSCOO ON901 512GB M.2 NVMe Gen3",
+          "fits": "HP ProDesk 400 G4+ / 280 G4+ / ProBook G5+",
+          "rate": 11500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "MiPhi MP500G4 512GB M.2 NVMe Gen4",
+          "fits": "M.2 2280 NVMe (runs at Gen3 in older HP)",
+          "rate": 13500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Kingston KC3000 512GB M.2 NVMe Gen4",
+          "fits": "M.2 2280 NVMe",
+          "rate": 18500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac NV3000 1TB M.2 NVMe Gen3",
+          "fits": "M.2 2280 NVMe",
+          "rate": 21000,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Netac N930ES 128GB M.2 2242 NVMe Gen3",
+          "fits": "Short M.2 2242 slot (some HP 250/ProBook)",
+          "rate": 3800,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Biostar M760 256GB M.2 NVMe Gen3",
+          "fits": "M.2 2280 NVMe",
+          "rate": 5999,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "hdd": {
+      "bn": "হার্ডডিস্ক",
+      "en": "Hard Disk",
+      "head": "computer_repair",
+      "rate": 19000,
+      "options": [
+        {
+          "detail": "Seagate BarraCuda 2TB 3.5\" 7200RPM",
+          "fits": "Desktop (1TB is out of stock in Dhaka)",
+          "rate": 19000,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Toshiba S300 2TB 3.5\" 5400RPM",
+          "fits": "Desktop, cheaper (surveillance grade)",
+          "rate": 15399,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "1TB 3.5\" 7200RPM",
+          "fits": "Desktop, if the shop has one",
+          "rate": 12000,
+          "src": "estimate"
+        },
+        {
+          "detail": "1TB 2.5\" 5400RPM",
+          "fits": "Laptop",
+          "rate": 11000,
+          "src": "estimate"
+        },
+        {
+          "detail": "500GB 3.5\" 7200RPM, refurbished",
+          "fits": "Desktop, cheapest storage fix",
+          "rate": 4000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "psu": {
+      "bn": "পাওয়ার সাপ্লাই",
+      "en": "Power Supply",
+      "head": "computer_repair",
+      "rate": 4500,
+      "options": [
+        {
+          "detail": "HP 240W PSU, ProDesk 400 G1/G2 MT",
+          "fits": "HP ProDesk 400 G1/G2 MT, HP 280 G1",
+          "rate": 3500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 180W PSU, ProDesk 400/600 G3–G5 SFF",
+          "fits": "HP ProDesk G3–G5 SFF",
+          "rate": 4000,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 260W PSU, ProDesk 400 G4–G6 MT",
+          "fits": "HP ProDesk 400 G4–G6 MT, HP 280 G4/G5",
+          "rate": 4500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Solitine STN-RP450BZ 450W 80+ Bronze ATX",
+          "fits": "Generic ATX casing",
+          "rate": 4140,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "1STPlayer PS-400FK 400W ATX",
+          "fits": "Generic ATX casing",
+          "rate": 2299,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Antec META V350 350W ATX",
+          "fits": "Generic ATX casing",
+          "rate": 2399,
+          "src": "Star Tech 2026-10-26"
+        }
+      ],
+      "detail": "HP 260W PSU, ProDesk 400 G4–G6 MT"
+    },
+    "motherboard": {
+      "bn": "মাদারবোর্ড",
+      "en": "Motherboard",
+      "head": "computer_repair",
+      "rate": 5500,
+      "options": [
+        {
+          "detail": "HP ProDesk 400 G1 MT board, DDR3, LGA1150",
+          "fits": "HP ProDesk 400 G1 MT",
+          "rate": 5500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP ProDesk 400 G3 MT board, DDR4, LGA1151",
+          "fits": "HP ProDesk 400 G3 MT",
+          "rate": 6500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 280 G4 MT board, DDR4, LGA1151",
+          "fits": "HP 280 G4 MT",
+          "rate": 7000,
+          "src": "estimate"
+        },
+        {
+          "detail": "ASUS PRIME H510M-F R3.0, DDR4, LGA1200",
+          "fits": "Generic casing, 10th/11th Gen Intel",
+          "rate": 10300,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "ASUS PRIME H510M-K R2.0, DDR4, LGA1200",
+          "fits": "Generic casing, 10th/11th Gen Intel",
+          "rate": 10800,
+          "src": "Star Tech 2026-10-24"
+        }
+      ],
+      "detail": "HP ProDesk 400 G1 MT board, DDR3, LGA1150"
+    },
+    "processor": {
+      "bn": "প্রসেসর",
+      "en": "Processor",
+      "head": "computer_repair",
+      "rate": 2500,
+      "options": [
+        {
+          "detail": "Intel Core i3-4160, 4th Gen, used",
+          "fits": "DDR3 HP: ProDesk 400/600 G1–G2",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Intel Core i5-4590, 4th Gen, used",
+          "fits": "DDR3 HP: ProDesk 400/600 G1–G2",
+          "rate": 3500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Intel Core i5-6500, 6th Gen, used",
+          "fits": "HP ProDesk 400/600 G3",
+          "rate": 4500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Intel Core i5-8500, 8th Gen, used",
+          "fits": "HP ProDesk 400/600 G4–G5, 280 G4",
+          "rate": 7500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Intel Core i3-10100, 10th Gen",
+          "fits": "HP ProDesk 400 G7, 280 G6, H510 boards",
+          "rate": 9400,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Intel Core i5-10500, 10th Gen",
+          "fits": "HP ProDesk 400 G7, H510 boards",
+          "rate": 13900,
+          "src": "Star Tech 2026-10-24"
+        }
+      ]
+    },
+    "cpu_cooler": {
+      "bn": "প্রসেসর ফ্যান",
+      "en": "CPU Cooler / Fan",
+      "head": "computer_repair",
+      "rate": 300,
+      "options": [
+        {
+          "detail": "Deepcool CK-11509",
+          "fits": "LGA115x/1200",
+          "rate": 300,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Arctic Alpine 17 CO Low Profile",
+          "fits": "LGA1700; HP SFF",
+          "rate": 999,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "DeepCool ICE EDGE MINI FS V2.0",
+          "fits": "Generic casing",
+          "rate": 1150,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP stock CPU cooler, pull",
+          "fits": "HP ProDesk MT/SFF",
+          "rate": 1000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "thermal_paste": {
+      "bn": "থার্মাল পেস্ট",
+      "en": "Thermal Paste",
+      "head": "computer_repair",
+      "rate": 500,
+      "options": [
+        { "detail": "DeepCool Z3", "rate": 500, "src": "Star Tech 2026-10-24" },
+        {
+          "detail": "Thermal Grizzly PolarTherm X-8 2g",
+          "rate": 450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Maxtor CTG8 2g",
+          "fits": "Any CPU",
+          "rate": 500,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Corsair TM30",
+          "fits": "Any CPU",
+          "rate": 650,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "DeepCool Z5",
+          "fits": "Any CPU",
+          "rate": 650,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "cmos_battery": {
+      "bn": "সিমস ব্যাটারি",
+      "en": "CMOS Battery",
+      "head": "computer_repair",
+      "rate": 100,
+      "options": [
+        {
+          "detail": "Maxell CR2032",
+          "fits": "All",
+          "rate": 100,
+          "src": "estimate"
+        },
+        {
+          "detail": "Panasonic CR2032",
+          "fits": "All",
+          "rate": 120,
+          "src": "estimate"
+        },
+        {
+          "detail": "Sony CR2032",
+          "fits": "Any motherboard",
+          "rate": 120,
+          "src": "estimate"
+        },
+        {
+          "detail": "Energizer CR2032",
+          "fits": "Any motherboard",
+          "rate": 150,
+          "src": "estimate"
+        }
+      ]
+    },
+    "gpu": {
+      "bn": "গ্রাফিক্স কার্ড",
+      "en": "Graphics Card",
+      "head": "computer_repair",
+      "rate": 11500,
+      "options": [
+        {
+          "detail": "AFOX GeForce GT 1030 2GB GDDR5",
+          "fits": "HP MT (check low-profile bracket for SFF)",
+          "rate": 11500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "OCPC GeForce GT 730 4GB DDR3",
+          "fits": "HP MT",
+          "rate": 8100,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "PELADN GeForce GT 730 4GB GDDR3",
+          "fits": "Full-height slot (MT tower)",
+          "rate": 5999,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "AFOX GeForce GT 710 2GB GDDR3",
+          "fits": "Full-height slot (MT tower)",
+          "rate": 6500,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "ASUS GeForce GT 710 2GB GDDR5 low-profile",
+          "fits": "HP SFF (low-profile bracket)",
+          "rate": 8500,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "lan_card": {
+      "bn": "ল্যান কার্ড",
+      "en": "LAN Card",
+      "head": "computer_repair",
+      "rate": 1149,
+      "options": [
+        {
+          "detail": "TP-Link TG-3468 Gigabit PCIe",
+          "fits": "PCIe x1",
+          "rate": 1149,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Cudy PE10 Gigabit PCIe",
+          "fits": "PCIe x1",
+          "rate": 750,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Onten OTN-5225D USB 3.0 Gigabit",
+          "fits": "Laptop or no free slot",
+          "rate": 999,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link UE200 USB 2.0 100Mbps",
+          "fits": "Any USB port, no opening the PC",
+          "rate": 999,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "UGREEN CR111 USB 3.0 Gigabit",
+          "fits": "Any USB 3.0 port",
+          "rate": 1150,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "wifi_card": {
+      "bn": "ওয়াইফাই অ্যাডাপ্টার",
+      "en": "Wi-Fi Adapter",
+      "head": "computer_repair",
+      "rate": 2050,
+      "options": [
+        {
+          "detail": "TP-Link Archer TX20U Nano AX1800 Wi-Fi 6 USB",
+          "fits": "Any PC, USB 3.0",
+          "rate": 2050,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Archer TX20U AX1800 Wi-Fi 6 USB, antenna",
+          "fits": "Desktop",
+          "rate": 2490,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Archer TX1U Nano AX300 Wi-Fi 6 USB",
+          "fits": "Any PC, basic",
+          "rate": 790,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Mercusys MA14N AX300 Wi-Fi 6 USB",
+          "fits": "Any USB port, single band",
+          "rate": 500,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Cudy WU650 AC650 dual-band USB",
+          "fits": "Any USB port, 2.4 + 5 GHz",
+          "rate": 890,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "dvd": {
+      "bn": "ডিভিডি রাইটার",
+      "en": "DVD Writer",
+      "head": "computer_repair",
+      "rate": 3500,
+      "options": [
+        {
+          "detail": "Onten OTN-UCD22 external DVD writer",
+          "fits": "Any PC (USB)",
+          "rate": 3500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "ASUS ZenDrive SDRW-08U8M-U external",
+          "fits": "Any PC (USB-C/A)",
+          "rate": 4900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP slim DVD-RW, SFF, pull",
+          "fits": "HP SFF internal",
+          "rate": 1700,
+          "src": "estimate"
+        },
+        {
+          "detail": "Internal 5.25\" SATA DVD-RW",
+          "fits": "Desktop MT tower",
+          "rate": 2000,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP slim internal SATA DVD-RW, new",
+          "fits": "HP SFF / slim bay",
+          "rate": 2200,
+          "src": "estimate"
+        }
+      ]
+    },
+    "casing": {
+      "bn": "কেসিং",
+      "en": "Desktop Casing",
+      "head": "computer_repair",
+      "rate": 3500,
+      "options": [
+        { "detail": "ATX casing with PSU", "rate": 3500, "src": "estimate" },
+        { "detail": "ATX casing without PSU", "rate": 2500, "src": "estimate" },
+        {
+          "detail": "T-Wolf Ironcore Office mATX with 200W PSU",
+          "fits": "mATX boards (HP-board swaps, office builds)",
+          "rate": 2300,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "MaxGreen H6 mATX with 200W PSU",
+          "fits": "mATX boards",
+          "rate": 2399,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Golden Field 2506B mATX, no PSU",
+          "fits": "mATX boards, reuse the old PSU",
+          "rate": 2400,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "casing_fan": {
+      "bn": "কেসিং ফ্যান",
+      "en": "Casing Fan",
+      "head": "computer_repair",
+      "rate": 400,
+      "options": [
+        { "detail": "120mm 3-pin", "rate": 400, "src": "estimate" },
+        {
+          "detail": "HP 92mm system fan, pull",
+          "fits": "HP ProDesk MT/SFF",
+          "rate": 900,
+          "src": "estimate"
+        },
+        {
+          "detail": "Deepcool XFAN 120mm",
+          "fits": "Generic casing, 3-pin/Molex",
+          "rate": 390,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Arctic P9 Silent 92mm PWM",
+          "fits": "HP 92mm system-fan position",
+          "rate": 650,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Arctic F12 120mm",
+          "fits": "Generic casing",
+          "rate": 900,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "power_button": {
+      "bn": "পাওয়ার বাটন",
+      "en": "Power Button",
+      "head": "computer_repair",
+      "rate": 600,
+      "options": [
+        {
+          "detail": "HP ProDesk power button board",
+          "fits": "HP ProDesk 400/600",
+          "rate": 600,
+          "src": "estimate"
+        },
+        {
+          "detail": "Power/reset switch cable",
+          "fits": "Generic",
+          "rate": 250,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP SFF power button cable",
+          "fits": "HP ProDesk/EliteDesk SFF",
+          "rate": 500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Front panel USB/audio board",
+          "fits": "HP ProDesk front I/O",
+          "rate": 600,
+          "src": "estimate"
+        }
+      ]
+    },
+    "sata_cable": {
+      "bn": "সাটা ক্যাবল",
+      "en": "SATA Cable",
+      "head": "computer_repair",
+      "rate": 150,
+      "options": [
+        { "detail": "SATA III 6Gbps 50cm", "rate": 150, "src": "estimate" },
+        { "detail": "SATA power splitter", "rate": 150, "src": "estimate" },
+        {
+          "detail": "SATA III 6Gbps 30cm right-angle",
+          "fits": "Tight HP SFF bays",
+          "rate": 150,
+          "src": "estimate"
+        },
+        {
+          "detail": "Molex to SATA power cable",
+          "fits": "Old PSU without SATA power",
+          "rate": 120,
+          "src": "estimate"
+        }
+      ]
+    },
+    "power_cable": {
+      "bn": "পাওয়ার ক্যাবল",
+      "en": "Power Cable",
+      "head": "computer_repair",
+      "rate": 250,
+      "options": [
+        {
+          "detail": "3-pin PC power cable 1.5m",
+          "rate": 250,
+          "src": "estimate"
+        },
+        {
+          "detail": "3-pin laptop clover cable",
+          "rate": 200,
+          "src": "estimate"
+        },
+        {
+          "detail": "2-pin figure-8 power cable",
+          "fits": "Printers, small adapters",
+          "rate": 150,
+          "src": "estimate"
+        },
+        {
+          "detail": "3-pin PC power cable 3m",
+          "fits": "Long run to the socket",
+          "rate": 350,
+          "src": "estimate"
+        }
+      ]
+    },
+    "hdmi_cable": {
+      "bn": "এইচডিএমআই ক্যাবল",
+      "en": "HDMI Cable",
+      "head": "computer_repair",
+      "rate": 450,
+      "options": [
+        {
+          "detail": "Vention AACBG HDMI 1.5m",
+          "rate": 450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Dtech DT-H005 HDMI 3m",
+          "rate": 450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "DisplayPort to HDMI 1.8m",
+          "fits": "HP ProDesk G2+ (DP only)",
+          "rate": 900,
+          "src": "estimate"
+        },
+        {
+          "detail": "Vention AACBF HDMI 1m",
+          "fits": "PC to monitor",
+          "rate": 240,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Vention AACBI HDMI 3m",
+          "fits": "Projector / far monitor",
+          "rate": 500,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "vga_cable": {
+      "bn": "ভিজিএ ক্যাবল",
+      "en": "VGA Cable",
+      "head": "computer_repair",
+      "rate": 358,
+      "options": [
+        {
+          "detail": "Onten OTN-6301V VGA 1.5m",
+          "rate": 358,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "DisplayPort to VGA adapter",
+          "fits": "HP ProDesk G3+ (no VGA port)",
+          "rate": 800,
+          "src": "estimate"
+        },
+        {
+          "detail": "Yuanxin YVX-002 VGA 3m",
+          "fits": "Projector / far monitor",
+          "rate": 560,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Yuanxin YVX-005 VGA 5m",
+          "fits": "Projector",
+          "rate": 700,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "HDMI to VGA converter",
+          "fits": "New PC to old VGA monitor/projector",
+          "rate": 700,
+          "src": "estimate"
+        }
+      ]
+    },
+    "display": {
+      "bn": "ডিসপ্লে",
+      "en": "Laptop Display",
+      "head": "computer_repair",
+      "rate": 6500,
+      "options": [
+        {
+          "detail": "15.6\" HD LED 30-pin",
+          "fits": "HP 250 G6/G7, 15-da",
+          "rate": 6500,
+          "src": "estimate"
+        },
+        {
+          "detail": "15.6\" FHD IPS 30-pin",
+          "fits": "HP 250 G8/G9, ProBook 450 G6+",
+          "rate": 9000,
+          "src": "estimate"
+        },
+        {
+          "detail": "14\" HD LED 30-pin",
+          "fits": "HP ProBook 440, 240 G-series",
+          "rate": 6000,
+          "src": "estimate"
+        },
+        {
+          "detail": "14\" FHD IPS 30-pin",
+          "fits": "HP 240/340/ProBook 440",
+          "rate": 8500,
+          "src": "estimate"
+        },
+        {
+          "detail": "15.6\" HD LED 40-pin",
+          "fits": "Older HP (pre-2015)",
+          "rate": 6500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "battery": {
+      "bn": "ব্যাটারি",
+      "en": "Laptop Battery",
+      "head": "computer_repair",
+      "rate": 2200,
+      "options": [
+        {
+          "detail": "HP JC04, A grade",
+          "fits": "HP 250/255 G6, 15-bs/bw",
+          "rate": 2200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP HT03XL, A grade",
+          "fits": "HP 250/255 G7–G8, 15-da/db",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP RR03XL, A grade",
+          "fits": "HP ProBook 430/440/450 G4–G5",
+          "rate": 2800,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP HS04, A grade",
+          "fits": "HP 250 G4/G5",
+          "rate": 2200,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP KI04, A grade",
+          "fits": "HP 14-ab, 15-ab, 15-an",
+          "rate": 2200,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "laptop_keyboard": {
+      "bn": "ল্যাপটপ কিবোর্ড",
+      "en": "Laptop Keyboard",
+      "head": "computer_repair",
+      "rate": 2000,
+      "options": [
+        {
+          "detail": "HP 250 G6 keyboard",
+          "fits": "HP 250 G6, 15-bs",
+          "rate": 2000,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP ProBook 440 G7 keyboard",
+          "fits": "HP ProBook 440 G6/G7",
+          "rate": 2500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 250 G7 / 15-da keyboard",
+          "rate": 2200,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 250 G8 / G9 keyboard",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP ProBook 450 G3 / G4 keyboard",
+          "fits": "HP ProBook 450/455/470 G3–G4",
+          "rate": 1800,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "laptop_adapter": {
+      "bn": "ল্যাপটপ অ্যাডাপ্টার",
+      "en": "Laptop Charger / Adapter",
+      "head": "computer_repair",
+      "rate": 1300,
+      "options": [
+        {
+          "detail": "HP 65W 19.5V 3.33A, A grade, 4.5mm",
+          "fits": "HP 250 G4+, ProBook G3+",
+          "rate": 1300,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 65W 19.5V 3.33A original, 4.5mm",
+          "fits": "HP 250 G4+, ProBook G3+",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 90W 19.5V 4.62A",
+          "fits": "HP 4.5mm, higher power",
+          "rate": 1500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 65W USB-C",
+          "fits": "HP ProBook G6+ / 250 G9 with USB-C charging",
+          "rate": 2800,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 45W 19.5V 2.31A, MaxGreen, 4.5mm",
+          "fits": "HP 250 G6+ / 240 G7, thin laptops",
+          "rate": 2200,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "laptop_fan": {
+      "bn": "ল্যাপটপ ফ্যান",
+      "en": "Laptop Cooling Fan",
+      "head": "computer_repair",
+      "rate": 1200,
+      "options": [
+        { "detail": "HP 250 G7 / 15-da fan", "rate": 1200, "src": "estimate" },
+        { "detail": "HP ProBook 450 G5 fan", "rate": 1500, "src": "estimate" },
+        {
+          "detail": "HP 250 G8 fan",
+          "fits": "HP 250 G8",
+          "rate": 1300,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP ProBook 440 G7 fan",
+          "fits": "HP ProBook 440 G7",
+          "rate": 1600,
+          "src": "estimate"
+        }
+      ]
+    },
+    "hinge": {
+      "bn": "ল্যাপটপ হিঞ্জ",
+      "en": "Laptop Hinge",
+      "head": "computer_repair",
+      "rate": 1500,
+      "options": [
+        { "detail": "HP 250 G7 hinge pair", "rate": 1500, "src": "estimate" },
+        { "detail": "HP 250 G8 hinge pair", "rate": 1600, "src": "estimate" },
+        {
+          "detail": "HP 250 G6 hinge pair",
+          "fits": "HP 250 G6",
+          "rate": 1400,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP ProBook 450 G7 hinge pair",
+          "fits": "HP ProBook 450 G7",
+          "rate": 1800,
+          "src": "estimate"
+        }
+      ]
+    },
+    "touchpad": {
+      "bn": "টাচপ্যাড",
+      "en": "Laptop Touchpad",
+      "head": "computer_repair",
+      "rate": 2000,
+      "options": [
+        { "detail": "HP 250 G7 touchpad", "rate": 2000, "src": "estimate" },
+        {
+          "detail": "HP 250 G8 touchpad",
+          "fits": "HP 250 G8",
+          "rate": 2200,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP ProBook 440 G7 touchpad",
+          "fits": "HP ProBook 440 G7",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Touchpad flex cable",
+          "fits": "Touchpad works intermittently",
+          "rate": 400,
+          "src": "estimate"
+        }
+      ]
+    },
+    "dc_jack": {
+      "bn": "ডিসি জ্যাক",
+      "en": "Laptop DC Jack",
+      "head": "computer_repair",
+      "rate": 600,
+      "options": [
+        {
+          "detail": "HP 4.5mm DC jack with cable",
+          "fits": "HP 250 G4–G8",
+          "rate": 600,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 7.4mm DC jack with cable",
+          "fits": "Older HP (black pin)",
+          "rate": 600,
+          "src": "estimate"
+        },
+        {
+          "detail": "USB-C charging port board",
+          "fits": "HP with USB-C charging",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "DC jack re-solder, no part",
+          "fits": "Loose jack",
+          "rate": 400,
+          "src": "estimate"
+        }
+      ]
+    },
+    "bios_chip": {
+      "bn": "বায়োস চিপ",
+      "en": "BIOS Chip Programming",
+      "head": "computer_repair",
+      "rate": 1500,
+      "options": [
+        { "detail": "BIOS re-flash, HP", "rate": 1500, "src": "estimate" },
+        {
+          "detail": "BIOS password reset",
+          "fits": "HP locked by admin password",
+          "rate": 1000,
+          "src": "estimate"
+        },
+        {
+          "detail": "BIOS chip replace + programming",
+          "fits": "Dead/corrupt chip",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "EC/KBC chip re-flash, laptop",
+          "fits": "Laptop no power / no display",
+          "rate": 2500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "software": {
+      "bn": "সফটওয়্যার",
+      "en": "OS & Software Setup",
+      "head": "computer_repair",
+      "rate": 1500,
+      "options": [
+        {
+          "detail": "Windows 11 Pro + MS Office 2021 setup",
+          "fits": "8th Gen Intel or newer, TPM 2.0",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Windows 10 Pro + MS Office setup",
+          "fits": "Older HP (4th–7th Gen)",
+          "rate": 1200,
+          "src": "estimate"
+        },
+        {
+          "detail": "Drivers & software setup",
+          "rate": 800,
+          "src": "estimate"
+        },
+        {
+          "detail": "Windows 11 Pro setup, no Office",
+          "fits": "OS reinstall only",
+          "rate": 1000,
+          "src": "estimate"
+        },
+        {
+          "detail": "Bijoy Bayanno 2026 Bangla typing",
+          "fits": "Bangla typing",
+          "rate": 500,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "antivirus": {
+      "bn": "অ্যান্টিভাইরাস",
+      "en": "Antivirus",
+      "head": "computer_repair",
+      "rate": 900,
+      "options": [
+        {
+          "detail": "Kaspersky Standard, 1 PC 1 year",
+          "rate": 900,
+          "src": "estimate"
+        },
+        {
+          "detail": "ESET NOD32, 1 PC 1 year",
+          "rate": 1000,
+          "src": "estimate"
+        },
+        {
+          "detail": "ESET Home Security Essential, 1 PC 1 year",
+          "fits": "One PC",
+          "rate": 750,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "ESET Internet Security, 3 PC 1 year",
+          "fits": "Three PCs in one section",
+          "rate": 1300,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "data_recovery": {
+      "bn": "ডাটা রিকভারি",
+      "en": "Data Recovery",
+      "head": "computer_repair",
+      "rate": 3000,
+      "options": [
+        {
+          "detail": "HDD/SSD data recovery up to 500GB",
+          "rate": 3000,
+          "src": "estimate"
+        },
+        {
+          "detail": "Deleted-file recovery, healthy drive",
+          "fits": "Files deleted by mistake",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Data backup / transfer to new drive",
+          "fits": "Before replacing HDD/SSD",
+          "rate": 800,
+          "src": "estimate"
+        },
+        {
+          "detail": "HDD/SSD data recovery up to 1TB",
+          "fits": "Failing drive",
+          "rate": 5000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "monitor": {
+      "bn": "মনিটর",
+      "en": "Monitor",
+      "head": "office_equipment_repair",
+      "rate": 11800,
+      "options": [
+        {
+          "detail": "HP P204v 19.5\" HD",
+          "rate": 11800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP Series 3 Pro 322pe 21.45\" FHD IPS",
+          "fits": "2024",
+          "rate": 11800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP M22f 22\" FHD IPS",
+          "fits": "2021",
+          "rate": 14500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP Series 3 Pro 324pf 23.8\" FHD IPS",
+          "fits": "2024",
+          "rate": 15500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP E22 G5 21.5\" FHD IPS",
+          "fits": "Height-adjustable",
+          "rate": 21999,
+          "src": "Star Tech 2026-10-24"
+        }
+      ]
+    },
+    "keyboard": {
+      "bn": "কিবোর্ড",
+      "en": "Keyboard",
+      "head": "office_equipment_repair",
+      "rate": 850,
+      "options": [
+        {
+          "detail": "A4Tech KRS-82 USB, Bangla",
+          "rate": 850,
+          "src": "Star Tech 2026-10-24"
+        },
+        { "detail": "HP wired USB keyboard", "rate": 800, "src": "estimate" },
+        {
+          "detail": "Havit KB271 USB, Bangla",
+          "fits": "Any PC",
+          "rate": 449,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "PC Power PCGKY601 USB, Bangla",
+          "fits": "Any PC",
+          "rate": 449,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "T-WOLF K220 USB, Bangla",
+          "fits": "Any PC",
+          "rate": 489,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "mouse": {
+      "bn": "মাউস",
+      "en": "Mouse",
+      "head": "office_equipment_repair",
+      "rate": 525,
+      "options": [
+        {
+          "detail": "A4Tech OP-620D USB",
+          "rate": 525,
+          "src": "Star Tech 2026-10-24"
+        },
+        { "detail": "HP wired USB mouse", "rate": 450, "src": "estimate" },
+        {
+          "detail": "Meetion MT-M360 USB",
+          "fits": "Any PC",
+          "rate": 249,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Havit HV-MS753 USB",
+          "fits": "Any PC",
+          "rate": 280,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "A4Tech OP-720 USB",
+          "fits": "Any PC",
+          "rate": 425,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "webcam": {
+      "bn": "ওয়েবক্যাম",
+      "en": "Webcam",
+      "head": "office_equipment_repair",
+      "rate": 3299,
+      "options": [
+        {
+          "detail": "A4Tech PK-935HL 1080p",
+          "rate": 3299,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Logitech BRIO 300 1080p",
+          "rate": 7700,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Logitech C270 720p",
+          "fits": "Zoom / video meetings",
+          "rate": 2300,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Rapoo C260 1080p",
+          "fits": "Zoom / video meetings",
+          "rate": 2999,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Logitech Brio 100 1080p",
+          "fits": "Zoom / video meetings, privacy shutter",
+          "rate": 3800,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "speaker": {
+      "bn": "স্পিকার",
+      "en": "Speaker",
+      "head": "office_equipment_repair",
+      "rate": 649,
+      "options": [
+        {
+          "detail": "Havit SK715 USB 2.0",
+          "rate": 649,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Havit SK764 USB",
+          "rate": 690,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Havit SK599 USB 2.0",
+          "fits": "Any PC",
+          "rate": 860,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Microlab B51 USB",
+          "fits": "Any PC",
+          "rate": 1299,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Edifier R12U USB",
+          "fits": "Any PC",
+          "rate": 1399,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "headset": {
+      "bn": "হেডফোন",
+      "en": "Headset",
+      "head": "office_equipment_repair",
+      "rate": 1200,
+      "options": [
+        {
+          "detail": "A4Tech HU-35 USB",
+          "rate": 1200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "A4Tech HS30 3.5mm",
+          "rate": 1200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Logitech H110 3.5mm, two plugs",
+          "fits": "Desktop with mic + speaker jacks",
+          "rate": 1000,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Rapoo H120 USB",
+          "fits": "Any PC",
+          "rate": 1250,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "A4Tech Fstyler FH150U USB",
+          "fits": "Any PC",
+          "rate": 1499,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "pendrive": {
+      "bn": "পেনড্রাইভ",
+      "en": "Pendrive",
+      "head": "office_equipment_repair",
+      "rate": 900,
+      "options": [
+        {
+          "detail": "Hiksemi M210S 32GB USB 3.2",
+          "rate": 900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Apacer AH355 32GB USB 3.1",
+          "rate": 950,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Kingston DataTraveler Exodia S 64GB USB 3.2",
+          "rate": 950,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Smart X4 Premier SM12 32GB USB 3.1",
+          "fits": "",
+          "rate": 810,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Kingston DataTraveler Exodia 64GB USB 3.2",
+          "fits": "",
+          "rate": 1050,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "ups": {
+      "bn": "ইউপিএস ব্যাটারি",
+      "en": "UPS Battery",
+      "head": "office_equipment_repair",
+      "rate": 1450,
+      "options": [
+        {
+          "detail": "KENSON 12V 7.5Ah UPS battery",
+          "fits": "650–850VA UPS",
+          "rate": 1450,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "KSTAR 12V 8.5Ah UPS battery",
+          "fits": "650–1000VA UPS",
+          "rate": 1400,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "12V 7Ah UPS battery",
+          "fits": "650VA offline UPS",
+          "rate": 1400,
+          "src": "estimate"
+        },
+        {
+          "detail": "12V 9Ah UPS battery",
+          "fits": "650–850VA UPS, longer backup",
+          "rate": 1700,
+          "src": "estimate"
+        }
+      ]
+    },
+    "ups_unit": {
+      "bn": "ইউপিএস",
+      "en": "UPS",
+      "head": "office_equipment_repair",
+      "rate": 3700,
+      "options": [
+        {
+          "detail": "MaxGreen MG-LI-EAP 650VA offline UPS",
+          "fits": "1 PC",
+          "rate": 3700,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Power Guard PG 650VA offline UPS",
+          "fits": "1 PC",
+          "rate": 3650,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "1200VA offline UPS",
+          "fits": "PC + router/switch",
+          "rate": 7000,
+          "src": "estimate"
+        },
+        {
+          "detail": "MaxGreen MGOE-W1KS 1KVA online UPS",
+          "fits": "Server/network rack",
+          "rate": 22800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Digital X 850VA offline UPS",
+          "fits": "PC + monitor, longer backup",
+          "rate": 4550,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "multiplug": {
+      "bn": "মাল্টিপ্লাগ",
+      "en": "Power Strip / Multiplug",
+      "head": "office_equipment_repair",
+      "rate": 750,
+      "options": [
+        {
+          "detail": "Aptech A1005 5-port 3m",
+          "rate": 750,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Aptech A1004MS 4-port 3m",
+          "rate": 675,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Aptech A053 5-port 2m",
+          "fits": "",
+          "rate": 750,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Huntkey SZM401 4-port",
+          "fits": "",
+          "rate": 750,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Aptech A1005MS 5-port 5m",
+          "fits": "",
+          "rate": 800,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "printer": {
+      "bn": "প্রিন্টার",
+      "en": "Printer Repair Kit",
+      "head": "office_equipment_repair",
+      "rate": 3000,
+      "options": [
+        {
+          "detail": "HP LaserJet P1102 repair kit",
+          "rate": 3000,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M12/M15 repair kit",
+          "rate": 3200,
+          "src": "estimate"
+        },
+        {
+          "detail": "Canon LBP2900 repair kit",
+          "fits": "Canon LBP2900/2900B",
+          "rate": 3000,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M402/M404 repair kit",
+          "fits": "HP M402/M404/M426",
+          "rate": 4000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "toner": {
+      "bn": "টোনার",
+      "en": "Toner Cartridge",
+      "head": "office_equipment_repair",
+      "rate": 10700,
+      "options": [
+        {
+          "detail": "HP 85A original, CE285A",
+          "fits": "HP LaserJet P1102, M1132, M1212",
+          "rate": 10700,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 85A compatible",
+          "fits": "HP LaserJet P1102, M1132, M1212",
+          "rate": 1800,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 79A original, CF279A",
+          "fits": "HP LaserJet M12, M26",
+          "rate": 9000,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 26A original, CF226A",
+          "fits": "HP LaserJet Pro M402, M426",
+          "rate": 15900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 107A original, W1107A",
+          "fits": "HP Laser 107, MFP 135/137",
+          "rate": 6350,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "HP 12A compatible, Q2612A",
+          "fits": "HP LaserJet 1020, M1005",
+          "rate": 1600,
+          "src": "estimate"
+        }
+      ]
+    },
+    "cartridge": {
+      "bn": "কার্টিজ",
+      "en": "Ink Cartridge",
+      "head": "office_equipment_repair",
+      "rate": 1200,
+      "options": [
+        {
+          "detail": "HP GT53 Black ink bottle",
+          "fits": "HP Ink Tank 115/315/415, Smart Tank",
+          "rate": 1200,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 680 Black",
+          "fits": "HP DeskJet 2135/3635",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Canon PG-47",
+          "fits": "Canon E400/E410",
+          "rate": 1300,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP 680 Tri-color",
+          "fits": "HP DeskJet 2135/3635/3835",
+          "rate": 1350,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "HP 682 Black",
+          "fits": "HP DeskJet 2335/2775/4175",
+          "rate": 1400,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "drum": {
+      "bn": "ড্রাম ইউনিট",
+      "en": "Drum Unit",
+      "head": "office_equipment_repair",
+      "rate": 2800,
+      "options": [
+        {
+          "detail": "Brother DR-B028 drum unit",
+          "fits": "Brother HL-B2080/DCP-B7500",
+          "rate": 2800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "DigitalX DL-410 drum unit",
+          "fits": "Pantum/compatible",
+          "rate": 1800,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Power Print DR-B028 drum unit",
+          "fits": "Brother HL-B2080/DCP-B7535 (compatible)",
+          "rate": 1800,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Digital X DL-5120 drum unit",
+          "fits": "Pantum BP5100/BM5100",
+          "rate": 2800,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "HP 19A imaging drum, CF219A",
+          "fits": "HP LaserJet Pro M102/M130",
+          "rate": 12000,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "fuser": {
+      "bn": "ফিউজার ইউনিট",
+      "en": "Fuser Unit",
+      "head": "office_equipment_repair",
+      "rate": 4500,
+      "options": [
+        {
+          "detail": "HP LaserJet P1102 / M12 fuser",
+          "rate": 4500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M402 / M426 fuser",
+          "rate": 9000,
+          "src": "estimate"
+        },
+        {
+          "detail": "Canon LBP2900 fuser",
+          "fits": "Canon LBP2900",
+          "rate": 4000,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M404 / M428 fuser",
+          "fits": "HP M404/M428",
+          "rate": 9500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "roller": {
+      "bn": "পিকআপ রোলার",
+      "en": "Pickup Roller",
+      "head": "office_equipment_repair",
+      "rate": 800,
+      "options": [
+        {
+          "detail": "HP LaserJet P1102 pickup roller",
+          "rate": 800,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M402 pickup roller",
+          "rate": 1200,
+          "src": "estimate"
+        },
+        {
+          "detail": "Canon LBP2900 pickup roller",
+          "fits": "Canon LBP2900",
+          "rate": 700,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet 107a / 135a pickup roller",
+          "fits": "HP 107a/135a/137fnw",
+          "rate": 900,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP LaserJet M404 pickup roller",
+          "fits": "HP M404/M428",
+          "rate": 1200,
+          "src": "estimate"
+        }
+      ]
+    },
+    "printer_head": {
+      "bn": "প্রিন্টার হেড",
+      "en": "Printer Head",
+      "head": "office_equipment_repair",
+      "rate": 3500,
+      "options": [
+        {
+          "detail": "HP Ink Tank 315/415 printhead",
+          "rate": 3500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Epson L3110/L3210 printhead",
+          "rate": 4500,
+          "src": "estimate"
+        },
+        {
+          "detail": "HP Smart Tank 515/520 printhead",
+          "fits": "HP Smart Tank 500 series",
+          "rate": 3800,
+          "src": "estimate"
+        },
+        {
+          "detail": "Canon G2010/G3010 printhead",
+          "fits": "Canon PIXMA G series",
+          "rate": 4000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "printer_cable": {
+      "bn": "প্রিন্টার ক্যাবল",
+      "en": "Printer USB Cable",
+      "head": "office_equipment_repair",
+      "rate": 250,
+      "options": [
+        {
+          "detail": "Yuanxin YUX-002 USB A-B 1.5m",
+          "rate": 250,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Yuanxin YUX-002 USB A-B 3m",
+          "rate": 250,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Onten OTN-US106 USB 3.0 A-B 1.8m",
+          "fits": "",
+          "rate": 385,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Vention COQBJ USB 2.0 A-B 5m",
+          "fits": "Printer far from the PC",
+          "rate": 400,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "scanner": {
+      "bn": "স্ক্যানার",
+      "en": "Scanner Repair",
+      "head": "office_equipment_repair",
+      "rate": 3000,
+      "options": [
+        { "detail": "Canon LiDE 300 repair", "rate": 3000, "src": "estimate" },
+        {
+          "detail": "HP ScanJet Pro 2000 s2 roller kit",
+          "rate": 4500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Flatbed scanner lamp / cable repair",
+          "fits": "Lines or dark scans",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Epson DS-410 roller kit",
+          "fits": "Epson DS-410/DS-530",
+          "rate": 4000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "projector_lamp": {
+      "bn": "প্রজেক্টর ল্যাম্প",
+      "en": "Projector Lamp",
+      "head": "office_equipment_repair",
+      "rate": 8000,
+      "options": [
+        {
+          "detail": "Epson ELPLP96",
+          "fits": "Epson EB-X41/W42",
+          "rate": 8000,
+          "src": "estimate"
+        },
+        {
+          "detail": "Epson ELPLP88",
+          "fits": "Epson EB-S31/X31/W31",
+          "rate": 7500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Epson ELPLP97",
+          "fits": "Epson EB-E01/X05/X06",
+          "rate": 8000,
+          "src": "estimate"
+        },
+        {
+          "detail": "BenQ MS/MX series lamp",
+          "fits": "BenQ MS506/MX507",
+          "rate": 9000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "router": {
+      "bn": "রাউটার",
+      "en": "Router",
+      "head": "office_equipment_repair",
+      "rate": 6590,
+      "options": [
+        {
+          "detail": "TP-Link Archer AX53 AX3000 Wi-Fi 6",
+          "fits": "Room/floor",
+          "rate": 6590,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Deco X50 AX3000 Wi-Fi 6 mesh, 1-pack",
+          "fits": "Floor, add units for coverage",
+          "rate": 9020,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Archer GE230 BE3600 Wi-Fi 7",
+          "fits": "Office, 2.5G ports, 2024",
+          "rate": 14940,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Archer AX73 AX5400 Wi-Fi 6",
+          "fits": "Large floor",
+          "rate": 15500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "MikroTik L009UiGS-RM 8-port gigabit router",
+          "fits": "Wired core router, VLAN/firewall, 2022",
+          "rate": 14500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "MikroTik hAP ax² Wi-Fi 6",
+          "fits": "Managed, 2022",
+          "rate": 11000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "router_adapter": {
+      "bn": "রাউটার অ্যাডাপ্টার",
+      "en": "Router Power Adapter",
+      "head": "office_equipment_repair",
+      "rate": 400,
+      "options": [
+        {
+          "detail": "12V 1A DC adapter",
+          "fits": "TP-Link Archer AX53",
+          "rate": 400,
+          "src": "estimate"
+        },
+        {
+          "detail": "12V 1.5A DC adapter",
+          "fits": "Archer GE230 / AX73",
+          "rate": 500,
+          "src": "estimate"
+        },
+        {
+          "detail": "24V 1.2A DC adapter",
+          "fits": "MikroTik",
+          "rate": 700,
+          "src": "estimate"
+        },
+        {
+          "detail": "5V 2A DC adapter",
+          "fits": "Small routers / media converters",
+          "rate": 350,
+          "src": "estimate"
+        },
+        {
+          "detail": "9V 0.85A DC adapter",
+          "fits": "TP-Link older routers",
+          "rate": 350,
+          "src": "estimate"
+        }
+      ]
+    },
+    "modem": {
+      "bn": "মডেম",
+      "en": "Modem",
+      "head": "office_equipment_repair",
+      "rate": 9000,
+      "options": [
+        {
+          "detail": "TP-Link Archer MR600 4G+ LTE",
+          "fits": "Backup internet via SIM",
+          "rate": 9000,
+          "src": "estimate"
+        },
+        {
+          "detail": "TP-Link Archer MR550 4G+ LTE",
+          "fits": "Backup internet via SIM",
+          "rate": 7500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Cudy LT400 4G 300Mbps",
+          "fits": "SIM backup internet",
+          "rate": 4950,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "OLAX MC60 4G",
+          "fits": "SIM backup internet",
+          "rate": 5000,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Cudy LT500 AC1200 4G dual-band",
+          "fits": "SIM internet, faster Wi-Fi",
+          "rate": 7100,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "onu": {
+      "bn": "ওএনইউ",
+      "en": "ONU",
+      "head": "office_equipment_repair",
+      "rate": 1290,
+      "options": [
+        {
+          "detail": "TP-Link XZ000-G7 1-port gigabit XPON ONU",
+          "fits": "ISP fiber, single LAN",
+          "rate": 1290,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "BDCOM GP1704-2F-E dual-port Wi-Fi XPON ONU",
+          "fits": "ISP fiber with Wi-Fi",
+          "rate": 2100,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "BDCOM GP1705-2G dual-port gigabit Wi-Fi XPON ONU",
+          "fits": "ISP fiber with Wi-Fi, gigabit",
+          "rate": 3050,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "VSOL V2801RGW XPON ONU router 300Mbps",
+          "fits": "Fiber line + Wi-Fi in one box",
+          "rate": 1750,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "access_point": {
+      "bn": "অ্যাক্সেস পয়েন্ট",
+      "en": "Wi-Fi Access Point",
+      "head": "office_equipment_repair",
+      "rate": 16149,
+      "options": [
+        {
+          "detail": "TP-Link Omada EAP653 AX3000 Wi-Fi 6",
+          "fits": "Ceiling, PoE",
+          "rate": 16149,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Omada EAP613 AX1800 Wi-Fi 6",
+          "fits": "Ceiling, PoE",
+          "rate": 16490,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Ruijie Reyee RG-RAP2260(G) AX1800 Wi-Fi 6",
+          "fits": "Ceiling, PoE, cloud managed",
+          "rate": 16150,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Ubiquiti U6+ Wi-Fi 6, no PoE adapter",
+          "fits": "UniFi",
+          "rate": 16920,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Ubiquiti U7 Lite Wi-Fi 7, no PoE adapter",
+          "fits": "UniFi, 2024",
+          "rate": 21160,
+          "src": "Star Tech 2026-10-24"
+        }
+      ]
+    },
+    "switch": {
+      "bn": "সুইচ",
+      "en": "Network Switch",
+      "head": "office_equipment_repair",
+      "rate": 1900,
+      "options": [
+        {
+          "detail": "TP-Link TL-SG1008D 8-port gigabit",
+          "fits": "Unmanaged",
+          "rate": 1900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link TL-SG1016D 16-port gigabit",
+          "fits": "Unmanaged, rackmount",
+          "rate": 6090,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link TL-SG1024D 24-port gigabit",
+          "fits": "Unmanaged, rackmount",
+          "rate": 8290,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link Omada ES210GMP 8-port PoE+ easy managed",
+          "fits": "Powers APs, 2022",
+          "rate": 12990,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link TL-SG2210P 8-port PoE smart",
+          "fits": "Smart managed, powers APs",
+          "rate": 14990,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link TL-SG108-M2 8-port 2.5G",
+          "fits": "Unmanaged, 2.5G",
+          "rate": 9500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "mc": {
+      "bn": "মিডিয়া কনভার্টার",
+      "en": "Media Converter",
+      "head": "office_equipment_repair",
+      "rate": 2500,
+      "options": [
+        {
+          "detail": "TP-Link MC220L gigabit SFP media converter",
+          "fits": "Takes any 1.25G SFP",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "D-Link HTB-3100 A+B media converter pair",
+          "fits": "100 Mbps only, cheapest",
+          "rate": 1850,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "10G SFP+ to RJ45 media converter",
+          "fits": "10G backbone",
+          "rate": 9000,
+          "src": "estimate"
+        },
+        {
+          "detail": "10/100 media converter pair",
+          "fits": "Old 100Mbps links",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "Netlink HTB-GS-03 gigabit media converter pair",
+          "fits": "Building-to-building fiber",
+          "rate": 2400,
+          "src": "estimate"
+        }
+      ],
+      "detail": "TP-Link MC220L gigabit SFP media converter"
+    },
+    "sfp": {
+      "bn": "এসএফপি মডিউল",
+      "en": "SFP Module",
+      "head": "office_equipment_repair",
+      "rate": 2150,
+      "options": [
+        {
+          "detail": "TP-Link Omada SM321B 1.25G BiDi SFP",
+          "fits": "Pair with SM321A, 1 fiber core",
+          "rate": 2150,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Grandstream F-SM1310-20KM 1.25G SM SFP",
+          "fits": "Single mode, 20 km",
+          "rate": 3500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "TP-Link TL-SM331T 1000BASE-T SFP",
+          "fits": "SFP port to copper RJ45",
+          "rate": 2200,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "10G SFP+ LR SM LC 10km",
+          "fits": "10G uplink",
+          "rate": 4000,
+          "src": "estimate"
+        }
+      ]
+    },
+    "cable": {
+      "bn": "ক্যাবল",
+      "en": "LAN Cable",
+      "head": "office_equipment_repair",
+      "rate": 40,
+      "options": [
+        {
+          "detail": "Cat-6 UTP pure copper, per metre",
+          "fits": "Up to 1G (2.5G to 55 m)",
+          "rate": 40,
+          "src": "estimate"
+        },
+        {
+          "detail": "Aptech Cat-6 UTP 305m box",
+          "fits": "Whole box",
+          "rate": 4500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Pro Tech Cat-6 UTP 305m box",
+          "fits": "Whole box",
+          "rate": 4900,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Cat-5e UTP pure copper, per metre",
+          "fits": "Short runs",
+          "rate": 25,
+          "src": "estimate"
+        },
+        {
+          "detail": "Nexakey Cat-6 CCA UTP 100m roll",
+          "fits": "Budget, not for long runs",
+          "rate": 2430,
+          "src": "Star Tech 2026-10-26"
+        }
+      ],
+      "detail": "Cat-6 UTP pure copper, per metre"
+    },
+    "fiber_cable": {
+      "bn": "ফাইবার ক্যাবল",
+      "en": "Fiber Optic Cable",
+      "head": "office_equipment_repair",
+      "rate": 18,
+      "options": [
+        {
+          "detail": "2-core SM FTTH drop cable, G.657A, per metre",
+          "fits": "Indoor/outdoor drop",
+          "rate": 18,
+          "src": "estimate"
+        },
+        {
+          "detail": "4-core SM armoured outdoor, per metre",
+          "fits": "Between buildings",
+          "rate": 40,
+          "src": "estimate"
+        },
+        {
+          "detail": "6-core SM armoured outdoor, per metre",
+          "fits": "Between buildings",
+          "rate": 55,
+          "src": "estimate"
+        },
+        {
+          "detail": "12-core SM armoured outdoor, per metre",
+          "fits": "Backbone",
+          "rate": 80,
+          "src": "estimate"
+        }
+      ]
+    },
+    "fiber_patch": {
+      "bn": "ফাইবার প্যাচ কর্ড",
+      "en": "Fiber Patch Cord",
+      "head": "office_equipment_repair",
+      "rate": 300,
+      "options": [
+        {
+          "detail": "Safenet LC/APC SM simplex 3m",
+          "rate": 300,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Safenet LC/APC SM duplex 3m",
+          "rate": 550,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "COTE LC-LC SM duplex 5m",
+          "fits": "SFP to SFP",
+          "rate": 700,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "SC/APC-SC/APC SM simplex 3m",
+          "fits": "ONU / ODF",
+          "rate": 250,
+          "src": "estimate"
+        },
+        {
+          "detail": "SC/UPC-LC/UPC SM duplex 3m",
+          "fits": "Media converter to SFP",
+          "rate": 500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "splicing": {
+      "bn": "ফাইবার স্প্লাইসিং",
+      "en": "Fiber Splicing",
+      "head": "office_equipment_repair",
+      "rate": 500,
+      "options": [
+        { "detail": "Fiber splicing per core", "rate": 500, "src": "estimate" },
+        {
+          "detail": "Fiber termination with pigtail per core",
+          "rate": 700,
+          "src": "estimate"
+        },
+        {
+          "detail": "Fiber link test with power meter, per link",
+          "fits": "Find a bad link",
+          "rate": 1000,
+          "src": "estimate"
+        },
+        {
+          "detail": "8-port fiber termination box with install",
+          "fits": "New fiber point",
+          "rate": 2500,
+          "src": "estimate"
+        }
+      ]
+    },
+    "patch_cord": {
+      "bn": "প্যাচ কর্ড",
+      "en": "Patch Cord",
+      "head": "office_equipment_repair",
+      "rate": 150,
+      "options": [
+        {
+          "detail": "UGREEN NW102 Cat-6 1m",
+          "rate": 150,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Vention IBEBH Cat-6 2m",
+          "rate": 175,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Vention IBOBI Cat-6A 3m slim",
+          "rate": 420,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Vention IBEBG Cat-6 1.5m",
+          "fits": "",
+          "rate": 175,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "UGREEN Cat-6 pure copper flat 2m",
+          "fits": "",
+          "rate": 200,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "rj45": {
+      "bn": "কানেক্টর",
+      "en": "RJ-45 Connector",
+      "head": "office_equipment_repair",
+      "rate": 15,
+      "options": [
+        { "detail": "Cat-6 RJ45 connector", "rate": 15, "src": "estimate" },
+        {
+          "detail": "Vention IDIH0 Cat-6A FTP toolless RJ45",
+          "rate": 375,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Vention IODL0 RJ45 strain-relief boots, 50 pcs",
+          "fits": "",
+          "rate": 350,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "UGREEN NW120 Cat-6 RJ45 plug, 50 pcs",
+          "fits": "",
+          "rate": 550,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "keystone": {
+      "bn": "কিস্টোন জ্যাক",
+      "en": "Keystone Jack",
+      "head": "office_equipment_repair",
+      "rate": 320,
+      "options": [
+        {
+          "detail": "D-Link NKJ-C6WHI1B21 Cat-6 keystone jack",
+          "rate": 320,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Dintek 1305-04017 Cat-6 keystone jack",
+          "rate": 420,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Belden AX101068 Cat-6 keystone jack",
+          "fits": "",
+          "rate": 399,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "Vention IPWB0 Cat-7 keystone coupler",
+          "fits": "Join two patch cords in a faceplate",
+          "rate": 425,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "faceplate": {
+      "bn": "ফেস প্লেট",
+      "en": "Face Plate",
+      "head": "office_equipment_repair",
+      "rate": 170,
+      "options": [
+        {
+          "detail": "Rosenberger CP21-112-10 dual-port faceplate",
+          "rate": 170,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "CommScope FPS-BS-2P-W 2-port faceplate kit",
+          "rate": 210,
+          "src": "Star Tech 2026-10-24"
+        },
+        { "detail": "Single-port faceplate", "rate": 150, "src": "estimate" },
+        {
+          "detail": "Dual-port surface-mount box with faceplate",
+          "fits": "Wall without a flush box",
+          "rate": 300,
+          "src": "estimate"
+        }
+      ]
+    },
+    "patch_panel": {
+      "bn": "প্যাচ প্যানেল",
+      "en": "Patch Panel",
+      "head": "office_equipment_repair",
+      "rate": 2500,
+      "options": [
+        {
+          "detail": "TRENDnet TC-KP24 24-port keystone patch panel",
+          "fits": "Add keystone jacks",
+          "rate": 2500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Belden AX101456 24-port patch panel",
+          "rate": 4500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "D-Link NCM-XX01-B 1U cable manager",
+          "fits": "Rack",
+          "rate": 1800,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "COTE CWM-1UFM 1U cable manager",
+          "fits": "Rack",
+          "rate": 1800,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "TRENDnet TC-KP24S 24-port shielded keystone panel",
+          "fits": "Rack, shielded jacks",
+          "rate": 3200,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "cable_channel": {
+      "bn": "ক্যাবল চ্যানেল",
+      "en": "Cable Channel / PVC Conduit",
+      "head": "office_equipment_repair",
+      "rate": 120,
+      "options": [
+        {
+          "detail": "PVC cable channel 1\" x 2m",
+          "rate": 120,
+          "src": "estimate"
+        },
+        { "detail": "PVC conduit 20mm x 3m", "rate": 100, "src": "estimate" },
+        {
+          "detail": "PVC cable channel 2\" x 2m",
+          "fits": "Many cables",
+          "rate": 200,
+          "src": "estimate"
+        },
+        {
+          "detail": "Flexible PVC conduit 20mm, per metre",
+          "fits": "Ceiling runs",
+          "rate": 30,
+          "src": "estimate"
+        }
+      ]
+    },
+    "network_rack": {
+      "bn": "নেটওয়ার্ক র‍্যাক",
+      "en": "Network Rack",
+      "head": "office_equipment_repair",
+      "rate": 10500,
+      "options": [
+        {
+          "detail": "Solitine SOL-265-6U wall-mount rack",
+          "rate": 10500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Solitine SOL-265-9U wall-mount rack",
+          "rate": 11500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Nexakey NX-9U wall-mount rack",
+          "rate": 10500,
+          "src": "Star Tech 2026-10-24"
+        },
+        {
+          "detail": "Toten 6U 600x450mm wall-mount rack",
+          "fits": "",
+          "rate": 11500,
+          "src": "Star Tech 2026-10-26"
+        },
+        {
+          "detail": "DATEUP 9U 600x450mm wall-mount rack",
+          "fits": "",
+          "rate": 12500,
+          "src": "Star Tech 2026-10-26"
+        }
+      ]
+    },
+    "network_setup": {
+      "bn": "নেটওয়ার্ক কনফিগারেশন",
+      "en": "Network Configuration",
+      "head": "office_equipment_repair",
+      "rate": 1500,
+      "options": [
+        {
+          "detail": "Router, switch & Wi-Fi configuration",
+          "rate": 1500,
+          "src": "estimate"
+        },
+        {
+          "detail": "VLAN / MikroTik configuration",
+          "rate": 2500,
+          "src": "estimate"
+        },
+        {
+          "detail": "ONU / fiber internet setup",
+          "fits": "New ISP line",
+          "rate": 1000,
+          "src": "estimate"
+        },
+        {
+          "detail": "Access point & Wi-Fi roaming setup",
+          "fits": "Several APs on one SSID",
+          "rate": 1500,
+          "src": "estimate"
+        }
+      ]
+    }
   }
 }

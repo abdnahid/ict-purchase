@@ -12,6 +12,8 @@ import base64
 import io
 import json
 import mimetypes
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -105,6 +107,23 @@ def build(case):
     return case
 
 
+def find_browser():
+    """Chrome (or Chromium / Edge, which print the same way) on Linux, macOS or Windows; $CHROME overrides."""
+    if os.environ.get("CHROME"):
+        return os.environ["CHROME"]
+    for name in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome", "msedge"):
+        if shutil.which(name):
+            return shutil.which(name)
+    roots = [os.environ.get(k) for k in ("PROGRAMFILES", "PROGRAMFILES(X86)", "LOCALAPPDATA")]
+    candidates = [Path(r) / sub for r in roots if r for sub in (r"Google\Chrome\Application\chrome.exe",
+                                                              r"Microsoft\Edge\Application\msedge.exe")]
+    candidates.append(Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
+    for c in candidates:
+        if c.is_file():
+            return str(c)
+    raise FileNotFoundError("No Chrome or Edge found to print the voucher PDF; set the CHROME environment variable to its path.")
+
+
 def render(case, out_pdf):
     """Build totals, compose the attestation and print the A5 PDF. Returns the built case."""
     case = build(case)
@@ -116,10 +135,10 @@ def render(case, out_pdf):
         assets["attestation"] = att
     env = Environment(loader=FileSystemLoader(Path(__file__).parent), autoescape=True)
     html = env.get_template("template.html").render(v=case, assets=assets, money=money,
-                                              filler_mm=max(30, 64 - 11 * len(case["items"])))
+                                              filler_mm=12)  # minimum; the template grows it to fill the page
     out_html = out_pdf.with_suffix(".html")
     out_html.write_text(html, encoding="utf-8")
-    subprocess.run(["google-chrome", "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+    subprocess.run([find_browser(), "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
                     f"--print-to-pdf={out_pdf}", out_html.as_uri()],
                    check=True, capture_output=True)
     out_html.unlink()
