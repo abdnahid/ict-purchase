@@ -1,4 +1,4 @@
-"""Render a Star-World invoice (A5) from a JSON case file to HTML + PDF.
+"""Render a Star-World invoice (A4) from a JSON case file to HTML + PDF.
 
 Usage: python3 voucher/make_voucher.py voucher/demo.json [-o output/voucher-demo.pdf]
 
@@ -9,6 +9,7 @@ exists (handwriting/slice_sheet.py), the hand-written certificate is composed fr
 """
 import argparse
 import base64
+import importlib
 import io
 import json
 import mimetypes
@@ -84,16 +85,19 @@ def data_uri(path):
 
 
 def composed_attestation(case):
-    """Hand-written certificate + signature + date + seal from the word bank, as a data URI (None if unavailable)."""
+    """Hand-written certificate with the signature, date and seal under it, from the word bank, as
+    {"src": data URI, "w": px, "h": px} (None if unavailable). About three words a line, like the user writes it."""
     att = case.get("attestation")
     if not att or not (PRIVATE / "handwriting" / "bank.json").exists():
         return None
     sys.path.insert(0, str(ROOT / "handwriting"))
-    from compose import compose
-    img = compose(att.get("text") or ATTESTATION.format(**att), date=case["date"], seed=case["sl_no"])
+    import compose
+    compose = importlib.reload(compose)  # a long-running app server must not keep an old layout
+    img = compose.compose(att.get("text") or ATTESTATION.format(**att), date=case["date"], seed=case["sl_no"],
+                  width_words=6)
     buf = io.BytesIO()
     img.save(buf, "PNG")
-    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    return {"src": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode(), "w": img.size[0], "h": img.size[1]}
 
 
 def build(case):
@@ -125,7 +129,7 @@ def find_browser():
 
 
 def render(case, out_pdf):
-    """Build totals, compose the attestation and print the A5 PDF. Returns the built case."""
+    """Build totals, compose the attestation and print the A4 PDF. Returns the built case."""
     case = build(case)
     out_pdf = Path(out_pdf).resolve()
     out_pdf.parent.mkdir(parents=True, exist_ok=True)
@@ -133,9 +137,14 @@ def render(case, out_pdf):
               for path in [next((PRIVATE / (stem + e) for e in ASSET_EXTS if (PRIVATE / (stem + e)).exists()), None)] if path}
     if (att := composed_attestation(case)):
         assets["attestation"] = att
+    elif "attestation" in assets:  # a ready-made private/attestation image: the only candidate
+        path = next(PRIVATE / ("attestation" + e) for e in ASSET_EXTS if (PRIVATE / ("attestation" + e)).exists())
+        from PIL import Image
+        w, h = Image.open(path).size if path.suffix != ".svg" else (1000, 500)
+        assets["attestation"] = {"src": assets["attestation"], "w": w, "h": h}
     env = Environment(loader=FileSystemLoader(Path(__file__).parent), autoescape=True)
     html = env.get_template("template.html").render(v=case, assets=assets, money=money,
-                                              filler_mm=12)  # minimum; the template grows it to fill the page
+                                              filler_mm=4)  # minimum; the template grows it to fill the page
     out_html = out_pdf.with_suffix(".html")
     out_html.write_text(html, encoding="utf-8")
     subprocess.run([find_browser(), "--headless=new", "--disable-gpu", "--no-pdf-header-footer",

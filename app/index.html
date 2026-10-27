@@ -65,6 +65,8 @@
   .err { background: var(--bad-soft); color: var(--bad); border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 13px; }
   .note { background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 8px 10px; margin: 8px 0; font-size: 13px; }
   .text { white-space: pre-wrap; background: #fafbfc; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 14.5px; line-height: 1.75; }
+  /* note and মঞ্জুরিপত্র text: shown and copied in D-Nothi's font */
+  .text.bn { font-family: SolaimanLipi, "Solaiman Lipi", sans-serif; font-size: 13pt; line-height: 1.6; }
   h2 { font-size: 16px; margin: 0 0 4px; } h3 { font-size: 13.5px; margin: 18px 0 6px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
   .steps { display: flex; gap: 4px; flex-wrap: wrap; margin: 8px 0; }
   .steps button { font: inherit; font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 3px 10px; cursor: pointer; color: var(--muted); }
@@ -205,7 +207,7 @@ function renderEditor(d) {
           ${Object.entries(S.heads).map(([k, h]) => `<option value="${k}" ${d.head === k ? "selected" : ""}>${esc(h.khat)} (${esc(h.code)}, serial ${h.serial})</option>`).join("")}</select></div>
       </div>
       <label>Diagnosis bullet (combined notes only; blank = generated)</label>
-      <textarea id="f_diag" placeholder="সিএম উইং এর কম্পিউটারে সংযুক্ত SSD-টি ত্রুটিযুক্ত। নতুন SSD প্রতিস্থাপন করা প্রয়োজন।">${esc(d.diagnosis)}</textarea>
+      <textarea id="f_diag" placeholder="প্রশাসন শাখার কম্পিউটারটিতে সংযুক্ত হার্ডডিস্ক অত্যন্ত ধীরগতিসম্পন্ন হওয়ায় সফটওয়্যারসমূহ সঠিকভাবে কাজ করছে না। এমতাবস্থায় সমস্যাটি সমাধানে একটি নতুন SSD প্রতিস্থাপন করে দ্রুততর সময়ে মেরামত করা হয়।">${esc(d.diagnosis)}</textarea>
       <label>Private notes</label><textarea id="f_notes">${esc(d.notes)}</textarea>
       <div class="total">Total ৳${bnd(money(d.total))} ${headChip(d.head_key)}</div>
       <div class="bar" style="margin-top:10px"><span class="sp"></span><button class="btn pri" onclick="saveDemand()">Save</button></div>
@@ -323,11 +325,12 @@ function renderCase(c) {
       <h3>Note subject</h3>${copyBlock(S.note.subject)}
       <h3>Paragraph X.0 (to audit)</h3>${copyBlock(S.note.x0)}
       <h3>Paragraph X.2 (final proposal)</h3>${copyBlock(S.note.x2)}
-      <h3>Attachments</h3><div class="text">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>
+      <h3>Attachments</h3><div class="text bn">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>
       <h3>মঞ্জুরিপত্র: subject</h3>${copyBlock(S.note.pass_subject)}
       <h3>মঞ্জুরিপত্র: body</h3>${passBlock(S.note)}` : `<div class="muted">Loading note…</div>`}
   </div>`;
 }
+const NOTE_FONT = 'font-family:SolaimanLipi,"Solaiman Lipi",sans-serif;font-size:13pt';
 function passBlock(n) {
   // paragraph + bordered table + closing line; Copy puts HTML on the clipboard so D-Nothi's editor keeps the table
   const cell = "border:1px solid #000;padding:4px 6px;text-align:center;vertical-align:middle";
@@ -335,23 +338,42 @@ function passBlock(n) {
     <table style="border-collapse:collapse;width:100%">${n.pass_table.map((r, i) => `<tr>${r.map(c =>
       `<td style="${cell}${i === 0 ? ";font-size:90%" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</table>
     <p>${esc(n.pass_close)}</p>`;
-  window._passHtml = html; window._passText = n.pass_body;
-  return `<div style="position:relative"><div class="text" style="white-space:normal;padding-right:72px">${html}</div>
-    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyPass()">Copy</button></div>`;
+  const id = "cp" + Math.random().toString(36).slice(2);
+  window[id] = { html: `<div style='${NOTE_FONT}'>${html}</div>`, text: n.pass_body };
+  return `<div style="position:relative"><div class="text bn" style="white-space:normal;padding-right:72px">${html}</div>
+    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyRich('${id}')">Copy</button></div>`;
 }
-async function copyPass() {
+async function copyRich(id) {
+  // HTML (SolaimanLipi 13pt, so D-Nothi keeps the font and size) with plain text as the fallback
+  const { html, text } = window[id];
   try {
     await navigator.clipboard.write([new ClipboardItem({
-      "text/html": new Blob([window._passHtml], { type: "text/html" }),
-      "text/plain": new Blob([window._passText], { type: "text/plain" }) })]);
-  } catch (e) { await navigator.clipboard.writeText(window._passText); }
-  toast("Copied (with table)");
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([text], { type: "text/plain" }) })]);
+  } catch (e) { await navigator.clipboard.writeText(text); }
+  toast("Copied");
+}
+function richParas(text) {
+  // "• " lines become a real <ul> (D-Nothi's editor doesn't turn a typed bullet into a list); every other line is a
+  // <p>. The font goes on each element too, since editors often drop the wrapper's style on paste.
+  let html = "", list = [];
+  const flush = () => {
+    if (list.length) html += `<ul style='list-style-type:disc;${NOTE_FONT}'>${list.map(l => `<li style='${NOTE_FONT}'>${esc(l)}</li>`).join("")}</ul>`;
+    list = [];
+  };
+  for (const line of text.split("\n")) {
+    if (line.startsWith("• ")) { list.push(line.slice(2)); continue; }
+    flush();
+    if (line.trim()) html += `<p style='${NOTE_FONT}'>${esc(line)}</p>`;
+  }
+  flush();
+  return html;
 }
 function copyBlock(text) {
   const id = "cp" + Math.random().toString(36).slice(2);
-  window[id] = text;
-  return `<div style="position:relative"><div class="text" style="padding-right:72px">${esc(text)}</div>
-    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="navigator.clipboard.writeText(window['${id}']);toast('Copied')">Copy</button></div>`;
+  window[id] = { html: `<div style='${NOTE_FONT}'>${richParas(text)}</div>`, text };
+  return `<div style="position:relative"><div class="text bn" style="padding-right:72px">${esc(text)}</div>
+    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyRich('${id}')">Copy</button></div>`;
 }
 async function saveCase(id) {
   await api("PUT", `/api/cases/${id}`, { voucher: { sl_no: +$("c_sl").value, date: $("c_date").value },

@@ -1,0 +1,13 @@
+{
+  "_comment": "Whole hand-written attestations (the user wrote each sentence out in full). slice_paragraphs.py cuts each box out of its photo (after rotating it upright by 'rotate' degrees counter-clockwise) into private/handwriting/paragraphs/. compose() uses a paragraph instead of assembling words when the attestation text matches 'text' exactly. Add more samples of the same text for variety: one is picked per voucher.",
+  "sources": [
+    {
+      "photo": "attestation-sample.jpeg",
+      "rotate": 90,
+      "paragraphs": [
+        {"text": "প্রত্যয়ন করা যাইতেছে যে, ইন্টারনেট সংযোগ মেরামত কাজে উল্লেখিত অর্থ যথাযথভাবে ব্যয়িত হয়েছে।", "box": [100, 150, 1480, 415], "lines": 3},
+        {"text": "প্রত্যয়ন করা যাইতেছে যে, কম্পিউটার মেরামত কাজে উল্লেখিত অর্থ যথাযথভাবে ব্যয়িত হয়েছে।", "box": [90, 570, 1490, 790], "lines": 2}
+      ]
+    }
+  ]
+}

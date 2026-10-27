@@ -7,6 +7,7 @@ Storage (all git-ignored, real names inside):
   cases/<id>/case.json        one case = one voucher + one note: demand ids, voucher SL/date, status, note no.
   cases/<id>/out/             generated voucher PDF, renamed demand PDFs for D-Nothi, note paragraphs
 """
+import importlib
 import json
 import re
 import shutil
@@ -21,6 +22,7 @@ CASES = ROOT / "cases"
 DEMANDS = ROOT / "demands"
 REGISTRY = CASES / "demands.json"
 BANK = ROOT / "private" / "handwriting" / "bank.json"
+PARAGRAPHS = ROOT / "private" / "handwriting" / "paragraphs" / "paragraphs.json"
 
 STATUSES = ["draft", "voucher", "x0_sent", "x1_received", "approved", "pass_letter", "reimbursed"]
 
@@ -68,7 +70,10 @@ def bank_words():
 
 
 def hand_missing(text, bank=None):
-    """Words of `text` the attestation can't write, in order; mirrors compose.Bank.tokens (trailing , । peeled off)."""
+    """Words of `text` the attestation can't write, in order; mirrors compose.Bank.tokens (trailing , । peeled off).
+    Nothing is missing when the user has written the whole sentence out (handwriting/slice_paragraphs.py)."""
+    if bank is None and unicodedata.normalize("NFC", text) in {p["text"] for p in load(PARAGRAPHS, [])}:
+        return []
     bank = bank_words() if bank is None else bank
     missing = []
     for w in unicodedata.normalize("NFC", text).split():
@@ -453,32 +458,28 @@ def note_texts(case):
     subject = "বিএসটিআই'র " + h["subject"].format(units=wings_phrase(demands, h, "-এর"))
 
     files = [attachment_name(d) for d in demands]
-    states = {d["state"] for d in demands}
-    if len(states) == 1:
-        who = join_bn([f"{d['who']} {d['thing']}" for d in demands]) + f" {states.pop()}"
-    else:
-        who = join_bn([f"{d['who']} {d['thing']} {d['state']}" for d in demands])
-    letters = "একটি চাহিদাপত্র" if n == 1 else f"{bn(n)}টি চাহিদাপত্র"
-    p1 = (f"বিএসটিআই'র {who} থাকায় দাপ্তরিক কার্যক্রম সম্পাদনে অসুবিধা হচ্ছে এই মর্মে {letters} পাওয়া গিয়েছে "
-          f"(সংযুক্তি: {join_bn(files)}{' সদয় দ্রষ্টব্য' if n > 1 else ''})।")
-
     if n == 1:
+        d = demands[0]
+        p1 = (f"বিএসটিআই'র {d['who']} {d['thing']} {d['state']} থাকায় দাপ্তরিক কার্যক্রম সম্পাদনে অসুবিধা হচ্ছে "
+              f"এই মর্মে একটি চাহিদাপত্র পাওয়া গিয়েছে (সংযুক্তি: {files[0]})।")
         pp = parts_phrase(demands)
         p2 = (f"পরবর্তীতে সমস্যা নির্ণয়ের পর {device}ের {pp} ত্রুটিযুক্ত পাওয়ায় দাপ্তরিক কার্যক্রমের গুরুত্ব "
                                 f"বিবেচনায় একটি নতুন {pp} প্রতিস্থাপন/সংযুক্ত করে দ্রুততর সময়ে মেরামত করা হয়।")
         repaired = f"ইতোমধ্যে মেরামতকৃত {device}টির"
-        lead = "এমতাবস্থায়, "
-    else:
-        bullets = [f"• {d['diagnosis'] or default_diagnosis(d, device)}" for d in demands]
-        p2 = "পরবর্তীতে সমস্যা নির্ণয়ের পর নিম্নবর্ণিত ত্রুটিসমূহ পরীলক্ষিত হয়ঃ\n" + "\n".join(bullets)
+    else:  # sample-5 (note 94): one bullet per demand, then one bullet per repair saying what was done
+        wings = {d["wing"] for d in demands}
+        source = "বিভিন্ন উইং" if len(wings) > 1 else next(iter(wings))
+        p1 = (f"বিএসটিআই'র প্রধান কার্যালয়ের {source} থেকে নিম্নোল্লেখিত চাহিদাপত্রসমূহ পাওয়া গিয়েছেঃ\n"
+              + "\n".join(f"• {d['who']} {d['thing']} {d['state']} থাকায় দাপ্তরিক কার্যক্রম সম্পাদনে অসুবিধা হচ্ছে "
+                          f"এই মর্মে একটি চাহিদাপত্র পাওয়া গিয়েছে (সংযুক্তি: {f})।" for d, f in zip(demands, files)))
+        repeated = {w for w in wings if sum(d["wing"] == w for d in demands) > 1}
+        bullets = [f"• {d['diagnosis'] or default_diagnosis(d, device, d['label'] if d['wing'] in repeated else d['wing'])}"
+                   for d in demands]
+        p2 = "চাহিদাপত্রের ভিত্তিতে সমস্যা নির্ণয়ের পর নিম্নরূপ সিদ্ধান্ত নেয়া হয়ঃ\n" + "\n".join(bullets)
         repaired = f"ইতোমধ্যে মেরামতকৃত {device} {bn(n)}টির"
-        lead = (f"এমতাবস্থায়, দাপ্তরিক কার্যক্রমের গুরুত্ব বিবেচনায় {device} {count_bn(n)} দ্রুততর সময়ে মেরামত করা হয়। ")
 
     body = f"{repaired} যন্ত্রাংশ ক্রয় ও সার্ভিস চার্জ বাবদ ভ্যাট ও ট্যাক্সসহ সর্বমোট {amount} (সংযুক্তি: {voucher}) {citation}"
-    if n == 1:
-        p3_x0 = f"এমতাবস্থায়, {body} অনুমোদনের পূর্বে নিরীক্ষা শাখার মতামত নেয়া যেতে পারে।"
-    else:
-        p3_x0 = f"{lead}{body} অনুমোদনের পূর্বে নিরীক্ষা শাখার মতামত নেয়া যেতে পারে।"
+    p3_x0 = f"এমতাবস্থায়, {body} অনুমোদনের পূর্বে নিরীক্ষা শাখার মতামত নেয়া যেতে পারে।"
     note_no = case["note"].get("no")
     audit = case["note"].get("audit_para") or (f"{note_no}.1" if note_no else "X.1")
     p3_x2 = f"এমতাবস্থায়, নোট অনুচ্ছেদ {bn(audit)} এর নিরীক্ষা শাখার মতামতের আলোকে {body}টি সদয় অনুমোদনের জন্য পেশ করা হলো।"
@@ -511,9 +512,11 @@ def pass_table(case):
             [amt(t["total"]), amt(t["base"]), amt(t["vat"]), amt(t["tax"]), f"{amt(t['payable'])} ({words_bn(t['payable'])})"]]
 
 
-def default_diagnosis(d, device):
+def default_diagnosis(d, device, place):
+    """One 'সিদ্ধান্ত' bullet (sample-5): what was faulty, then what was done about it."""
     pp = parts_phrase([d])
-    return f"{d['wing']} এর {device}ের {pp} ত্রুটিযুক্ত। নতুন {pp} প্রতিস্থাপন করা প্রয়োজন।"
+    return (f"{place} এর {device}ের {pp} ত্রুটিযুক্ত পাওয়া যায়। এমতাবস্থায় সমস্যাটি সমাধানে নতুন {pp} "
+            f"প্রতিস্থাপন করে দ্রুততর সময়ে মেরামত করা হয়।")
 
 
 # ---------- output ----------
@@ -527,12 +530,16 @@ def generate(cid):
 
     sys.path.insert(0, str(ROOT / "voucher"))
     import make_voucher
+    make_voucher = importlib.reload(make_voucher)  # the app runs for days: pick up voucher/handwriting edits
     v = voucher_case(case)
     pdf = out / settings()["note"]["voucher_attachment"]
     bare = [d["label"] + ": " + parts().get(it["part"], {}).get("en", it["part"]) for d in case_demands(case)
             for it in d["items"] if not it.get("detail", "").strip()]
     if bare:
         warnings.append("No model/detail on the voucher for " + "; ".join(bare) + " — pick a model under each part in the demand form.")
+    if len(v["items"]) > 9:  # A4 with the attestation band holds 9 two-line rows (checked 2026-10-27)
+        warnings.append(f"The voucher has {len(v['items'])} lines; one A4 page holds 9 with the attestation, so the footer "
+                        "is cut off. Split the case into two vouchers.")
     missing = hand_missing(v["attestation"]["text"])
     if missing:  # leave the attestation blank rather than fail; the user hand-writes it or tops up the bank
         warnings.append("Voucher has NO hand-written attestation: no handwriting sample for "

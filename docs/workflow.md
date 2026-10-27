@@ -128,3 +128,19 @@ Para X.2 keeps the first two paragraphs. Its third paragraph starts `এমত�
 Attachments are named `চাহিদাপত্র - <person or room>.pdf` and `মেরামত ভাউচার.pdf`.
 
 On the sample-4 voucher, the hand-written certificate also wrote the amount ("… অকেজো কম্পিউটার মেরামতের কাজে উল্লেখিত ১৭,৫০০/= (সতের হাজার পাঁচশত টাকা) যথাযথভাবে ব্যয়িত হয়েছে।"). The generator keeps the amount typed and uses the bank-composable wording: `প্রত্যয়ন করা যাইতেছে যে, সিএম উইং এর একটি ও রসায়ন পরীক্ষণ উইং এর একটি কম্পিউটার মেরামতে এসএসডি এবং মাদারবোর্ড ক্রয় ও সার্ভিস চার্জ বাবদ উক্ত অর্থ ব্যয় করা হয়েছে।`
+
+## Combined note, current layout: sample-5, note 94 (Sep 2026)
+
+`sample-5-combined/note-format.pdf` is the layout the generator now uses for every case with two or more demands (a single demand keeps the sample-1 wording):
+
+> বিএসটিআই'র প্রধান কার্যালয়ের বিভিন্ন উইং থেকে নিম্নোল্লেখিত চাহিদাপত্রসমূহ পাওয়া গিয়েছেঃ
+> • <who> <thing> <state> থাকায় দাপ্তরিক কার্যক্রম সম্পাদনে অসুবিধা হচ্ছে এই মর্মে একটি চাহিদাপত্র পাওয়া গিয়েছে (সংযুক্তি: <demand.pdf>)।  ← one per demand
+>
+> চাহিদাপত্রের ভিত্তিতে সমস্যা নির্ণয়ের পর নিম্নরূপ সিদ্ধান্ত নেয়া হয়ঃ
+> • <what was faulty>। এমতাবস্থায় সমস্যাটি সমাধানে নতুন <part> প্রতিস্থাপন করে দ্রুততর সময়ে মেরামত করা হয়।  ← one per demand (the demand's "diagnosis", or a generated default)
+>
+> এমতাবস্থায়, ইতোমধ্যে মেরামতকৃত কম্পিউটার <n>টির যন্ত্রাংশ ক্রয় ও সার্ভিস চার্জ বাবদ … নিরীক্ষা শাখার মতামত নেয়া যেতে পারে।
+>
+> সদয় অনুমোদনের জন্য পেশ করা হলো।
+
+Not copied from sample-5: its old citation (serial 44, 33rd council, মহাপরিচালক), "সার্ভিজ", the empty voucher attachment, and the mixing of PC and network jobs in one note under 'কম্পিউটার মেরামত' (our rule in `docs/rules.md` §5 still keeps them apart).
