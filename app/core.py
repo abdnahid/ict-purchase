@@ -387,7 +387,8 @@ def voucher_items(demands):
             if key in lines:
                 lines[key]["qty"] += int(it.get("qty") or 1)
             else:
-                lines[key] = {"description": cat.get(it["part"], {}).get("en", it["part"]), "detail": it.get("detail", ""),
+                lines[key] = {"part": it["part"], "description": cat.get(it["part"], {}).get("en", it["part"]),
+                              "detail": it.get("detail", ""),
                               "qty": int(it.get("qty") or 1), "rate": int(it["rate"])}
     items = list(lines.values())
     charges = [int(d.get("service_charge") or 0) for d in demands if d.get("service_charge")]
@@ -483,8 +484,15 @@ def note_texts(case):
     note_no = case["note"].get("no")
     audit = case["note"].get("audit_para") or (f"{note_no}.1" if note_no else "X.1")
     p3_x2 = f"এমতাবস্থায়, নোট অনুচ্ছেদ {bn(audit)} এর নিরীক্ষা শাখার মতামতের আলোকে {body}টি সদয় অনুমোদনের জন্য পেশ করা হলো।"
-    x0 = "\n\n".join([p1, p2, p3_x0, "সদয় অনুমোদনের জন্য পেশ করা হলো।"])
-    x2 = "\n\n".join([p1, p2, p3_x2])
+    # item details and rates (asked for by the approving authority, Nov 2026): a table between the diagnosis and the
+    # proposal, one group per repair saying which parts it needed
+    items = item_table(demands)
+    head = [p1, p2, "মেরামতে ব্যবহৃত যন্ত্রাংশ ও সার্ভিস চার্জের বিবরণ ও দর নিম্নরূপঃ"]
+    table_text = item_table_text(items)
+    x0_tail = [p3_x0, "সদয় অনুমোদনের জন্য পেশ করা হলো।"]
+    x2_tail = [p3_x2]
+    x0 = "\n\n".join(head + [table_text] + x0_tail)
+    x2 = "\n\n".join(head + [table_text] + x2_tail)
 
     # মঞ্জুরিপত্র (sample-1 wording): one device names its parts, several say যন্ত্রাংশ like the combined note
     what = join_bn([f"{d['who']} {d['thing']}" for d in demands])
@@ -496,8 +504,45 @@ def note_texts(case):
     table = pass_table(case)
     pass_body = "\n\n".join([pass_para, "\n".join("\t".join(r) for r in table), pass_close])
     return {"subject": subject, "x0": x0, "x2": x2, "attachments": files + [voucher],
+            "note_head": "\n\n".join(head), "item_table": items,
+            "x0_tail": "\n\n".join(x0_tail), "x2_tail": "\n\n".join(x2_tail),
             "pass_subject": "মঞ্জুরিপত্র", "pass_para": pass_para, "pass_table": table, "pass_close": pass_close,
             "pass_body": pass_body}
+
+
+def item_table(demands):
+    """The note's item table, one group per demand (which repair needed which parts), so the UI can merge the
+    serial and repair cells over the group's rows. Same parts and charges as the voucher, so the total agrees.
+    Returns {"header": [6 cells], "groups": [{"no", "repair", "rows": [[desc, qty, rate, amount], ...]}],
+    "total": [label, amount]}."""
+    cat = parts()
+    money = lambda n: taka_bn(n) + ".০০"
+    groups, total = [], 0
+    for i, d in enumerate(demands, 1):
+        rows = []
+        for it in d["items"]:
+            name = cat.get(it["part"], {}).get("bn", it["part"])
+            detail = it.get("detail", "").strip()
+            qty, rate = int(it.get("qty") or 1), int(it["rate"])
+            rows.append([f"{name} ({detail})" if detail else name, bn(qty), money(rate), money(qty * rate)])  # no 'টি': cable is per metre
+            total += qty * rate
+        charge = int(d.get("service_charge") or 0)
+        if charge:
+            rows.append(["সার্ভিস চার্জ", bn(1), money(charge), money(charge)])
+            total += charge
+        groups.append({"no": bn(i), "repair": f"{d['wing']} ({d['label']})", "rows": rows})
+    return {"header": ["ক্রমিক নং", "মেরামতকৃত কম্পিউটার/সরঞ্জাম", "যন্ত্রাংশ/সেবার বিবরণ", "পরিমাণ", "দর (টাকা)", "মোট (টাকা)"],
+            "groups": groups, "total": [f"সর্বমোট (ভ্যাট ও ট্যাক্সসহ) = {words_bn(total)} টাকা মাত্র", money(total)]}
+
+
+def item_table_text(t):
+    """Tab-separated version for note.txt and the plain-text clipboard: the merged cells are left blank after the first row."""
+    lines = ["\t".join(t["header"])]
+    for g in t["groups"]:
+        for k, r in enumerate(g["rows"]):
+            lines.append("\t".join(([g["no"], g["repair"]] if k == 0 else ["", ""]) + r))
+    lines.append(t["total"][0] + "\t" * 5 + t["total"][1])
+    return "\n".join(lines)
 
 
 def pass_table(case):

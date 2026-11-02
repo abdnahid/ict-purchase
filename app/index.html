@@ -301,10 +301,10 @@ function renderCase(c) {
     <div class="steps">${S.statuses.map((s, i) => `<button class="${i < si ? "done" : i === si ? "cur" : ""}" onclick="setStatus('${c.id}','${s}')">${STATUS_BN[s]}</button>`).join("")}</div>
     ${c.errors.map(e => `<div class="err">${esc(e)}</div>`).join("")}
     <div class="row2">
-      <div><label>Voucher SL</label><input id="c_sl" type="number" value="${esc(c.voucher.sl_no)}"></div>
-      <div><label>Voucher date (also under the signature)</label><input id="c_date" type="date" value="${esc(c.voucher.date)}"></div>
-      <div><label>D-Nothi note no.</label><input id="c_note" type="number" value="${esc(c.note.no ?? "")}" placeholder="e.g. 91"></div>
-      <div><label>Audit opinion paragraph (X.1)</label><input id="c_audit" value="${esc(c.note.audit_para ?? "")}" placeholder="${c.note.no ? c.note.no + ".1" : "e.g. 91.1"}"></div>
+      <div><label>Voucher SL</label><input id="c_sl" onchange="storeCase('${c.id}')" type="number" value="${esc(c.voucher.sl_no)}"></div>
+      <div><label>Voucher date (also under the signature)</label><input id="c_date" onchange="storeCase('${c.id}')" type="date" value="${esc(c.voucher.date)}"></div>
+      <div><label>D-Nothi note no.</label><input id="c_note" onchange="storeCase('${c.id}')" type="number" value="${esc(c.note.no ?? "")}" placeholder="e.g. 91"></div>
+      <div><label>Audit opinion paragraph (X.1)</label><input id="c_audit" onchange="storeCase('${c.id}')" value="${esc(c.note.audit_para ?? "")}" placeholder="${c.note.no ? c.note.no + ".1" : "e.g. 91.1"}"></div>
     </div>
     <div class="bar" style="margin-top:10px"><span class="sp"></span><button class="btn" onclick="saveCase('${c.id}')">Save</button></div>
 
@@ -323,8 +323,8 @@ function renderCase(c) {
 
     ${S.note ? `
       <h3>Note subject</h3>${copyBlock(S.note.subject)}
-      <h3>Paragraph X.0 (to audit)</h3>${copyBlock(S.note.x0)}
-      <h3>Paragraph X.2 (final proposal)</h3>${copyBlock(S.note.x2)}
+      <h3>Paragraph X.0 (to audit)</h3>${noteBlock(S.note, S.note.x0_tail, S.note.x0)}
+      <h3>Paragraph X.2 (final proposal)</h3>${noteBlock(S.note, S.note.x2_tail, S.note.x2)}
       <h3>Attachments</h3><div class="text bn">${S.note.attachments.map((a, i) => `${bnd(i + 1)}। ${esc(a)}`).join("\n")}</div>
       <h3>মঞ্জুরিপত্র: subject</h3>${copyBlock(S.note.pass_subject)}
       <h3>মঞ্জুরিপত্র: body</h3>${passBlock(S.note)}` : `<div class="muted">Loading note…</div>`}
@@ -340,6 +340,25 @@ function passBlock(n) {
     <p>${esc(n.pass_close)}</p>`;
   const id = "cp" + Math.random().toString(36).slice(2);
   window[id] = { html: `<div style='${NOTE_FONT}'>${html}</div>`, text: n.pass_body };
+  return `<div style="position:relative"><div class="text bn" style="white-space:normal;padding-right:72px">${html}</div>
+    <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyRich('${id}')">Copy</button></div>`;
+}
+function noteBlock(n, tail, text) {
+  // X.0 / X.2: paragraphs, the item/rate table, then the proposal; Copy puts HTML on the clipboard like passBlock.
+  // One group per repair: its serial and repair cells are merged (rowspan) over the parts it needed.
+  const cell = `border:1px solid #000;padding:4px 6px;vertical-align:middle;${NOTE_FONT}`;
+  const td = (c, align, extra = "") => `<td${extra} style='${cell};text-align:${align}'>${esc(c)}</td>`;
+  const t = n.item_table, align = ["left", "center", "right", "right"];
+  const head = `<tr>${t.header.map(c => `<td style='${cell};text-align:center;font-weight:bold'>${esc(c)}</td>`).join("")}</tr>`;
+  const body = t.groups.map(g => g.rows.map((r, k) => `<tr>${k ? "" :
+    td(g.no, "center", ` rowspan='${g.rows.length}'`) + td(g.repair, "left", ` rowspan='${g.rows.length}'`)
+  }${r.map((c, j) => td(c, align[j])).join("")}</tr>`).join("")).join("");
+  const foot = `<tr><td colspan='5' style='${cell};text-align:right;font-weight:bold'>${esc(t.total[0])}</td>
+    <td style='${cell};text-align:right;font-weight:bold'>${esc(t.total[1])}</td></tr>`;
+  const table = `<table style='border-collapse:collapse;width:100%'>${head}${body}${foot}</table>`;
+  const html = richParas(n.note_head) + table + richParas(tail);
+  const id = "cp" + Math.random().toString(36).slice(2);
+  window[id] = { html: `<div style='${NOTE_FONT}'>${html}</div>`, text };
   return `<div style="position:relative"><div class="text bn" style="white-space:normal;padding-right:72px">${html}</div>
     <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyRich('${id}')">Copy</button></div>`;
 }
@@ -375,12 +394,14 @@ function copyBlock(text) {
   return `<div style="position:relative"><div class="text bn" style="padding-right:72px">${esc(text)}</div>
     <button class="btn" style="position:absolute;top:6px;right:6px" onclick="copyRich('${id}')">Copy</button></div>`;
 }
-async function saveCase(id) {
-  await api("PUT", `/api/cases/${id}`, { voucher: { sl_no: +$("c_sl").value, date: $("c_date").value },
-    note: { no: $("c_note").value ? +$("c_note").value : null, audit_para: $("c_audit").value.trim() || null } });
-  toast("Saved"); await refresh(); openCase(id);
+function caseFields() {
+  // the form's current values; every action that redraws the case stores them first, or unsaved edits are lost
+  return { voucher: { sl_no: +$("c_sl").value, ...($("c_date").value && { date: $("c_date").value }) },
+    note: { no: $("c_note").value ? +$("c_note").value : null, audit_para: $("c_audit").value.trim() || null } };
 }
-async function setStatus(id, status) { await api("PUT", `/api/cases/${id}`, { status }); refresh(); }
+async function storeCase(id) { await api("PUT", `/api/cases/${id}`, caseFields()); }
+async function saveCase(id) { await storeCase(id); toast("Saved"); await refresh(); openCase(id); }
+async function setStatus(id, status) { await api("PUT", `/api/cases/${id}`, { ...caseFields(), status }); refresh(); }
 async function dissolve(id) {
   if (!confirm(`Dissolve ${id}? Its demands go back to the inbox and generated files are deleted.`)) return;
   await api("DELETE", `/api/cases/${id}`); S.selCase = null; refresh();
@@ -388,6 +409,7 @@ async function dissolve(id) {
 async function gen(id) {
   $("genmsg").innerHTML = `<div class="note">Generating…</div>`;
   try {
+    await storeCase(id);
     const r = await api("POST", `/api/cases/${id}/generate`);
     await refresh(); await openCase(id);
     $("genmsg").innerHTML = r.warnings.map(w => `<div class="err">${esc(w)}</div>`).join("");

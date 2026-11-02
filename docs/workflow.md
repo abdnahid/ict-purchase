@@ -45,6 +45,8 @@ Placeholders are in `<>`.
 >
 > সদয় অনুমোদনের জন্য পেশ করা হলো।
 
+> **From Nov 2026 (authority's request):** between the second paragraph and "এমতাবস্থায়" both X.0 and X.2 carry the line `মেরামতে ব্যবহৃত যন্ত্রাংশ ও সার্ভিস চার্জের বিবরণ ও দর নিম্নরূপঃ` and an item table: ক্রমিক নং | মেরামতকৃত কম্পিউটার/সরঞ্জাম | যন্ত্রাংশ/সেবার বিবরণ | পরিমাণ | দর (টাকা) | মোট (টাকা). There is one group per demand, with the serial and repair cells merged over that repair's parts and its service charge, and a closing row `সর্বমোট (ভ্যাট ও ট্যাক্সসহ) = <words> টাকা মাত্র` (`core.item_table`).
+
 **Para X.2.** The first two paragraphs are the same as X.0. The third becomes:
 > এমতাবস্থায়, নোট অনুচ্ছেদ <অনুচ্ছেদ X.1> এর নিরীক্ষা শাখার মতামতের আলোকে ইতোমধ্যে মেরামতকৃত কম্পিউটারটির যন্ত্রাংশ ক্রয় ও সার্ভিজ চার্জ বাবদ ভ্যাট ও ট্যাক্সসহ সর্বমোট <total>/- (<words> টাকা) মাত্র (সংযুক্তি: <voucher.pdf>) পরিচালক(প্রশাসন) মহোদয়ের আর্থিক ক্ষমতার ক্রমিক নং-৪৪ (সংশোধিত ৩৩ তম কাউন্সিল) মোতাবেক 'কম্পিউটার মেরামত' ক্রয় খাত থেকে **পোস্ট ফ্যাক্টো** মঞ্জুরির প্রস্তাবটি সদয় অনুমোদনের জন্য পেশ করা হলো।
 
